@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=8 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="PackedScene" uid="uid://dvtu0cdorm1yd" path="res://Player/Player.tscn" id="1_d4bn0"]
 [ext_resource type="Script" uid="uid://cncyikl8gvjqw" path="res://World/test.gd" id="1_orwn4"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/DialogueBox.tscn" id="3_ccxtb"]
+[ext_resource type="PackedScene" uid="uid://c80mqnaa4fjea" path="res://World/props/scp_server_room.glb" id="4_lohiu"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k4bx8"]
 
@@ -45,3 +46,11 @@ light_energy = 16.0
 light_indirect_energy = 16.0
 
 [node name="DialogueBox" parent="." instance=ExtResource("3_ccxtb")]
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("4_lohiu")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -531.57196, -221.40868, 122.18797)
+
+[node name="Sketchfab_model" parent="Sketchfab_Scene" index="0"]
+transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 1.4015198, 16.165413, 50.194504)
+
+[editable path="Sketchfab_Scene"]
