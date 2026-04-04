@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=7 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="PackedScene" uid="uid://dvtu0cdorm1yd" path="res://Player/Player.tscn" id="1_d4bn0"]
 [ext_resource type="Script" uid="uid://cncyikl8gvjqw" path="res://World/test.gd" id="1_orwn4"]
@@ -6,7 +6,11 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_k4bx8"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ccxtb"]
+albedo_color = Color(0, 0, 0, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_k4bx8"]
+material = SubResource("StandardMaterial3D_ccxtb")
 
 [node name="Level01" type="Node3D"]
 
@@ -17,6 +21,7 @@ transform = Transform3D(11.400888, 0, 0, 0, 1, 0, 0, 0, 10.37527, 0, 0, 0)
 shape = SubResource("BoxShape3D_k4bx8")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+transform = Transform3D(3.8983986, 0, 0, 0, 0.99999976, 0, 0, 0, 4.8411803, 0, 0, 0)
 mesh = SubResource("BoxMesh_k4bx8")
 skeleton = NodePath("../CollisionShape3D")
 
@@ -32,9 +37,11 @@ mesh = SubResource("BoxMesh_k4bx8")
 skeleton = NodePath("../CollisionShape3D")
 
 [node name="Player" parent="." instance=ExtResource("1_d4bn0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3477962, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5728786, -17.123665)
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1065125, 2.1975408, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1065125, 4.2429566, 0)
+light_energy = 16.0
+light_indirect_energy = 16.0
 
 [node name="DialogueBox" parent="." instance=ExtResource("3_ccxtb")]

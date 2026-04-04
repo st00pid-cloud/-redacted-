@@ -1,26 +1,15 @@
-extends CharacterBody3D
-const SPEED = 8.5
-const JUMP_VELOCITY = 4.5
+extends Node
 
+signal task_completed(task_id: String)
+signal task_updated # Added for HUD synchronization
 
-func _physics_process(delta: float) -> void:
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+var active_task: TaskData
 
-	# Handle jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+func set_task(task: TaskData) -> void:
+	active_task = task
+	task_updated.emit() # Tell the HUD to refresh [cite: 78]
 
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	var input_dir := Input.get_vector("left", "right", "forward", "backward")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
-
-	move_and_slide()
+func complete_task(task_id: String) -> void:
+	emit_signal("task_completed", task_id)
+	active_task = null
+	task_updated.emit() # Hide the HUD [cite: 79]

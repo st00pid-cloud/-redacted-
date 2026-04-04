@@ -17,6 +17,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 DialogueManager="*res://autoloads/DialogueManager.gd"
+TaskManager="*res://autoloads/TaskManager.gd"
 
 [input]
 
