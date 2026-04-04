@@ -1,0 +1,40 @@
+[gd_scene load_steps=6 format=3 uid="uid://dooywrqu1b2uo"]
+
+[ext_resource type="PackedScene" uid="uid://dvtu0cdorm1yd" path="res://Player/Player.tscn" id="1_d4bn0"]
+[ext_resource type="Script" uid="uid://cncyikl8gvjqw" path="res://World/test.gd" id="1_orwn4"]
+[ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/DialogueBox.tscn" id="3_ccxtb"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_k4bx8"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_k4bx8"]
+
+[node name="Level01" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(11.400888, 0, 0, 0, 1, 0, 0, 0, 10.37527, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_k4bx8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("BoxMesh_k4bx8")
+skeleton = NodePath("../CollisionShape3D")
+
+[node name="test" type="StaticBody3D" parent="."]
+transform = Transform3D(1.1400888, 0, 0, 0, 0.7, 0, 0, 0, 0.74701947, 2, 0.70516574, 0)
+script = ExtResource("1_orwn4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="test"]
+shape = SubResource("BoxShape3D_k4bx8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="test"]
+mesh = SubResource("BoxMesh_k4bx8")
+skeleton = NodePath("../CollisionShape3D")
+
+[node name="Player" parent="." instance=ExtResource("1_d4bn0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3477962, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1065125, 2.1975408, 0)
+
+[node name="DialogueBox" parent="." instance=ExtResource("3_ccxtb")]
