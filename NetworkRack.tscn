@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://0qyvi6yekqrx"]
+
+[ext_resource type="PackedScene" uid="uid://cyuynxogtal5" path="res://World/props/data_center_rack.glb" id="1_mrhui"]
+[ext_resource type="Script" uid="uid://cbltl3ycc874n" path="res://World/propsGd/NetworkRack.gd" id="2_0v53a"]
+
+[node name="Sketchfab_Scene" instance=ExtResource("1_mrhui")]
+
+[node name="StaticBody3D" parent="Sketchfab_model/a7022ea9e66845b296ff9077e440b859_obj_cleaner_materialmerger_gles/Object_2" index="0"]
+script = ExtResource("2_0v53a")
