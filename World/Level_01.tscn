@@ -1,14 +1,11 @@
 [gd_scene load_steps=5 format=3 uid="uid://dooywrqu1b2uo"]
 
-[ext_resource type="PackedScene" uid="uid://dvtu0cdorm1yd" path="res://Player/Player.tscn" id="1_d4bn0"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/DialogueBox.tscn" id="3_ccxtb"]
+[ext_resource type="PackedScene" uid="uid://btlq03ck7663s" path="res://Player/Player_Claude.tscn" id="4_bpnau"]
 [ext_resource type="PackedScene" uid="uid://0qyvi6yekqrx" path="res://NetworkRack.tscn" id="4_clck7"]
 [ext_resource type="PackedScene" uid="uid://c80mqnaa4fjea" path="res://World/props/scp_server_room.glb" id="4_lohiu"]
 
 [node name="Level01" type="Node3D"]
-
-[node name="Player" parent="." instance=ExtResource("1_d4bn0")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.589869, -19.462658)
 
 [node name="DialogueBox" parent="." instance=ExtResource("3_ccxtb")]
 
@@ -20,5 +17,8 @@ transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 1.4015
 
 [node name="Sketchfab_Scene2" parent="." instance=ExtResource("4_clck7")]
 transform = Transform3D(7.5, 0, 0, 0, 7.5, 0, 0, 0, 7.5, 9.652324, 10.529431, -14.538088)
+
+[node name="Player2" parent="." instance=ExtResource("4_bpnau")]
+transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 15.503794, -2.4985821)
 
 [editable path="Sketchfab_Scene"]

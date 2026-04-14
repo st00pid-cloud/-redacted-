@@ -1,11 +1,11 @@
 extends CharacterBody3D
 
-@onready var ray = $HeadPivot/Camera3D/RayCast3D
+@onready var ray: RayCast3D = $HeadPivot/Camera3D/RayCast3D
 
 const SPEED = 8.5
 const JUMP_VELOCITY = 7.5
-const STEP_HEIGHT = 8 # Max height the player can step up (tweak to match your stairs)
-const STEP_CHECK_DIST = 15 # How far ahead to check for steps
+const STEP_HEIGHT = 4.5 # Max height the player can step up (tweak to match your stairs)
+const STEP_CHECK_DIST = 8 # How far ahead to check for steps
 
 
 func _physics_process(delta: float) -> void:
@@ -48,33 +48,38 @@ func _input(event):
 				collider.interact() 
 				
 func _try_step_up(delta: float) -> bool:
+	# 1. Don't step up if we aren't moving or are in the air
 	var move_dir = Vector3(velocity.x, 0, velocity.z).normalized()
-	if move_dir.length() < 0.1:
+	if move_dir.length() < 0.1 or not is_on_floor():
 		return false
 
 	var space_state = get_world_3d().direct_space_state
 
-	# Cast forward at step height to make sure there's open space
+	# 2. Shorten the check distance significantly
+	# We check just slightly in front of the player's radius
+	var forward_offset = move_dir * STEP_CHECK_DIST
+	
 	var step_top = global_position + Vector3.UP * STEP_HEIGHT
 	var forward_check = PhysicsRayQueryParameters3D.create(
 		step_top,
-		step_top + move_dir * STEP_CHECK_DIST,
-		0xFFFFFFFF,
+		step_top + forward_offset,
+		1, # Collision mask (adjust to match your environment layer)
 		[get_rid()]
 	)
 	var forward_result = space_state.intersect_ray(forward_check)
 
-	# If something is blocking at step height, it's a wall, not a step
+	# If the top path is blocked, it's a wall, not a step
 	if forward_result:
 		return false
 
-	# Cast downward from the forward position to find the step surface
-	var cast_from = step_top + move_dir * STEP_CHECK_DIST
-	var cast_to = cast_from + Vector3.DOWN * (STEP_HEIGHT + 0.1)
+	# 3. Cast down to find the exact floor height
+	var cast_from = global_position + forward_offset + Vector3.UP * STEP_HEIGHT
+	var cast_to = global_position + forward_offset + Vector3.DOWN * 0.1
+	
 	var down_check = PhysicsRayQueryParameters3D.create(
 		cast_from,
 		cast_to,
-		0xFFFFFFFF,
+		1,
 		[get_rid()]
 	)
 	var down_result = space_state.intersect_ray(down_check)
@@ -83,8 +88,9 @@ func _try_step_up(delta: float) -> bool:
 		var step_y = down_result.position.y
 		var height_diff = step_y - global_position.y
 
-		# Only step up if the surface is above us but within step height
 		if height_diff > 0.05 and height_diff <= STEP_HEIGHT:
+			# 4. The Fix: Zero out Y velocity so gravity doesn't "fight" the step
+			velocity.y = 0 
 			global_position.y = step_y
 			return true
 

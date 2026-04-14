@@ -1,6 +1,9 @@
-[gd_scene format=3 uid="uid://c13sq6ef31tdd"]
+[gd_scene load_steps=2 format=3 uid="uid://c13sq6ef31tdd"]
+
+[ext_resource type="Script" uid="uid://boqkhh71sibc3" path="res://ui/DialogueBox.gd" id="1_62fiq"]
 
 [node name="DialogueBox" type="CanvasLayer"]
+script = ExtResource("1_62fiq")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -15,6 +18,7 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 482.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -25,9 +29,10 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = 123.0
-offset_right = 47.0
-offset_bottom = 150.0
+offset_left = 47.0
+offset_top = -58.0
+offset_right = 94.0
+offset_bottom = -31.0
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/Panel/MarginContainer"]
@@ -35,7 +40,6 @@ layout_mode = 2
 
 [node name="NameLabel" type="Label" parent="Control/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Name"
 
 [node name="ContentLabel" type="RichTextLabel" parent="Control/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -44,6 +48,10 @@ text = "Content"
 
 [node name="nextButton" type="Button" parent="Control"]
 layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
+offset_left = 1080.0
+offset_top = 507.0
+offset_right = 1129.0
+offset_bottom = 538.0
 text = "NEXT"
+
+[connection signal="pressed" from="Control/nextButton" to="." method="_on_next_button_pressed"]

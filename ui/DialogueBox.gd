@@ -9,8 +9,8 @@ var _is_typing: bool = false
 
 func _ready():
 	hide()
-	# Connect to the autoload manager
-	DialogueManager.dialogue_box = self 
+	DialogueManager.dialogue_box = self
+	$Control/nextButton.pressed.connect(_on_next_pressed)
 
 func start_dialogue(lines: Array[String]):
 	_current_lines = lines
@@ -36,10 +36,20 @@ func _type_text(text: String):
 	tween.finished.connect(func(): _is_typing = false)
 
 func _input(event):
-	if event.is_action_pressed("ui_accept") or event.is_action_pressed("ui_interact"):
+	if event.is_action_pressed("ui_accept") or event.is_action_pressed("interact"):
 		if _is_typing:
-			# Skip typewriter animation
 			content_label.visible_ratio = 1.0
 			_is_typing = false
 		else:
 			_display_next_line()
+			
+func _on_next_pressed():
+	if _is_typing:
+		content_label.visible_ratio = 1.0
+		_is_typing = false
+	else:
+		_display_next_line()
+
+
+func _on_next_button_pressed() -> void:
+	pass # Replace with function body.
