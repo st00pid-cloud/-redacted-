@@ -39,7 +39,40 @@ materials/extract_format=0
 materials/extract_path=""
 _subresources={
 "nodes": {
+"PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_10": {
+"generate/physics": true
+},
+"PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_11": {
+"generate/physics": true
+},
+"PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_12": {
+"generate/physics": true
+},
+"PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_13": {
+"generate/physics": true
+},
 "PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_2": {
+"generate/physics": true
+},
+"PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_3": {
+"generate/physics": true
+},
+"PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_4": {
+"generate/physics": true
+},
+"PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_5": {
+"generate/physics": true
+},
+"PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_6": {
+"generate/physics": true
+},
+"PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_7": {
+"generate/physics": true
+},
+"PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_8": {
+"generate/physics": true
+},
+"PATH:Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_9": {
 "generate/physics": true
 }
 }
