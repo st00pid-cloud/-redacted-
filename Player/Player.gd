@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 @onready var ray: RayCast3D = $HeadPivot/Camera3D/RayCast3D
 
-const SPEED = 8.5
+const SPEED = 10
 const JUMP_VELOCITY = 7.5
 const STEP_HEIGHT = 4.5 # Max height the player can step up (tweak to match your stairs)
 const STEP_CHECK_DIST = 8 # How far ahead to check for steps

@@ -7,11 +7,10 @@ script = ExtResource("1_62fiq")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 2
+grow_vertical = 0
 
 [node name="Panel" type="Panel" parent="Control"]
 layout_mode = 1
@@ -24,27 +23,31 @@ grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/Panel"]
 clip_contents = true
-custom_minimum_size = Vector2(5, 10)
+custom_minimum_size = Vector2(10, 20)
 layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 47.0
-offset_top = -58.0
-offset_right = 94.0
-offset_bottom = -31.0
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
 grow_vertical = 2
+pivot_offset = Vector2(-197, 98)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control/Panel/MarginContainer"]
 layout_mode = 2
 
 [node name="NameLabel" type="Label" parent="Control/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
+text = "[Bobby]"
 
 [node name="ContentLabel" type="RichTextLabel" parent="Control/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
-text = "Content"
+fit_content = true
+scroll_following = true
 
 [node name="nextButton" type="Button" parent="Control"]
 layout_mode = 0

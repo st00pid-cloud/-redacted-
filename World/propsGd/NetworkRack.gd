@@ -1,6 +1,6 @@
 extends StaticBody3D
 
-@export var dialogue_lines: PackedStringArray = [
+@export var dialogue_lines: Array[String] = [
 	"Port 7 is flapping. Standard fix — pull the module, reseat it.",
 	"...there's black residue on the connector.",
 	"It's warm. And it smells organic.",
@@ -20,3 +20,6 @@ func interact() -> void:
 func _apply_horror_state() -> void:
 	# You'll add the flickering/material swap tomorrow
 	pass
+
+func _ready() -> void:
+	add_to_group("interactable")

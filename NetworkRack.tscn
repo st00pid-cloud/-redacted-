@@ -1,9 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://0qyvi6yekqrx"]
+[gd_scene load_steps=5 format=3 uid="uid://0qyvi6yekqrx"]
 
 [ext_resource type="PackedScene" uid="uid://cyuynxogtal5" path="res://World/props/data_center_rack.glb" id="1_mrhui"]
 [ext_resource type="Script" uid="uid://cbltl3ycc874n" path="res://World/propsGd/NetworkRack.gd" id="2_0v53a"]
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_mrhui"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0v53a"]
+size = Vector3(1.0117188, 1.1244965, 1)
+
 [node name="Sketchfab_Scene" instance=ExtResource("1_mrhui")]
 
-[node name="StaticBody3D" parent="Sketchfab_model/a7022ea9e66845b296ff9077e440b859_obj_cleaner_materialmerger_gles/Object_2" index="0"]
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="1"]
+physics_material_override = SubResource("PhysicsMaterial_mrhui")
 script = ExtResource("2_0v53a")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" index="0"]
+transform = Transform3D(1, 0, 0, 0, 2.1404629, 0, 0, 0, 1, -0.005859375, 1.171089, 0)
+shape = SubResource("BoxShape3D_0v53a")

@@ -16,9 +16,9 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -531.57196, -221.40868, 122.1
 transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 1.4015198, 16.165413, 50.194504)
 
 [node name="Sketchfab_Scene2" parent="." instance=ExtResource("4_clck7")]
-transform = Transform3D(7.5, 0, 0, 0, 7.5, 0, 0, 0, 7.5, 9.652324, 10.529431, -14.538088)
+transform = Transform3D(0.8852103, -2.0048304, -5.044507, 0.8869523, 5.095871, -1.8696016, 5.3553443, -0.5125903, 1.1434739, 8.946904, 10.529431, -14.538088)
 
 [node name="Player2" parent="." instance=ExtResource("4_bpnau")]
-transform = Transform3D(1.2, 0, 0, 0, 1.2, 0, 0, 0, 1.2, 0, 15.503794, -2.4985821)
+transform = Transform3D(0.48894483, 0, -1.0958709, 0, 1.1999999, 0, 1.0958709, 0, 0.48894483, 5.0898094, 12.987345, 24.822285)
 
 [editable path="Sketchfab_Scene"]
