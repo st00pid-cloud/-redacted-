@@ -49,34 +49,36 @@ func _run_dialogue_with_resist() -> void:
 
 	# We'll play line by line manually to intercept resist moments
 	for i in range(lines_to_play.size()):
-		DialogueManager.show_dialogue([lines_to_play[i]])
+		var single_line: Array[String] = [lines_to_play[i]]
+		DialogueManager.show_dialogue(single_line)
 		await DialogueManager.dialogue_finished
 
 		if i in RESIST_TRIGGER_LINES:
 			var resisted = await _show_resist_prompt()
 			if not resisted:
 				_resist_misses += 1
-				# Replace next engineer line with corrupted version
 				if _current_resist_index < corrupted_lines.size():
-					DialogueManager.show_dialogue([corrupted_lines[_current_resist_index]])
+					var corrupt_line: Array[String] = [corrupted_lines[_current_resist_index]]
+					DialogueManager.show_dialogue(corrupt_line)
 					await DialogueManager.dialogue_finished
 				_current_resist_index += 1
 
 	_play_ending()
 
 func _show_resist_prompt() -> bool:
+	if not _resist_overlay:
+		push_warning("ConsoleTerminal: resist_overlay group not found in scene")
 	if _resist_overlay:
 		_resist_overlay.show()
 	_waiting_for_resist = true
 	_resist_timer = RESIST_WINDOW
 
-	# Wait for either input or timeout
 	while _waiting_for_resist and _resist_timer > 0:
 		await get_tree().process_frame
 
 	if _resist_overlay:
 		_resist_overlay.hide()
-	return not _waiting_for_resist # true = player pressed in time
+	return not _waiting_for_resist
 
 func _process(delta: float) -> void:
 	if not _waiting_for_resist:
@@ -91,21 +93,26 @@ func _input(event: InputEvent) -> void:
 
 func _play_ending() -> void:
 	var horror_overlay = get_tree().get_first_node_in_group("horror_overlay")
+	if not horror_overlay:
+		push_warning("ConsoleTerminal: horror_overlay group not found in scene")
 
 	if _resist_misses >= 3:
 		# BAD ENDING
 		if horror_overlay:
+			horror_overlay.modulate.a = 0.0
 			horror_overlay.show()
 			var tween = create_tween()
-			tween.tween_property(horror_overlay, "modulate:a", 1.0, 0.05)
-		DialogueManager.show_dialogue(["[SYSTEM]: Integration complete. Welcome."])
+			tween.tween_property(horror_overlay, "modulate:a", 1.0, 0.5)
+		var final_line: Array[String] = ["[SYSTEM]: Integration complete. Welcome."]
+		DialogueManager.show_dialogue(final_line)
 		await DialogueManager.dialogue_finished
 		GameManager.trigger_game_over("integration_complete")
 	else:
 		# GOOD ENDING — hard cut
 		if horror_overlay:
+			horror_overlay.modulate.a = 0.0
 			horror_overlay.show()
 			var tween = create_tween()
-			tween.tween_property(horror_overlay, "modulate:a", 1.0, 0.05)
+			tween.tween_property(horror_overlay, "modulate:a", 1.0, 0.5)
 		await get_tree().create_timer(0.5).timeout
 		GameManager.trigger_ending("engineer_resisted")

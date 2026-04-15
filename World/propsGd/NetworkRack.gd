@@ -28,17 +28,17 @@ func interact() -> void:
 	for line in dialogue_lines:
 		lines.append(line)
 	DialogueManager.show_dialogue(lines)
-	
 	await DialogueManager.dialogue_finished
 	TaskManager.complete_task(task_to_complete)
 	TaskManager.begin_corruption()
 	_apply_horror_state()
 
 func _apply_horror_state() -> void:
-	# Find the horror overlay in the scene and flicker it
 	var overlay = get_tree().get_first_node_in_group("horror_overlay")
 	if not overlay:
+		push_warning("NetworkRack: horror_overlay group not found in scene")
 		return
+	overlay.modulate.a = 0.0
 	overlay.show()
 	var tween = create_tween()
 	tween.set_loops(6)

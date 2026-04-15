@@ -3,7 +3,7 @@ extends Node3D
 @onready var network_rack = $Sketchfab_Scene2  # adjust path to your NetworkRack node
 @onready var diagnostic_panel = $DiagnosticPanel
 @onready var horror_overlay = $HorrorOverlay
-@onready var resist_overlay = $"."
+@onready var resist_overlay = $ResistOverlay
 
 const OPENING_LINES = [
 	"Central Command Console. 0300 hours.",
@@ -13,9 +13,11 @@ const OPENING_LINES = [
 ]
 
 func _ready():
-	# Wire the diagnostic panel into the rack
-	if network_rack and network_rack.has_method("interact"):
-		network_rack.diagnostic_panel = diagnostic_panel
+	# Wire the diagnostic panel into the rack's StaticBody3D script
+	# $Sketchfab_Scene2 is the root — the script lives on the StaticBody3D child
+	var rack_body = $Sketchfab_Scene2.get_node("StaticBody3D")
+	if rack_body:
+		rack_body.diagnostic_panel = diagnostic_panel
 
 	# Set opening task
 	var task = TaskData.new()
@@ -26,8 +28,7 @@ func _ready():
 
 	# Play opening dialogue after a short delay
 	await get_tree().create_timer(1.2).timeout
-
 	var lines: Array[String] = []
 	for line in OPENING_LINES:
 		lines.append(line)
-		DialogueManager.show_dialogue(lines)
+	DialogueManager.show_dialogue(lines)

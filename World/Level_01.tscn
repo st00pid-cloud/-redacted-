@@ -1,14 +1,16 @@
-[gd_scene load_steps=10 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=12 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
-[ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/DialogueBox.tscn" id="3_ccxtb"]
+[ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/dialogue_box/DialogueBox.tscn" id="3_ccxtb"]
 [ext_resource type="PackedScene" uid="uid://btlq03ck7663s" path="res://Player/Player_Claude.tscn" id="4_bpnau"]
 [ext_resource type="PackedScene" uid="uid://0qyvi6yekqrx" path="res://NetworkRack.tscn" id="4_clck7"]
 [ext_resource type="PackedScene" uid="uid://c80mqnaa4fjea" path="res://World/props/scp_server_room.glb" id="4_lohiu"]
-[ext_resource type="PackedScene" uid="uid://bf11cqb22njsx" path="res://ui/DiagnosticPanel.tscn" id="6_ieywp"]
+[ext_resource type="PackedScene" uid="uid://bf11cqb22njsx" path="res://ui/diagnostic_panel/DiagnosticPanel.tscn" id="6_ieywp"]
 [ext_resource type="PackedScene" uid="uid://d17uht2oiic26" path="res://ui/horror_overlay/color_rect.tscn" id="7_ieywp"]
 [ext_resource type="PackedScene" uid="uid://b8w0veatu7gb1" path="res://ui/horror_overlay/resist_overlay.tscn" id="8_7wdav"]
 [ext_resource type="PackedScene" uid="uid://q06spmostej3" path="res://World/propsGd/ConsoleTerminal.tscn" id="9_faiek"]
+[ext_resource type="PackedScene" uid="uid://x8u82i7o7khc" path="res://audio/AmbientSound (2).tscn" id="10_egdld"]
+[ext_resource type="PackedScene" uid="uid://djqs4vt8tbcn0" path="res://ui/menu/PauseMenu.tscn" id="11_j4qah"]
 
 [node name="Level01" type="Node3D"]
 script = ExtResource("1_bpnau")
@@ -29,13 +31,21 @@ transform = Transform3D(0.48894483, 0, -1.0958709, 0, 1.1999999, 0, 1.0958709, 0
 
 [node name="DiagnosticPanel" parent="." instance=ExtResource("6_ieywp")]
 
+[node name="ConsoleTerminal" parent="." instance=ExtResource("9_faiek")]
+transform = Transform3D(5.5, 0, 0, 0, 5.5, 0, 0, 0, 5.5, 0, 12.287832, 0)
+
+[node name="ResistOverlay" parent="." instance=ExtResource("8_7wdav")]
+visible = false
+
 [node name="HorrorOverlay" parent="." instance=ExtResource("7_ieywp")]
 
 [node name="Control" parent="HorrorOverlay" instance=ExtResource("8_7wdav")]
 layout_mode = 1
 
-[node name="ConsoleTerminal" parent="." instance=ExtResource("9_faiek")]
-transform = Transform3D(5.5, 0, 0, 0, 5.5, 0, 0, 0, 5.5, 0, 12.287832, 0)
+[node name="AmbientSound" parent="." instance=ExtResource("10_egdld")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("11_j4qah")]
+script = null
 
 [editable path="Sketchfab_Scene"]
 [editable path="Sketchfab_Scene2"]

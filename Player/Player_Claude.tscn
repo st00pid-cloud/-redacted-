@@ -1,12 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://btlq03ck7663s"]
+[gd_scene load_steps=5 format=3 uid="uid://btlq03ck7663s"]
 
 [ext_resource type="Script" uid="uid://dfi8q0taencg8" path="res://Player/Player.gd" id="1_3qydi"]
 [ext_resource type="Script" uid="uid://c68dyyk6h8oii" path="res://Player/CameraHead.gd" id="2_q3lat"]
+[ext_resource type="AudioStream" uid="uid://2j4r0wcxse4i" path="res://audio/620346__marb7e__footsteps_stiletto_stone_walk04.wav" id="3_xs1ha"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_l2ndj"]
 
 [node name="Player" type="CharacterBody3D"]
 script = ExtResource("1_3qydi")
+
+[node name="footsteps" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_xs1ha")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)

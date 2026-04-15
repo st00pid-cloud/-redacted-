@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d17uht2oiic26"]
 
-[node name="HorrorOverlay" type="ColorRect"]
+[node name="HorrorOverlay" type="ColorRect" groups=["horror_overlay"]]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0

@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://x8u82i7o7khc"]
+
+[ext_resource type="Script" uid="uid://b1nw3a5g8ij74" path="res://audio/AmbientSound.gd" id="1_amb"]
+[ext_resource type="AudioStream" uid="uid://iodxdn6uewo4" path="res://audio/765695__shluup__amb-int_officeserver_gm_owsfx.wav" id="2_lqr5g"]
+[ext_resource type="AudioStream" uid="uid://bwyx05jnwxuek" path="res://audio/506220__nucleartape__gross-glitch.wav" id="3_ixdw1"]
+
+[node name="AmbientSound" type="Node"]
+script = ExtResource("1_amb")
+
+[node name="Hum" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_lqr5g")
+
+[node name="Distortion" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_ixdw1")
+volume_db = -80.0
