@@ -3,7 +3,6 @@ extends CanvasLayer
 @onready var location_label = $Control/VBoxContainer/LocationLabel
 @onready var condition_label = $Control/VBoxContainer/ConditionLabel
 
-# Condition stages — updates as game progresses
 const CONDITIONS = [
 	"01% Integration",
 	"24% Integration",
@@ -22,7 +21,6 @@ func _ready() -> void:
 	TaskManager.corruption_tick.connect(_on_corruption_tick)
 
 func _process(delta: float) -> void:
-	# Blink the condition label after corruption starts
 	if _condition_index > 0:
 		_blink_timer += delta
 		if _blink_timer >= 0.8:
@@ -35,3 +33,10 @@ func _on_corruption_tick() -> void:
 		condition_label.visible = true
 		condition_label.text = "Condition: " + CONDITIONS[_condition_index]
 		_condition_index += 1
+
+## Called by DiagnosticPanel or other full-screen UI to avoid overlap
+func hide_header() -> void:
+	visible = false
+
+func show_header() -> void:
+	visible = true

@@ -8,9 +8,11 @@ const JUMP_VELOCITY = 7.5
 const STEP_HEIGHT = 4.5
 const STEP_CHECK_DIST = 8
 
-# Footstep timing — one step every this many seconds while moving
 const FOOTSTEP_INTERVAL = 0.42
 var _footstep_timer: float = 0.0
+
+func _ready() -> void:
+	add_to_group("player")
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -35,7 +37,6 @@ func _physics_process(delta: float) -> void:
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
-		# Tick footstep timer only when moving on floor
 		if is_on_floor():
 			_footstep_timer -= delta
 			if _footstep_timer <= 0.0:
@@ -44,13 +45,12 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
-		_footstep_timer = 0.0 # reset so first step after pause is immediate
+		_footstep_timer = 0.0
 
 	move_and_slide()
 
 func _play_footstep() -> void:
 	if footstep_player and not footstep_player.playing:
-		# Randomize pitch slightly so steps don't sound robotic
 		footstep_player.pitch_scale = randf_range(0.9, 1.1)
 		footstep_player.play()
 

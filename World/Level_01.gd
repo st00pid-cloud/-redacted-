@@ -1,7 +1,5 @@
 extends Node3D
 
-@onready var network_rack = $Sketchfab_Scene2  # adjust path to your NetworkRack node
-@onready var diagnostic_panel = $DiagnosticPanel
 @onready var horror_overlay = $HorrorOverlay
 @onready var resist_overlay = $ResistOverlay
 
@@ -13,12 +11,6 @@ const OPENING_LINES = [
 ]
 
 func _ready():
-	# Wire the diagnostic panel into the rack's StaticBody3D script
-	# $Sketchfab_Scene2 is the root — the script lives on the StaticBody3D child
-	var rack_body = $Sketchfab_Scene2.get_node("StaticBody3D")
-	if rack_body:
-		rack_body.diagnostic_panel = diagnostic_panel
-
 	# Set opening task
 	var task = TaskData.new()
 	task.task_id = "task_01"

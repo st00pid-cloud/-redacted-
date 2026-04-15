@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://dat8dpjgsiown" path="res://cutscene/IntroCutscene.gd" id="1_intro"]
+
+[node name="IntroCutscene" type="CanvasLayer"]
+layer = 200
+script = ExtResource("1_intro")
+
+[node name="BG" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -150.0
+offset_right = 350.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="TextLabel" type="RichTextLabel" parent="Control/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(700, 250)
+bbcode_enabled = true
+text = ""
+fit_content = true
+scroll_active = false
+theme_override_font_sizes/normal_font_size = 16
+theme_override_colors/default_color = Color(0.5, 0.9, 0.5, 0.9)
+
+[node name="SkipLabel" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -40.0
+offset_right = 60.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "[ SPACE to skip ]"
+theme_override_font_sizes/font_size = 11
+modulate = Color(0.4, 0.6, 0.4, 0.4)
+horizontal_alignment = 1

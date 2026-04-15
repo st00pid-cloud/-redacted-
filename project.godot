@@ -22,7 +22,7 @@ TaskManager="*res://autoloads/TaskManager.gd"
 GameManager="*res://autoloads/GameManager.gd"
 SceneTransition="*res://ui/scene_transition/SceneTransition.tscn"
 EndScreenData="*res://autoloads/EndScreenData.gd"
-AmbientSound="*res://audio/AmbientSound.tscn"
+AmbientSound="*res://audio/AmbientSound (2).tscn"
 
 [global_group]
 
