@@ -1,10 +1,10 @@
 extends StaticBody3D
 
 ## NetworkRack.gd — The main puzzle interactable
-## Flow: Player interacts → dialogue explains the problem → diagnostic panel opens
+## Flow: interact → dialogue → diagnostic (port + 4 horror questions) → ending
 
-var _interaction_stage: int = 0  # 0=first look, 1=diagnostic, 2=completed
-var _diag_ref: Node = null  # fetched lazily — NOT typed as CanvasLayer to avoid Godot assignment issues
+var _interaction_stage: int = 0  # 0=first look, 1=diagnostic open, 2=completed
+var _diag_ref: Node = null
 
 const INTRO_LINES: Array[String] = [
 	"[SYSTEM]: Rack 7 — anomalous activity detected on network port.",
@@ -13,9 +13,9 @@ const INTRO_LINES: Array[String] = [
 ]
 
 const POST_SUCCESS_LINES: Array[String] = [
-	"[SYSTEM]: Port 7 isolated. Partial containment achieved.",
-	"[SYSTEM]: ...signal residue detected in adjacent subsystems.",
-	"[SYSTEM]: Recommend immediate facility evacuation.",
+	"[SYSTEM]: Diagnostic complete. Containment at 42%.",
+	"[SYSTEM]: Entity is resisting isolation.",
+	"[SYSTEM]: Brace yourself, R. Vasquez.",
 ]
 
 const POST_FAIL_LINES: Array[String] = [
@@ -32,54 +32,69 @@ func _get_diagnostic_panel() -> Node:
 	return _diag_ref
 
 func interact() -> void:
-	match _interaction_stage:
-		0:
-			_interaction_stage = 1
-			var task = TaskData.new()
-			task.task_id = "diagnose_rack"
-			task.task_name = "Diagnose Rack 7"
-			task.description = "Run the diagnostic interface. Identify the corrupted port."
-			TaskManager.set_task(task)
-			
-			var lines: Array[String] = []
-			for l in INTRO_LINES:
-				lines.append(l)
-			DialogueManager.show_dialogue(lines)
-			await DialogueManager.dialogue_finished
-			_open_diagnostic()
-		1:
-			_open_diagnostic()
-		2:
-			var lines: Array[String] = ["[SYSTEM]: Rack 7 — diagnostic complete. No further action available."]
-			DialogueManager.show_dialogue(lines)
+	if _interaction_stage == 2:
+		var lines: Array[String] = ["[SYSTEM]: Rack 7 — diagnostic complete. No further action available."]
+		DialogueManager.show_dialogue(lines)
+		return
+	if _interaction_stage == 1:
+		_open_diagnostic()
+		return
+
+	# Stage 0: first interaction
+	_interaction_stage = 1
+	var task = TaskData.new()
+	task.task_id = "diagnose_rack"
+	task.task_name = "Diagnose Rack 7"
+	task.description = "Run the diagnostic interface. Identify the corrupted port."
+	TaskManager.set_task(task)
+
+	var lines: Array[String] = []
+	for l in INTRO_LINES:
+		lines.append(l)
+	DialogueManager.show_dialogue(lines)
+	await DialogueManager.dialogue_finished
+	_open_diagnostic()
 
 func _open_diagnostic() -> void:
 	var panel = _get_diagnostic_panel()
-	if panel:
-		var loc_header = _find_node_by_script("LocationHeader")
-		if loc_header and loc_header.has_method("hide_header"):
-			loc_header.hide_header()
-		panel.open_diagnostic()
-		if not panel.diagnostic_completed.is_connected(_on_diagnostic_done):
-			panel.diagnostic_completed.connect(_on_diagnostic_done, CONNECT_ONE_SHOT)
+	if not panel:
+		push_warning("NetworkRack: No diagnostic_panel found in group!")
+		return
+	# Hide location header
+	var loc_header = _find_node_by_script("LocationHeader")
+	if loc_header and loc_header.has_method("hide_header"):
+		loc_header.hide_header()
+	panel.open_diagnostic()
+	if not panel.diagnostic_completed.is_connected(_on_diagnostic_done):
+		panel.diagnostic_completed.connect(_on_diagnostic_done, CONNECT_ONE_SHOT)
 
 func _on_diagnostic_done(success: bool) -> void:
 	_interaction_stage = 2
+	# Show location header again
 	var loc_header = _find_node_by_script("LocationHeader")
 	if loc_header and loc_header.has_method("show_header"):
 		loc_header.show_header()
-	
+
 	TaskManager.complete_task("diagnose_rack")
-	
+
 	if success:
 		var lines: Array[String] = []
 		for l in POST_SUCCESS_LINES:
 			lines.append(l)
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
+
+		# Start corruption visuals
 		TaskManager.begin_corruption()
-		await get_tree().create_timer(8.0).timeout
-		GameManager.trigger_ending("engineer_resisted")
+		await get_tree().create_timer(3.0).timeout
+
+		# Trigger the RESIST sequence on the level
+		var level = get_tree().current_scene
+		if level and level.has_method("start_resist_sequence"):
+			level.start_resist_sequence()
+		else:
+			# Fallback if level doesn't have the method
+			GameManager.trigger_ending("engineer_resisted")
 	else:
 		var lines: Array[String] = []
 		for l in POST_FAIL_LINES:

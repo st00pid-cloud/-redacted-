@@ -56,6 +56,9 @@ func _play_footstep() -> void:
 
 func _input(event):
 	if event.is_action_pressed("interact"):
+		# Block interaction during dialogue
+		if DialogueManager and DialogueManager.is_active:
+			return
 		if ray.is_colliding():
 			var collider = ray.get_collider()
 			if collider.is_in_group("interactable"):

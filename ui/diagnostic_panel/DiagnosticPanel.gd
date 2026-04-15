@@ -14,8 +14,8 @@ var wrong_guesses := 0
 var port_buttons: Array = []
 var ascii_cycle_timer: float = 0.0
 var ascii_step: int = 0
-var _phase: int = 0  # 0 = port select, 1 = horror question, 2 = done
-var _port_success: bool = false  # stored separately — not in the const dict
+var _phase: int = 0  # 0=port, 1=horror questions, 2=done
+var _port_success: bool = false
 
 const ASCII_SEQUENCE = [72, 85, 78, 71, 82, 89]  # HUNGRY
 
@@ -28,30 +28,39 @@ var port_data = [
 
 const HORROR_QUESTIONS = [
 	{
-		"question": "Before containment proceeds:\nDo you believe R. Vasquez is still alone in this room?",
+		"question": "VERIFICATION 1/4:\nDo you believe R. Vasquez is still alone in this room?",
 		"answers": ["YES", "NO"],
 		"correct": 1,
-		"success_text": "Correct. You were never alone.\nContainment proceeding...",
+		"success_text": "Correct. You were never alone.",
 		"fail_text": "Denial noted. Integration preference: willing host.",
 	},
 	{
-		"question": "Verification required:\nThe maintenance logs mention sounds from this rack.\nWhat do machines dream about?",
+		"question": "VERIFICATION 2/4:\nThe maintenance logs mention sounds from this rack.\nWhat do machines dream about?",
 		"answers": ["NOTHING", "US"],
 		"correct": 0,
-		"success_text": "Response logged. Rational mind confirmed.\nContainment proceeding...",
-		"fail_text": "You listened too closely.\nIt appreciates that.",
+		"success_text": "Response logged. Rational mind confirmed.",
+		"fail_text": "You listened too closely. It appreciates that.",
 	},
 	{
-		"question": "SYSTEM INTEGRITY CHECK:\nWho authorized your night shift, R. Vasquez?",
+		"question": "VERIFICATION 3/4:\nWho authorized your night shift, R. Vasquez?",
 		"answers": ["DISPATCH", "I DON'T REMEMBER"],
 		"correct": 0,
-		"success_text": "Authorization verified. Proceeding...",
+		"success_text": "Authorization verified.",
 		"fail_text": "Memory gaps detected. Integration compatible.",
+	},
+	{
+		"question": "VERIFICATION 4/4:\nThe entity requests a name.\nDo you give it one?",
+		"answers": ["NO", "YES"],
+		"correct": 0,
+		"success_text": "Unnamed things are harder to love.\nContainment holds.",
+		"fail_text": "Named things grow. You know that now.",
 	},
 ]
 
-var _current_horror_q: Dictionary = {}
 var _horror_buttons: Array = []
+var _horror_correct_count: int = 0
+var _horror_question_index: int = 0
+var _awaiting_horror_answer: bool = false
 
 func _ready():
 	add_to_group("diagnostic_panel")
@@ -65,6 +74,9 @@ func _ready():
 func open_diagnostic():
 	_phase = 0
 	_port_success = false
+	_horror_correct_count = 0
+	_horror_question_index = 0
+	_awaiting_horror_answer = false
 	wrong_guesses = 0
 	ascii_step = 0
 	feedback_label.text = ""
@@ -80,7 +92,6 @@ func open_diagnostic():
 
 func _build_port_buttons():
 	for i in range(port_data.size()):
-		var port = port_data[i]
 		var btn = Button.new()
 		btn.text = _format_port_display(i)
 		btn.name = "Port" + str(i)
@@ -112,44 +123,54 @@ func _on_port_selected(index: int):
 	if _phase != 0:
 		return
 	if index == CORRUPTED_PORT:
-		feedback_label.text = "PORT 7 flagged. Running verification..."
+		feedback_label.text = "PORT 7 flagged. Initiating verification sequence..."
 		await get_tree().create_timer(1.0).timeout
-		_start_horror_question(true)
+		_begin_horror_sequence(true)
 	else:
 		wrong_guesses += 1
 		if wrong_guesses >= MAX_WRONG_GUESSES:
 			feedback_label.text = "Too many failures. Integration pathway opened."
 			await get_tree().create_timer(1.5).timeout
-			_start_horror_question(false)
+			_begin_horror_sequence(false)
 		else:
 			feedback_label.text = "Incorrect. The anomaly shifts. Choose again."
 			port_buttons[index].disabled = true
 
-func _start_horror_question(port_was_correct: bool) -> void:
+func _begin_horror_sequence(port_was_correct: bool) -> void:
 	_phase = 1
-	_port_success = port_was_correct  # store as instance var, not in the const dict
+	_port_success = port_was_correct
+	_horror_correct_count = 0
+	_horror_question_index = 0
 	port_container.visible = false
+	_show_horror_question()
 
-	# Pick a random horror question — duplicate so we have a mutable copy
-	_current_horror_q = HORROR_QUESTIONS[randi() % HORROR_QUESTIONS.size()].duplicate()
+func _show_horror_question() -> void:
+	if _horror_question_index >= HORROR_QUESTIONS.size():
+		# All questions answered — evaluate
+		_finish_horror_sequence()
+		return
+
+	var q = HORROR_QUESTIONS[_horror_question_index]
+	_clear_horror_buttons()
 
 	header_label.text = ""
 	feedback_label.text = ""
 
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.4).timeout
 
-	header_label.text = _current_horror_q["question"]
+	# Type out question
+	header_label.text = q["question"]
 	header_label.visible_ratio = 0.0
 	var tween = create_tween()
-	tween.tween_property(header_label, "visible_ratio", 1.0, 1.5)
+	tween.tween_property(header_label, "visible_ratio", 1.0, 1.2)
 	await tween.finished
 
-	await get_tree().create_timer(0.3).timeout
+	await get_tree().create_timer(0.2).timeout
 
+	# Show answer buttons
 	if horror_container:
 		horror_container.visible = true
-		_clear_horror_buttons()
-		var answers = _current_horror_q["answers"]
+		var answers = q["answers"]
 		for i in range(answers.size()):
 			var btn = Button.new()
 			btn.text = "[ " + answers[i] + " ]"
@@ -158,32 +179,62 @@ func _start_horror_question(port_was_correct: bool) -> void:
 			btn.pressed.connect(_on_horror_answer.bind(i))
 			horror_container.add_child(btn)
 			_horror_buttons.append(btn)
+		_awaiting_horror_answer = true
 
 func _on_horror_answer(index: int) -> void:
-	if _phase != 1:
+	if not _awaiting_horror_answer:
 		return
-	_phase = 2
+	_awaiting_horror_answer = false
 
-	var correct_answer: int = _current_horror_q["correct"]
-	var horror_success: bool = (index == correct_answer)
+	var q = HORROR_QUESTIONS[_horror_question_index]
+	var correct: int = q["correct"]
+	var success: bool = (index == correct)
 
+	# Disable buttons
 	for btn in _horror_buttons:
 		btn.disabled = true
 
-	if horror_success:
-		feedback_label.text = _current_horror_q["success_text"]
+	if success:
+		_horror_correct_count += 1
+		feedback_label.text = q["success_text"]
 	else:
-		feedback_label.text = _current_horror_q["fail_text"]
+		feedback_label.text = q["fail_text"]
 
 	feedback_label.visible_ratio = 0.0
 	var tween = create_tween()
-	tween.tween_property(feedback_label, "visible_ratio", 1.0, 1.2)
+	tween.tween_property(feedback_label, "visible_ratio", 1.0, 0.8)
 	await tween.finished
 
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(1.2).timeout
 
-	# Both port AND horror question must succeed
-	var overall_success = _port_success and horror_success
+	# Next question
+	_horror_question_index += 1
+	_show_horror_question()
+
+func _finish_horror_sequence() -> void:
+	_phase = 2
+	_clear_horror_buttons()
+	if horror_container:
+		horror_container.visible = false
+
+	# Need port correct + at least 3 of 4 horror questions right
+	var overall_success = _port_success and _horror_correct_count >= 3
+
+	if overall_success:
+		header_label.text = "CONTAINMENT SEQUENCE INITIATED\n%d/4 verifications passed." % _horror_correct_count
+	else:
+		if not _port_success:
+			header_label.text = "PORT ISOLATION FAILED.\nThe entity has a wider attack surface now."
+		else:
+			header_label.text = "VERIFICATION FAILED.\nOnly %d/4 correct. Minimum 3 required.\nIntegration pathway opened." % _horror_correct_count
+
+	feedback_label.text = ""
+	header_label.visible_ratio = 0.0
+	var tween = create_tween()
+	tween.tween_property(header_label, "visible_ratio", 1.0, 1.0)
+	await tween.finished
+
+	await get_tree().create_timer(2.0).timeout
 
 	hide()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)

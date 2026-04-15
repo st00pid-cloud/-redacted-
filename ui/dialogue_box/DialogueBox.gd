@@ -7,10 +7,9 @@ var _current_lines: Array[String] = []
 var _line_index: int = 0
 var _is_typing: bool = false
 
-# SYSTEM lines print fast and clinical, ENGINEER lines slow and hesitant
-const SYSTEM_SPEED = 0.35  # seconds to type full line
-const ENGINEER_SPEED = 1.4  # seconds to type full line
-const CORRUPTED_SPEED = 0.15 # fast and wrong-feeling
+const SYSTEM_SPEED = 0.35
+const ENGINEER_SPEED = 1.4
+const CORRUPTED_SPEED = 0.15
 
 func _ready():
 	hide()
@@ -29,10 +28,11 @@ func _display_next_line():
 		_line_index += 1
 	else:
 		hide()
+		DialogueManager.is_active = false
 		DialogueManager.emit_signal("dialogue_finished")
 
 func _get_type_duration(text: String) -> float:
-	if text.begins_with("[SYSTEM]"):
+	if text.begins_with("[SYSTEM]") or text.begins_with("[TERMINAL") or text.begins_with("[MAINTENANCE"):
 		return SYSTEM_SPEED
 	elif text.begins_with("ENGINEER"):
 		return ENGINEER_SPEED
@@ -40,12 +40,16 @@ func _get_type_duration(text: String) -> float:
 		return CORRUPTED_SPEED
 
 func _get_speaker_name(text: String) -> String:
-	if text.begins_with("[SYSTEM]"):
+	if text.begins_with("[SYSTEM]") or text.begins_with("[TERMINAL") or text.begins_with("[MAINTENANCE"):
 		return "[SYSTEM]"
 	elif text.begins_with("ENGINEER"):
 		return "ENGINEER"
+	elif text.begins_with("User:") or text.begins_with("Clearance:") or text.begins_with("Last login:") or text.begins_with("Active session") or text.begins_with("Note to"):
+		return "[TERMINAL]"
+	elif text.begins_with("Week") or text.begins_with("NOTE"):
+		return "[LOG]"
 	else:
-		return "???"
+		return "..."
 
 func _type_text(text: String):
 	name_label.text = _get_speaker_name(text)
@@ -59,6 +63,8 @@ func _type_text(text: String):
 	tween.finished.connect(func(): _is_typing = false)
 
 func _input(event):
+	if not visible:
+		return
 	if event.is_action_pressed("ui_accept") or event.is_action_pressed("interact"):
 		if _is_typing:
 			content_label.visible_ratio = 1.0

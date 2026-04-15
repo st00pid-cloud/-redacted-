@@ -20,7 +20,13 @@ const ENDINGS = {
 }
 
 func _ready():
+	# Ensure mouse is visible and game is unpaused
+	get_tree().paused = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+	# Hide everything from horror overlays that might have carried over
+	_cleanup_overlays()
+
 	var reason = EndScreenData.reason
 
 	var ending_data = ENDINGS.get(reason, {
@@ -32,11 +38,12 @@ func _ready():
 	sub_label.text = ""
 	restart_button.hide()
 
+	# Sequence the text reveals
 	await get_tree().create_timer(0.8).timeout
 	_type_in(message_label, ending_data["message"])
 	await get_tree().create_timer(2.5).timeout
 	_type_in(sub_label, ending_data["sub"])
-	await get_tree().create_timer(1.5).timeout
+	await get_tree().create_timer(2.0).timeout
 	restart_button.show()
 
 	restart_button.pressed.connect(_on_restart)
@@ -51,3 +58,10 @@ func _on_restart() -> void:
 	EndScreenData.reason = ""
 	EndScreenData.is_game_over = false
 	get_tree().change_scene_to_file("res://World/Level_01.tscn")
+
+func _cleanup_overlays() -> void:
+	# Remove any lingering horror overlays from the previous scene
+	for node in get_tree().get_nodes_in_group("horror_overlay"):
+		node.visible = false
+	for node in get_tree().get_nodes_in_group("resist_overlay"):
+		node.visible = false
