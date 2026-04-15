@@ -78,6 +78,7 @@ layout_mode = 1
 [node name="AmbientSound" parent="." instance=ExtResource("10_egdld")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("11_j4qah")]
+visible = false
 script = null
 
 [node name="LocationHeader" parent="." instance=ExtResource("12_wojfw")]
