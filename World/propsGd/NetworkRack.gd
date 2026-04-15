@@ -1,27 +1,26 @@
 extends StaticBody3D
 
 ## NetworkRack.gd — The main puzzle interactable
-## Flow: interact → dialogue → diagnostic (port + 4 horror questions) → ending
-## Updates TaskManager at each stage so the TaskHUD always shows the current objective.
+## Flow: interact → dialogue → port diagnostic → 4 challenges → 4 horror questions → ending
 
-var _interaction_stage: int = 0  # 0=first look, 1=diagnostic open, 2=completed
+var _interaction_stage: int = 0
 var _diag_ref: Node = null
 
 const INTRO_LINES: Array[String] = [
 	"[SYSTEM]: Rack 7 — anomalous activity detected on network port.",
-	"[SYSTEM]: Run diagnostic scan to isolate corrupted port.",
-	"[SYSTEM]: WARNING: Incorrect isolation may accelerate integration.",
+	"[SYSTEM]: Extended diagnostic required. Multiple subsystem checks.",
+	"[SYSTEM]: WARNING: The system will test your perception. Trust nothing.",
 ]
 
 const POST_SUCCESS_LINES: Array[String] = [
-	"[SYSTEM]: Diagnostic complete. Containment at 42%.",
+	"[SYSTEM]: All diagnostics passed. Containment at 72%.",
 	"[SYSTEM]: Entity is resisting isolation.",
 	"[SYSTEM]: Brace yourself, R. Vasquez.",
 ]
 
 const POST_FAIL_LINES: Array[String] = [
-	"[SYSTEM]: Diagnostic failure. Integration vector widened.",
-	"[SYSTEM]: It knows you tried.",
+	"[SYSTEM]: Diagnostic sequence failed. Integration vector widened.",
+	"[SYSTEM]: It knows you tried. It knows what you answered.",
 ]
 
 func _get_diagnostic_panel() -> Node:
@@ -34,16 +33,15 @@ func _get_diagnostic_panel() -> Node:
 
 func interact() -> void:
 	if _interaction_stage == 2:
-		var lines: Array[String] = ["[SYSTEM]: Rack 7 — diagnostic complete. No further action available."]
+		var lines: Array[String] = ["[SYSTEM]: Rack 7 — all diagnostics complete. No further action."]
 		DialogueManager.show_dialogue(lines)
 		return
 	if _interaction_stage == 1:
 		_open_diagnostic()
 		return
 
-	# Stage 0: first interaction
 	_interaction_stage = 1
-	_set_task("diagnose_rack", "Diagnose Rack 7", "Interact with the console to run the diagnostic scan.")
+	_set_task("diagnose_rack", "Diagnose Rack 7", "Interact with the console to begin the diagnostic sequence.")
 
 	var lines: Array[String] = []
 	for l in INTRO_LINES:
@@ -57,7 +55,7 @@ func interact() -> void:
 func _open_diagnostic() -> void:
 	var panel = _get_diagnostic_panel()
 	if not panel:
-		push_warning("NetworkRack: No diagnostic_panel found in group!")
+		push_warning("NetworkRack: No diagnostic_panel found!")
 		return
 	var loc_header = _find_node_by_script("LocationHeader")
 	if loc_header and loc_header.has_method("hide_header"):
@@ -83,7 +81,6 @@ func _on_diagnostic_done(success: bool) -> void:
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
 
-		# Freeze player IMMEDIATELY after dialogue — they should not be able to walk
 		var player = _find_player()
 		if player:
 			player.set_physics_process(false)
@@ -108,7 +105,6 @@ func _on_diagnostic_done(success: bool) -> void:
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
 
-		# Freeze player before transitioning
 		var player = _find_player()
 		if player:
 			player.set_physics_process(false)

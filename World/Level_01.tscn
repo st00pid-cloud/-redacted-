@@ -1,7 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=23 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/dialogue_box/DialogueBox.tscn" id="3_ccxtb"]
+[ext_resource type="Texture2D" uid="uid://c2rmmppbhky3f" path="res://World/props/scp_server_room_4.png" id="4_6ga61"]
 [ext_resource type="PackedScene" uid="uid://btlq03ck7663s" path="res://Player/Player_Claude.tscn" id="4_bpnau"]
 [ext_resource type="PackedScene" uid="uid://0qyvi6yekqrx" path="res://NetworkRack.tscn" id="4_clck7"]
 [ext_resource type="PackedScene" uid="uid://c80mqnaa4fjea" path="res://World/props/scp_server_room.glb" id="4_lohiu"]
@@ -15,6 +16,25 @@
 [ext_resource type="PackedScene" path="res://ui/crosshair/Crosshair.tscn" id="13_eukdw"]
 [ext_resource type="PackedScene" path="res://cutscene/IntroCutscene.tscn" id="14_ybi3m"]
 [ext_resource type="PackedScene" uid="uid://xbn53ewemqeb" path="res://ui/taskHUD/TaskHUD.tscn" id="15_6vn4c"]
+[ext_resource type="Script" uid="uid://cxlxqwal2yjm2" path="res://challenges/EchoCorrelation.gd" id="16_meeu0"]
+[ext_resource type="Script" uid="uid://whjhl8g6ssxj" path="res://challenges/GhostCursor.gd" id="17_6ga61"]
+[ext_resource type="Script" uid="uid://dbfl2avru45lh" path="res://challenges/ThermalScan.gd" id="18_8jeay"]
+[ext_resource type="Script" uid="uid://ewscf8w1tff" path="res://challenges/MemoryString.gd" id="19_puub4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_meeu0"]
+albedo_texture = ExtResource("4_6ga61")
+
+[sub_resource type="Environment" id="Environment_meeu0"]
+background_mode = 1
+background_color = Color(0.20511743, 0.20511743, 0.20511743, 1)
+background_energy_multiplier = 0.5
+ambient_light_source = 2
+ambient_light_energy = 0.0
+glow_enabled = true
+glow_strength = 0.5
+glow_bloom = 0.2
+volumetric_fog_enabled = true
+volumetric_fog_albedo = Color(2.1658838e-07, 0.124740444, 0.1247404, 1)
 
 [node name="Level01" type="Node3D"]
 script = ExtResource("1_bpnau")
@@ -23,15 +43,19 @@ script = ExtResource("1_bpnau")
 
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("4_lohiu")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -531.57196, -221.40868, 122.18797)
+metadata/_edit_lock_ = true
 
 [node name="Sketchfab_model" parent="Sketchfab_Scene" index="0"]
 transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 1.4015198, 16.165413, 50.194504)
+
+[node name="Object_11" parent="Sketchfab_Scene/Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles" index="9"]
+surface_material_override/0 = SubResource("StandardMaterial3D_meeu0")
 
 [node name="Sketchfab_Scene2" parent="." instance=ExtResource("4_clck7")]
 transform = Transform3D(1.1199205, -0.29382885, -5.3767505, 0.56219196, 5.4681726, -0.18172634, 5.355344, -0.5125901, 1.1434737, 8.946904, 10.529431, -14.538088)
 
 [node name="Player2" parent="." instance=ExtResource("4_bpnau")]
-transform = Transform3D(0.48894483, 0, -1.0958709, 0, 1.1999999, 0, 1.0958709, 0, 0.48894483, 5.0898094, 12.987345, 24.822285)
+transform = Transform3D(-1.0992994, 0, -0.48118633, 0, 1.1999999, 0, 0.48118633, 0, -1.0992994, -7.947733, 38.987434, 22.639372)
 
 [node name="DiagnosticPanel" parent="." instance=ExtResource("6_ieywp")]
 
@@ -60,6 +84,51 @@ script = null
 [node name="IntroCutscene" parent="." instance=ExtResource("14_ybi3m")]
 
 [node name="TaskHud" parent="." instance=ExtResource("15_6vn4c")]
+
+[node name="EchoCorrelation" type="CanvasLayer" parent="."]
+script = ExtResource("16_meeu0")
+
+[node name="GhostCursor" type="CanvasLayer" parent="."]
+script = ExtResource("17_6ga61")
+
+[node name="ThermalScan" type="CanvasLayer" parent="."]
+script = ExtResource("18_8jeay")
+
+[node name="MemoryString" type="CanvasLayer" parent="."]
+script = ExtResource("19_puub4")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_meeu0")
+
+[node name="Bridge1-omni" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.8331056, 37.461178, 22.656567)
+layers = 1023
+light_energy = 20.0
+light_size = 100.0
+light_specular = 8.5
+light_bake_mode = 1
+light_cull_mask = 4294966273
+omni_range = 16.02963
+
+[node name="Bridge1-omni2" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.8331056, 38.446056, -38.289993)
+layers = 1023
+light_energy = 20.0
+light_size = 100.0
+light_specular = 8.5
+light_bake_mode = 1
+light_cull_mask = 4294966273
+omni_range = 24.199257
+
+[node name="Bridge1-omni3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.814571, 37.299347, -38.289993)
+layers = 1023
+light_energy = 20.0
+light_size = 100.0
+light_specular = 8.5
+light_bake_mode = 1
+light_cull_mask = 4294966273
+omni_range = 24.199257
 
 [editable path="Sketchfab_Scene"]
 [editable path="Sketchfab_Scene2"]
