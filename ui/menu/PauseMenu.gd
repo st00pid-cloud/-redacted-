@@ -3,18 +3,28 @@ extends CanvasLayer
 var _is_paused: bool = false
 
 func _ready() -> void:
-	process_mode = Node.PROCESS_MODE_ALWAYS
+	# Ensure the pause menu itself can run even when the game is paused
+	process_mode = Node.PROCESS_MODE_ALWAYS 
 	hide()
 
-func _unhandled_input(event: InputEvent) -> void:
-	# Use _unhandled_input so UI elements get first crack at input
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_ESCAPE:
-			get_viewport().set_input_as_handled()
-			if _is_paused:
-				_resume()
-			else:
-				_pause()
+func _input(event: InputEvent) -> void:
+	# Use _input instead of _unhandled_input to override other UI/Blocking
+	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.keycode == KEY_ESCAPE and event.pressed):
+		
+		# Prevent pausing if the player is currently in a challenge/dialogue 
+		# unless you specifically want them to be able to pause there.
+		if ChallengeTracker.is_player_frozen():
+			# Optional: Allow pausing during challenges, but you must 
+			# be careful with mouse mode conflicts.
+			pass 
+
+		if _is_paused:
+			_resume()
+		else:
+			_pause()
+		
+		# Stop the input from bubbling down to other nodes
+		get_viewport().set_input_as_handled()
 
 func _pause() -> void:
 	_is_paused = true
@@ -25,13 +35,9 @@ func _pause() -> void:
 func _resume() -> void:
 	_is_paused = false
 	hide()
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	# Check if we should actually capture the mouse 
+	# (don't capture if the player is still in a terminal)
+	if not ChallengeTracker.is_player_frozen():
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
 	get_tree().paused = false
-
-func _on_resume_pressed() -> void:
-	_resume()
-
-func _on_quit_pressed() -> void:
-	get_tree().paused = false
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	get_tree().quit()

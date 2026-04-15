@@ -80,13 +80,13 @@ theme_override_constants/separation = 10
 [node name="StartButton" type="Button" parent="CanvasLayer/Control/VBoxContainer/ButtonContainer"]
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
-text = "[ BEGIN MAINTENANCE CALL ]"
+text = "[START]"
 alignment = 0
 
 [node name="QuitButton" type="Button" parent="CanvasLayer/Control/VBoxContainer/ButtonContainer"]
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
-text = "[ DISCONNECT ]"
+text = "[ EXIT ]"
 alignment = 0
 
 [node name="VersionLabel" type="Label" parent="CanvasLayer/Control"]

@@ -13,7 +13,7 @@
 [ext_resource type="PackedScene" uid="uid://x8u82i7o7khc" path="res://audio/AmbientSound (2).tscn" id="10_egdld"]
 [ext_resource type="PackedScene" uid="uid://djqs4vt8tbcn0" path="res://ui/menu/PauseMenu.tscn" id="11_j4qah"]
 [ext_resource type="PackedScene" uid="uid://d0hiq5x7ekx71" path="res://ui/location_header/LocationHeader.tscn" id="12_wojfw"]
-[ext_resource type="PackedScene" path="res://ui/crosshair/Crosshair.tscn" id="13_eukdw"]
+[ext_resource type="PackedScene" uid="uid://btoiamg4a4i21" path="res://ui/crosshair/Crosshair.tscn" id="13_eukdw"]
 [ext_resource type="PackedScene" path="res://cutscene/IntroCutscene.tscn" id="14_ybi3m"]
 [ext_resource type="PackedScene" uid="uid://xbn53ewemqeb" path="res://ui/taskHUD/TaskHUD.tscn" id="15_6vn4c"]
 [ext_resource type="Script" uid="uid://cxlxqwal2yjm2" path="res://challenges/EchoCorrelation.gd" id="16_meeu0"]
@@ -78,7 +78,6 @@ layout_mode = 1
 [node name="AmbientSound" parent="." instance=ExtResource("10_egdld")]
 
 [node name="PauseMenu" parent="." instance=ExtResource("11_j4qah")]
-visible = false
 script = null
 
 [node name="LocationHeader" parent="." instance=ExtResource("12_wojfw")]
