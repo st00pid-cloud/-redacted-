@@ -24,7 +24,11 @@ func interact() -> void:
 			return
 	# Puzzle passed — play the dialogue
 	has_been_used = true
-	DialogueManager.show_dialogue(Array(dialogue_lines))
+	var lines: Array[String] = []
+	for line in dialogue_lines:
+		lines.append(line)
+	DialogueManager.show_dialogue(lines)
+	
 	await DialogueManager.dialogue_finished
 	TaskManager.complete_task(task_to_complete)
 	TaskManager.begin_corruption()

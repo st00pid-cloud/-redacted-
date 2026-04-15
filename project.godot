@@ -22,6 +22,10 @@ TaskManager="*res://autoloads/TaskManager.gd"
 GameManager="*res://autoloads/GameManager.gd"
 EndScreenData="*res://autoloads/EndScreenData.gd"
 
+[global_group]
+
+interactable=""
+
 [input]
 
 left={

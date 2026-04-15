@@ -10,7 +10,7 @@ size = Vector3(1.0117188, 1.1244965, 1)
 
 [node name="Sketchfab_Scene" instance=ExtResource("1_mrhui")]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." index="1"]
+[node name="StaticBody3D" type="StaticBody3D" parent="." index="1" groups=["interactable"]]
 transform = Transform3D(1.2654021, 0, 0, 0, 1, 0, 0, 0, 1.0905162, 0, 0, 0)
 physics_material_override = SubResource("PhysicsMaterial_mrhui")
 script = ExtResource("2_0v53a")
