@@ -2,9 +2,14 @@ extends CanvasLayer
 
 @onready var title_label = $Control/MarginContainer/VBoxContainer/taskTitle
 @onready var desc_label = $Control/MarginContainer/VBoxContainer/taskDesc
+@onready var container = $Control/MarginContainer
+
+var _base_offset: Vector2 = Vector2.ZERO
 
 func _ready():
 	TaskManager.task_updated.connect(update_display)
+	TaskManager.corruption_tick.connect(_on_corruption_tick)
+	_base_offset = container.position
 	update_display()
 
 func update_display():
@@ -15,3 +20,14 @@ func update_display():
 		show()
 	else:
 		hide()
+
+func _on_corruption_tick() -> void:
+	var tween = create_tween()
+	var s = 4.0
+	tween.tween_property(container, "position",
+		_base_offset + Vector2(randf_range(-s, s), randf_range(-s, s)), 0.05)
+	tween.tween_property(container, "position",
+		_base_offset + Vector2(randf_range(-s, s), randf_range(-s, s)), 0.05)
+	tween.tween_property(container, "position",
+		_base_offset + Vector2(randf_range(-s, s), randf_range(-s, s)), 0.05)
+	tween.tween_property(container, "position", _base_offset, 0.05)

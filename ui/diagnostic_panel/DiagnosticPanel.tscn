@@ -1,6 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://bf11cqb22njsx"]
+[gd_scene load_steps=4 format=3 uid="uid://bf11cqb22njsx"]
 
 [ext_resource type="Script" uid="uid://cklfbc2y1k1bx" path="res://ui/diagnostic_panel/DiagnosticPanel.gd" id="1_diag"]
+[ext_resource type="Shader" uid="uid://fsgkafwwx36p" path="res://shaders/crt_screen.gdshader" id="2_3unrs"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wv7tj"]
+shader = ExtResource("2_3unrs")
+shader_parameter/scanline_density = 200.0
+shader_parameter/scanline_strength = 0.25
+shader_parameter/curvature = 0.04
+shader_parameter/vignette_strength = 0.35
+shader_parameter/flicker_speed = 3.0
+shader_parameter/flicker_strength = 0.02
 
 [node name="DiagnosticPanel" type="CanvasLayer"]
 script = ExtResource("1_diag")
@@ -14,6 +24,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="Panel" parent="Control"]
+material = SubResource("ShaderMaterial_wv7tj")
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

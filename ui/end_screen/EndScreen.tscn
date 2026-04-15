@@ -1,14 +1,13 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=2 format=3 uid="uid://cy67xnw6t2ivb"]
 
-[ext_resource type="Script" uid="uid://c6h163n6cap8a" path="res://autoloads/EndScreenData.gd" id="1_end"]
+[ext_resource type="Script" uid="uid://cgwtpboffsyax" path="res://ui/end_screen/EndScreen.gd" id="1_g7leb"]
 
 [node name="EndScreen" type="Node2D"]
-script = ExtResource("1_end")
+script = ExtResource("1_g7leb")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
-layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -37,22 +36,20 @@ offset_right = 300.0
 offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
-alignment = 1
 theme_override_constants/separation = 24
+alignment = 1
 
 [node name="MessageLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
 layout_mode = 2
-text = ""
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="SubLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
 layout_mode = 2
-text = ""
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="RestartButton" type="Button" parent="CanvasLayer/Control/VBoxContainer"]
+visible = false
 layout_mode = 2
 text = "[ RECONNECT ]"
-visible = false

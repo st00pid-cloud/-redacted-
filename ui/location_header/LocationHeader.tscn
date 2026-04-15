@@ -1,6 +1,6 @@
-[gd_scene format=3 uid="uid://location_header_001"]
+[gd_scene load_steps=0 format=3]
 
-[ext_resource type="Script" path="res://ui/LocationHeader.gd" id="1_loc"]
+[ext_resource type="Script" uid="uid://cfy6xa510cwtq" path="res://ui/location_header/LocationHeader.gd" id="1_loc"]
 
 [node name="LocationHeader" type="CanvasLayer"]
 script = ExtResource("1_loc")
