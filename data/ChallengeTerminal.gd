@@ -10,11 +10,15 @@ extends StaticBody3D
 ##   3. Set challenge_type to "echo", "ghost", "thermal", or "memory"
 ##   4. The terminal auto-creates the challenge CanvasLayer at runtime
 
+@onready var status_light: OmniLight3D = $OmniLight3D
+@onready var hum_audio: AudioStreamPlayer3D = $AudioStreamPlayer3D
+
 @export_enum("echo", "ghost", "thermal", "memory") var challenge_type: String = "echo"
 
 var _challenge_node: Node = null
 var _interaction_stage: int = 0  # 0=available, 1=running, 2=completed
 var has_been_read: bool = false  # for crosshair exhaustion check
+
 
 # Dialogue lines per challenge type (intro flavor)
 const TERMINAL_LINES = {
@@ -176,3 +180,19 @@ func _on_challenge_done(success: bool) -> void:
 		task.task_name = "Subsystem Diagnostics"
 		task.description = "%d terminal(s) remaining. Locate and complete them." % remaining
 		TaskManager.set_task(task)
+
+
+func _process(delta: float) -> void:
+	# Only flicker if the terminal is still available (stage 0)
+	if _interaction_stage == 0:
+		# Pulse the light energy using a sine wave
+		status_light.light_energy = 1.0 + (sin(Time.get_ticks_msec() * 0.005) * 0.5) 
+		# Random "glitch" flicker
+		if randf() < 0.02:
+			status_light.visible = !status_light.visible
+	# If completed, turn light green and dim the audio
+	elif _interaction_stage == 2:
+		status_light.visible = true
+		status_light.light_color = Color.GREEN
+		status_light.light_energy = 0.5
+		hum_audio.unit_size = lerp(hum_audio.unit_size, 0.0, 0.1) # Fade out sound

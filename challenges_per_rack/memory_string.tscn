@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://dmeevhvlniemg"]
+[gd_scene load_steps=5 format=3 uid="uid://dmeevhvlniemg"]
 
 [ext_resource type="PackedScene" uid="uid://cyuynxogtal5" path="res://World/props/data_center_rack.glb" id="1_o7vvq"]
 [ext_resource type="Script" uid="uid://l65vs2kksr24" path="res://data/ChallengeTerminal.gd" id="2_ihe8t"]
+[ext_resource type="AudioStream" uid="uid://bwyx05jnwxuek" path="res://audio/506220__nucleartape__gross-glitch.wav" id="3_747v2"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_t1gyr"]
 size = Vector3(1.230896, 2.1479492, 1)
@@ -17,3 +18,13 @@ challenge_type = "memory"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Sketchfab_Scene/StaticBody3D" groups=["interactable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.021820068, 1.2668457, 0)
 shape = SubResource("BoxShape3D_t1gyr")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Sketchfab_Scene/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.03684, 0.35582507, 0.25777256)
+light_color = Color(1, 0.06999999, 0.06999999, 1)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Sketchfab_Scene/StaticBody3D"]
+stream = ExtResource("3_747v2")
+volume_db = -50.0
+unit_size = 3.0
+autoplay = true
