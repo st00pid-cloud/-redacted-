@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=24 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/dialogue_box/DialogueBox.tscn" id="3_ccxtb"]
@@ -20,6 +20,7 @@
 [ext_resource type="Script" uid="uid://whjhl8g6ssxj" path="res://challenges/GhostCursor.gd" id="17_6ga61"]
 [ext_resource type="Script" uid="uid://dbfl2avru45lh" path="res://challenges/ThermalScan.gd" id="18_8jeay"]
 [ext_resource type="Script" uid="uid://ewscf8w1tff" path="res://challenges/MemoryString.gd" id="19_puub4"]
+[ext_resource type="PackedScene" uid="uid://bvg3lnoclioxv" path="res://World/props/lamp.glb" id="21_8jeay"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_meeu0"]
 albedo_texture = ExtResource("4_6ga61")
@@ -51,8 +52,8 @@ transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 1.4015
 [node name="Object_11" parent="Sketchfab_Scene/Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles" index="9"]
 surface_material_override/0 = SubResource("StandardMaterial3D_meeu0")
 
-[node name="Sketchfab_Scene2" parent="." instance=ExtResource("4_clck7")]
-transform = Transform3D(1.1199205, -0.29382885, -5.3767505, 0.56219196, 5.4681726, -0.18172634, 5.355344, -0.5125901, 1.1434737, 8.946904, 10.529431, -14.538088)
+[node name="Rack1" parent="." instance=ExtResource("4_clck7")]
+transform = Transform3D(0.23546375, -0.27981722, -7.6913104, 0.7870689, 7.655442, -0.2544168, 7.656048, -0.7784007, 0.2627032, -32.011482, 8.719945, 8.733135)
 
 [node name="Player2" parent="." instance=ExtResource("4_bpnau")]
 transform = Transform3D(-1.0992994, 0, -0.48118633, 0, 1.1999999, 0, 0.48118633, 0, -1.0992994, -7.947733, 38.987434, 22.639372)
@@ -101,24 +102,24 @@ script = ExtResource("19_puub4")
 environment = SubResource("Environment_meeu0")
 
 [node name="Bridge1-omni" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.8331056, 37.461178, 22.656567)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.8331056, 35.9683, 16.720438)
 layers = 1023
 light_energy = 20.0
 light_size = 100.0
 light_specular = 8.5
 light_bake_mode = 1
 light_cull_mask = 4294966273
-omni_range = 16.02963
+omni_range = 13.834019
 
 [node name="Bridge1-omni2" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.8331056, 38.446056, -38.289993)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.8331056, 41.355915, -37.739185)
 layers = 1023
 light_energy = 20.0
 light_size = 100.0
 light_specular = 8.5
 light_bake_mode = 1
 light_cull_mask = 4294966273
-omni_range = 24.199257
+omni_range = 18.015373
 
 [node name="Bridge1-omni3" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.814571, 37.299347, -38.289993)
@@ -130,5 +131,11 @@ light_bake_mode = 1
 light_cull_mask = 4294966273
 omni_range = 24.199257
 
+[node name="lamp" parent="." instance=ExtResource("21_8jeay")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -46.097954, 42.16422, 23.317074)
+
+[node name="lamp2" parent="." instance=ExtResource("21_8jeay")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -46.097954, 44.023224, -28.962729)
+
 [editable path="Sketchfab_Scene"]
-[editable path="Sketchfab_Scene2"]
+[editable path="Rack1"]
