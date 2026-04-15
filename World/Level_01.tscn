@@ -1,11 +1,16 @@
-[gd_scene load_steps=5 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=9 format=3 uid="uid://dooywrqu1b2uo"]
 
+[ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/DialogueBox.tscn" id="3_ccxtb"]
 [ext_resource type="PackedScene" uid="uid://btlq03ck7663s" path="res://Player/Player_Claude.tscn" id="4_bpnau"]
 [ext_resource type="PackedScene" uid="uid://0qyvi6yekqrx" path="res://NetworkRack.tscn" id="4_clck7"]
 [ext_resource type="PackedScene" uid="uid://c80mqnaa4fjea" path="res://World/props/scp_server_room.glb" id="4_lohiu"]
+[ext_resource type="PackedScene" uid="uid://bf11cqb22njsx" path="res://ui/DiagnosticPanel.tscn" id="6_ieywp"]
+[ext_resource type="PackedScene" uid="uid://d17uht2oiic26" path="res://ui/horror_overlay/color_rect.tscn" id="7_ieywp"]
+[ext_resource type="PackedScene" uid="uid://b8w0veatu7gb1" path="res://ui/horror_overlay/resist_overlay.tscn" id="8_7wdav"]
 
 [node name="Level01" type="Node3D"]
+script = ExtResource("1_bpnau")
 
 [node name="DialogueBox" parent="." instance=ExtResource("3_ccxtb")]
 
@@ -21,4 +26,12 @@ transform = Transform3D(0.8852103, -2.0048304, -5.044507, 0.8869523, 5.095871, -
 [node name="Player2" parent="." instance=ExtResource("4_bpnau")]
 transform = Transform3D(0.48894483, 0, -1.0958709, 0, 1.1999999, 0, 1.0958709, 0, 0.48894483, 5.0898094, 12.987345, 24.822285)
 
+[node name="DiagnosticPanel" parent="." instance=ExtResource("6_ieywp")]
+
+[node name="HorrorOverlay" parent="." instance=ExtResource("7_ieywp")]
+
+[node name="Control" parent="HorrorOverlay" instance=ExtResource("8_7wdav")]
+layout_mode = 1
+
 [editable path="Sketchfab_Scene"]
+[editable path="Sketchfab_Scene2"]

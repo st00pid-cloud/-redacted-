@@ -1,6 +1,6 @@
 extends StaticBody3D
 
-@export var dialogue_lines: Array[String] = [
+@export var dialogue_lines: PackedStringArray = [
 	"Port 7 is flapping. Standard fix — pull the module, reseat it.",
 	"...there's black residue on the connector.",
 	"It's warm. And it smells organic.",
@@ -8,18 +8,37 @@ extends StaticBody3D
 @export var task_to_complete: String = "task_01"
 var has_been_used: bool = false
 
+# Reference to the diagnostic panel — set this in Level_01 after instancing
+var diagnostic_panel: CanvasLayer = null
+
 func interact() -> void:
 	if has_been_used:
 		return
+	# Open the diagnostic puzzle first
+	if diagnostic_panel:
+		diagnostic_panel.open_diagnostic()
+		var success = await diagnostic_panel.diagnostic_completed
+		if not success:
+			# Player failed — trigger game over via GameManager
+			GameManager.trigger_game_over("integration_accelerated")
+			return
+	# Puzzle passed — play the dialogue
 	has_been_used = true
 	DialogueManager.show_dialogue(Array(dialogue_lines))
 	await DialogueManager.dialogue_finished
 	TaskManager.complete_task(task_to_complete)
+	TaskManager.begin_corruption()
 	_apply_horror_state()
 
 func _apply_horror_state() -> void:
-	# You'll add the flickering/material swap tomorrow
-	pass
-
-func _ready() -> void:
-	add_to_group("interactable")
+	# Find the horror overlay in the scene and flicker it
+	var overlay = get_tree().get_first_node_in_group("horror_overlay")
+	if not overlay:
+		return
+	overlay.show()
+	var tween = create_tween()
+	tween.set_loops(6)
+	tween.tween_property(overlay, "modulate:a", 0.7, 0.08)
+	tween.tween_property(overlay, "modulate:a", 0.0, 0.08)
+	await tween.finished
+	overlay.hide()
