@@ -43,8 +43,6 @@ func interact() -> void:
 
 	# Stage 0: first interaction
 	_interaction_stage = 1
-
-	# Task: diagnose
 	_set_task("diagnose_rack", "Diagnose Rack 7", "Interact with the console to run the diagnostic scan.")
 
 	var lines: Array[String] = []
@@ -53,9 +51,7 @@ func interact() -> void:
 	DialogueManager.show_dialogue(lines)
 	await DialogueManager.dialogue_finished
 
-	# Update task before opening diagnostic
 	_set_task("select_port", "Identify Corrupted Port", "Examine the port data. One port has anomalous cycling values — isolate it.")
-
 	_open_diagnostic()
 
 func _open_diagnostic() -> void:
@@ -76,11 +72,9 @@ func _on_diagnostic_done(success: bool) -> void:
 	if loc_header and loc_header.has_method("show_header"):
 		loc_header.show_header()
 
-	# Clear the diagnostic task
 	TaskManager.complete_task("select_port")
 
 	if success:
-		# Set a new task for the resist phase
 		_set_task("survive", "Survive", "Something is wrong. Brace yourself.")
 
 		var lines: Array[String] = []
@@ -89,11 +83,16 @@ func _on_diagnostic_done(success: bool) -> void:
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
 
-		TaskManager.begin_corruption()
-		await get_tree().create_timer(3.0).timeout
+		# Freeze player IMMEDIATELY after dialogue — they should not be able to walk
+		var player = _find_player()
+		if player:
+			player.set_physics_process(false)
+			player.set_process_input(false)
 
-		# Update task right before resist
+		TaskManager.begin_corruption()
 		_set_task("resist", "RESIST", "The entity is attempting integration. Fight back.")
+
+		await get_tree().create_timer(2.0).timeout
 
 		var level = get_tree().current_scene
 		if level and level.has_method("start_resist_sequence"):
@@ -108,6 +107,13 @@ func _on_diagnostic_done(success: bool) -> void:
 			lines.append(l)
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
+
+		# Freeze player before transitioning
+		var player = _find_player()
+		if player:
+			player.set_physics_process(false)
+			player.set_process_input(false)
+
 		GameManager.trigger_game_over("integration_accelerated")
 
 func _set_task(id: String, title: String, desc: String) -> void:
@@ -116,6 +122,12 @@ func _set_task(id: String, title: String, desc: String) -> void:
 	task.task_name = title
 	task.description = desc
 	TaskManager.set_task(task)
+
+func _find_player() -> CharacterBody3D:
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() > 0:
+		return players[0]
+	return null
 
 func _find_node_by_script(script_hint: String) -> Node:
 	for child in get_tree().root.get_children():

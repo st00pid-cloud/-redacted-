@@ -8,11 +8,12 @@ script = ExtResource("1_task")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 15
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = -450.0
+offset_bottom = 183.0
+grow_horizontal = 0
 
 [node name="MarginContainer" type="MarginContainer" parent="Control"]
 layout_mode = 1

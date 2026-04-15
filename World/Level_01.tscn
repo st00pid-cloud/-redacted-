@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=16 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/dialogue_box/DialogueBox.tscn" id="3_ccxtb"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://d0hiq5x7ekx71" path="res://ui/location_header/LocationHeader.tscn" id="12_wojfw"]
 [ext_resource type="PackedScene" path="res://ui/crosshair/Crosshair.tscn" id="13_eukdw"]
 [ext_resource type="PackedScene" path="res://cutscene/IntroCutscene.tscn" id="14_ybi3m"]
+[ext_resource type="PackedScene" uid="uid://xbn53ewemqeb" path="res://ui/taskHUD/TaskHUD.tscn" id="15_6vn4c"]
 
 [node name="Level01" type="Node3D"]
 script = ExtResource("1_bpnau")
@@ -57,6 +58,8 @@ script = null
 [node name="Crosshair" parent="." instance=ExtResource("13_eukdw")]
 
 [node name="IntroCutscene" parent="." instance=ExtResource("14_ybi3m")]
+
+[node name="TaskHud" parent="." instance=ExtResource("15_6vn4c")]
 
 [editable path="Sketchfab_Scene"]
 [editable path="Sketchfab_Scene2"]
