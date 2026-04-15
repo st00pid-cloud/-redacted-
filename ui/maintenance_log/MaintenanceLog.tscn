@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://maintenance_log_001"]
+
+[ext_resource type="Script" path="res://World/propsGd/MaintenanceLog.gd" id="1_log"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_log"]
+size = Vector3(0.4, 0.6, 0.05)
+
+[node name="MaintenanceLog" type="StaticBody3D" groups=["interactable"]]
+script = ExtResource("1_log")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_log")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
