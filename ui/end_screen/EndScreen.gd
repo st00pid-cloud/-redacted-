@@ -4,55 +4,122 @@ extends Node2D
 @onready var sub_label = $CanvasLayer/Control/VBoxContainer/SubLabel
 @onready var restart_button = $CanvasLayer/Control/VBoxContainer/RestartButton
 
+# Full ending cutscene data — each ending has multiple phases
 const ENDINGS = {
 	"engineer_resisted": {
-		"message": "R. Vasquez stopped trying.\nThe silence was hers.",
-		"sub": "The data is still there. Waiting.\n\n— CONNECTION TERMINATED —",
+		"phases": [
+			{"text": "...", "duration": 1.5, "color": "green"},
+			{"text": "[SYSTEM]: Host signal severed.", "duration": 2.0, "color": "green"},
+			{"text": "[SYSTEM]: Entity confined to Rack 7 buffer.", "duration": 2.5, "color": "green"},
+			{"text": "R. Vasquez stood up.\nHer hands were shaking.", "duration": 3.0, "color": "white"},
+			{"text": "The elevator light was on.\nShe didn't look back.", "duration": 3.0, "color": "white"},
+		],
+		"final_message": "CONNECTION TERMINATED",
+		"final_sub": "The data is still there. Waiting.\nBut not inside her. Not tonight.",
+		"final_color": "green",
 	},
 	"integration_complete": {
-		"message": "[SYSTEM]: Integration complete.\nWelcome, R. Vasquez.",
-		"sub": "You missed every chance to resist.\nShe is the buffer now.",
+		"phases": [
+			{"text": "...", "duration": 1.5, "color": "red"},
+			{"text": "[SYSTEM]: Integration complete.", "duration": 2.5, "color": "red"},
+			{"text": "R. Vasquez opened her eyes.\nThe screen was off.", "duration": 3.0, "color": "white"},
+			{"text": "She couldn't remember when she sat down.", "duration": 3.0, "color": "white"},
+			{"text": "Her badge read a different name.", "duration": 3.0, "color": "red"},
+		],
+		"final_message": "WELCOME, R. VASQUEZ",
+		"final_sub": "You missed every chance to resist.\nShe is the buffer now.",
+		"final_color": "red",
 	},
 	"integration_accelerated": {
-		"message": "Integration accelerated.\nYou fed it attention.",
-		"sub": "Some anomalies grow stronger when observed.\n\n— HOST ENTITY LOST —",
+		"phases": [
+			{"text": "...", "duration": 1.5, "color": "red"},
+			{"text": "The diagnostic failed.", "duration": 2.0, "color": "red"},
+			{"text": "You gave it exactly what it needed:\nAttention.", "duration": 3.0, "color": "white"},
+			{"text": "The rack hummed louder.\nSomething inside it smiled.", "duration": 3.0, "color": "red"},
+		],
+		"final_message": "HOST ENTITY LOST",
+		"final_sub": "Some anomalies grow stronger when observed.\nYou observed too closely.",
+		"final_color": "red",
 	},
 }
 
 func _ready():
-	# Ensure mouse is visible and game is unpaused
 	get_tree().paused = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
-	# Hide everything from horror overlays that might have carried over
 	_cleanup_overlays()
 
 	var reason = EndScreenData.reason
-
-	var ending_data = ENDINGS.get(reason, {
-		"message": "— SIGNAL LOST —",
-		"sub": "",
-	})
+	var ending = ENDINGS.get(reason, null)
 
 	message_label.text = ""
 	sub_label.text = ""
 	restart_button.hide()
 
-	# Sequence the text reveals
-	await get_tree().create_timer(0.8).timeout
-	_type_in(message_label, ending_data["message"])
-	await get_tree().create_timer(2.5).timeout
-	_type_in(sub_label, ending_data["sub"])
-	await get_tree().create_timer(2.0).timeout
-	restart_button.show()
+	if ending:
+		await _play_cutscene(ending)
+	else:
+		# Fallback for unknown endings
+		message_label.text = "— SIGNAL LOST —"
+		await get_tree().create_timer(2.0).timeout
+		restart_button.show()
 
 	restart_button.pressed.connect(_on_restart)
 
-func _type_in(label: Label, text: String) -> void:
-	label.text = text
-	label.visible_ratio = 0.0
-	var tween = create_tween()
-	tween.tween_property(label, "visible_ratio", 1.0, 1.8)
+func _play_cutscene(ending: Dictionary) -> void:
+	var phases = ending["phases"]
+
+	# Phase-by-phase text reveals
+	for phase in phases:
+		var color = _get_color(phase["color"])
+		message_label.add_theme_color_override("font_color", color)
+		message_label.text = phase["text"]
+		message_label.visible_ratio = 0.0
+
+		var tween = create_tween()
+		tween.tween_property(message_label, "visible_ratio", 1.0, 1.2)
+		await tween.finished
+
+		await get_tree().create_timer(phase["duration"]).timeout
+
+		# Fade out between phases
+		var fade = create_tween()
+		fade.tween_property(message_label, "modulate:a", 0.0, 0.4)
+		await fade.finished
+		message_label.modulate.a = 1.0
+
+	# Final message — stays on screen
+	await get_tree().create_timer(0.5).timeout
+
+	var final_color = _get_color(ending["final_color"])
+	message_label.add_theme_color_override("font_color", final_color)
+	message_label.text = ending["final_message"]
+	message_label.visible_ratio = 0.0
+	var msg_tween = create_tween()
+	msg_tween.tween_property(message_label, "visible_ratio", 1.0, 1.5)
+	await msg_tween.finished
+
+	await get_tree().create_timer(1.5).timeout
+
+	sub_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 0.8))
+	sub_label.text = ending["final_sub"]
+	sub_label.visible_ratio = 0.0
+	var sub_tween = create_tween()
+	sub_tween.tween_property(sub_label, "visible_ratio", 1.0, 2.0)
+	await sub_tween.finished
+
+	await get_tree().create_timer(2.0).timeout
+	restart_button.show()
+
+func _get_color(name: String) -> Color:
+	match name:
+		"red":
+			return Color(0.9, 0.25, 0.2, 1.0)
+		"green":
+			return Color(0.4, 0.9, 0.4, 1.0)
+		"white":
+			return Color(0.85, 0.85, 0.85, 1.0)
+		_:
+			return Color(0.7, 0.7, 0.7, 1.0)
 
 func _on_restart() -> void:
 	EndScreenData.reason = ""
@@ -60,7 +127,6 @@ func _on_restart() -> void:
 	get_tree().change_scene_to_file("res://World/Level_01.tscn")
 
 func _cleanup_overlays() -> void:
-	# Remove any lingering horror overlays from the previous scene
 	for node in get_tree().get_nodes_in_group("horror_overlay"):
 		node.visible = false
 	for node in get_tree().get_nodes_in_group("resist_overlay"):

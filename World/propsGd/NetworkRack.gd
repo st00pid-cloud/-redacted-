@@ -2,6 +2,7 @@ extends StaticBody3D
 
 ## NetworkRack.gd — The main puzzle interactable
 ## Flow: interact → dialogue → diagnostic (port + 4 horror questions) → ending
+## Updates TaskManager at each stage so the TaskHUD always shows the current objective.
 
 var _interaction_stage: int = 0  # 0=first look, 1=diagnostic open, 2=completed
 var _diag_ref: Node = null
@@ -42,17 +43,19 @@ func interact() -> void:
 
 	# Stage 0: first interaction
 	_interaction_stage = 1
-	var task = TaskData.new()
-	task.task_id = "diagnose_rack"
-	task.task_name = "Diagnose Rack 7"
-	task.description = "Run the diagnostic interface. Identify the corrupted port."
-	TaskManager.set_task(task)
+
+	# Task: diagnose
+	_set_task("diagnose_rack", "Diagnose Rack 7", "Interact with the console to run the diagnostic scan.")
 
 	var lines: Array[String] = []
 	for l in INTRO_LINES:
 		lines.append(l)
 	DialogueManager.show_dialogue(lines)
 	await DialogueManager.dialogue_finished
+
+	# Update task before opening diagnostic
+	_set_task("select_port", "Identify Corrupted Port", "Examine the port data. One port has anomalous cycling values — isolate it.")
+
 	_open_diagnostic()
 
 func _open_diagnostic() -> void:
@@ -60,7 +63,6 @@ func _open_diagnostic() -> void:
 	if not panel:
 		push_warning("NetworkRack: No diagnostic_panel found in group!")
 		return
-	# Hide location header
 	var loc_header = _find_node_by_script("LocationHeader")
 	if loc_header and loc_header.has_method("hide_header"):
 		loc_header.hide_header()
@@ -70,38 +72,50 @@ func _open_diagnostic() -> void:
 
 func _on_diagnostic_done(success: bool) -> void:
 	_interaction_stage = 2
-	# Show location header again
 	var loc_header = _find_node_by_script("LocationHeader")
 	if loc_header and loc_header.has_method("show_header"):
 		loc_header.show_header()
 
-	TaskManager.complete_task("diagnose_rack")
+	# Clear the diagnostic task
+	TaskManager.complete_task("select_port")
 
 	if success:
+		# Set a new task for the resist phase
+		_set_task("survive", "Survive", "Something is wrong. Brace yourself.")
+
 		var lines: Array[String] = []
 		for l in POST_SUCCESS_LINES:
 			lines.append(l)
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
 
-		# Start corruption visuals
 		TaskManager.begin_corruption()
 		await get_tree().create_timer(3.0).timeout
 
-		# Trigger the RESIST sequence on the level
+		# Update task right before resist
+		_set_task("resist", "RESIST", "The entity is attempting integration. Fight back.")
+
 		var level = get_tree().current_scene
 		if level and level.has_method("start_resist_sequence"):
 			level.start_resist_sequence()
 		else:
-			# Fallback if level doesn't have the method
 			GameManager.trigger_ending("engineer_resisted")
 	else:
+		_set_task("failed", "---", "Diagnostic failed.")
+
 		var lines: Array[String] = []
 		for l in POST_FAIL_LINES:
 			lines.append(l)
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
 		GameManager.trigger_game_over("integration_accelerated")
+
+func _set_task(id: String, title: String, desc: String) -> void:
+	var task = TaskData.new()
+	task.task_id = id
+	task.task_name = title
+	task.description = desc
+	TaskManager.set_task(task)
 
 func _find_node_by_script(script_hint: String) -> Node:
 	for child in get_tree().root.get_children():
