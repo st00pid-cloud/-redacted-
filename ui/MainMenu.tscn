@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b2ocq28kure28"]
+
+[ext_resource type="Shader" uid="uid://bi6bilt1w1di5" path="res://World/main_menu/menu_scanline.gdshader" id="1_b00nv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rn8js"]
+shader = ExtResource("1_b00nv")
+shader_parameter/scanline_density = 120.0
+shader_parameter/scanline_strength = 0.08
+shader_parameter/scroll_speed = 0.18
+shader_parameter/flicker = 0.012
+
+[node name="MainMenu" type="Node2D"]
+material = SubResource("ShaderMaterial_rn8js")

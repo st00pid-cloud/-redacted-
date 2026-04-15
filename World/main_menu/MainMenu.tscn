@@ -1,0 +1,109 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" uid="uid://bau11wjc3devl" path="res://World/main_menu/MainMenu.gd" id="1_menu"]
+
+[node name="MainMenu" type="Node2D"]
+script = ExtResource("1_menu")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Background" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.04, 0.02, 1)
+
+[node name="Scanline" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+mouse_filter = 2
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -340.0
+offset_top = 60.0
+offset_right = 340.0
+offset_bottom = 700.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+
+[node name="BootLabel" type="RichTextLabel" parent="CanvasLayer/Control/VBoxContainer"]
+custom_minimum_size = Vector2(680, 260)
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 12
+theme_override_colors/default_color = Color(0.4, 0.7, 0.4, 0.85)
+bbcode_enabled = true
+fit_content = false
+scroll_active = false
+
+[node name="Spacer" type="Control" parent="CanvasLayer/Control/VBoxContainer"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 42
+theme_override_colors/font_color = Color(0.7, 1.0, 0.7, 1)
+text = "-REDACTED-"
+horizontal_alignment = 0
+
+[node name="SubtitleLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.45, 0.7, 0.45, 0.8)
+text = "Central Command Console — Maintenance Access"
+horizontal_alignment = 0
+
+[node name="Spacer2" type="Control" parent="CanvasLayer/Control/VBoxContainer"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="ButtonContainer" type="VBoxContainer" parent="CanvasLayer/Control/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="StartButton" type="Button" parent="CanvasLayer/Control/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "[ BEGIN MAINTENANCE CALL ]"
+alignment = 0
+
+[node name="QuitButton" type="Button" parent="CanvasLayer/Control/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+text = "[ DISCONNECT ]"
+alignment = 0
+
+[node name="VersionLabel" type="Label" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 4
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -28.0
+offset_right = 300.0
+offset_bottom = -8.0
+theme_override_font_sizes/font_size = 10
+theme_override_colors/font_color = Color(0.3, 0.45, 0.3, 0.6)
+text = "CBSYS-MGMT v2.3.1  |  Unauthorized access is prohibited"
