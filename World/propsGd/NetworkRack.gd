@@ -1,15 +1,21 @@
 extends StaticBody3D
 
-## NetworkRack.gd — The main puzzle interactable
-## Flow: interact → dialogue → port diagnostic → 4 challenges → 4 horror questions → ending
+## NetworkRack.gd — The MAIN console interactable (Rack 7)
+## Only allows the final diagnostic AFTER all 4 challenge terminals are complete.
+## Flow: check challenges → port diagnostic → horror questions → resist/ending
 
-var _interaction_stage: int = 0
+var _interaction_stage: int = 0  # 0=waiting, 1=diagnostic open, 2=completed
 var _diag_ref: Node = null
 
+const LOCKED_LINES: Array[String] = [
+	"[SYSTEM]: Rack 7 — primary diagnostic unavailable.",
+	"[SYSTEM]: Subsystem checks incomplete. Complete all terminal diagnostics first.",
+]
+
 const INTRO_LINES: Array[String] = [
-	"[SYSTEM]: Rack 7 — anomalous activity detected on network port.",
-	"[SYSTEM]: Extended diagnostic required. Multiple subsystem checks.",
-	"[SYSTEM]: WARNING: The system will test your perception. Trust nothing.",
+	"[SYSTEM]: All subsystems checked. Rack 7 diagnostic unlocked.",
+	"[SYSTEM]: Challenge results: %d / %d passed.",
+	"[SYSTEM]: Initiating port isolation. Select the corrupted port carefully.",
 ]
 
 const POST_SUCCESS_LINES: Array[String] = [
@@ -36,20 +42,36 @@ func interact() -> void:
 		var lines: Array[String] = ["[SYSTEM]: Rack 7 — all diagnostics complete. No further action."]
 		DialogueManager.show_dialogue(lines)
 		return
+
 	if _interaction_stage == 1:
 		_open_diagnostic()
 		return
 
+	# Check if all challenges are done
+	if not ChallengeTracker.all_done():
+		var remaining = ChallengeTracker.required_ids.size() - ChallengeTracker.get_completed_count()
+		var lines: Array[String] = []
+		for l in LOCKED_LINES:
+			lines.append(l)
+		lines.append("[SYSTEM]: %d terminal(s) remaining." % remaining)
+		DialogueManager.show_dialogue(lines)
+		return
+
+	# All challenges done — unlock the diagnostic
 	_interaction_stage = 1
-	_set_task("diagnose_rack", "Diagnose Rack 7", "Interact with the console to begin the diagnostic sequence.")
+
+	var score = ChallengeTracker.get_success_count()
+	var total = ChallengeTracker.required_ids.size()
+
+	_set_task("select_port", "Identify Corrupted Port", "All subsystems checked. Now isolate the corrupted port on Rack 7.")
 
 	var lines: Array[String] = []
 	for l in INTRO_LINES:
-		lines.append(l)
+		var formatted = l % [score, total] if l.contains("%d") else l
+		lines.append(formatted)
 	DialogueManager.show_dialogue(lines)
 	await DialogueManager.dialogue_finished
 
-	_set_task("select_port", "Identify Corrupted Port", "Examine the port data. One port has anomalous cycling values — isolate it.")
 	_open_diagnostic()
 
 func _open_diagnostic() -> void:
@@ -57,6 +79,10 @@ func _open_diagnostic() -> void:
 	if not panel:
 		push_warning("NetworkRack: No diagnostic_panel found!")
 		return
+
+	# Freeze player during diagnostic
+	ChallengeTracker.freeze_player()
+
 	var loc_header = _find_node_by_script("LocationHeader")
 	if loc_header and loc_header.has_method("hide_header"):
 		loc_header.hide_header()
@@ -81,11 +107,7 @@ func _on_diagnostic_done(success: bool) -> void:
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
 
-		var player = _find_player()
-		if player:
-			player.set_physics_process(false)
-			player.set_process_input(false)
-
+		# Player stays frozen
 		TaskManager.begin_corruption()
 		_set_task("resist", "RESIST", "The entity is attempting integration. Fight back.")
 
@@ -104,11 +126,6 @@ func _on_diagnostic_done(success: bool) -> void:
 			lines.append(l)
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
-
-		var player = _find_player()
-		if player:
-			player.set_physics_process(false)
-			player.set_process_input(false)
 
 		GameManager.trigger_game_over("integration_accelerated")
 

@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://dmeevhvlniemg"]
+
+[ext_resource type="PackedScene" uid="uid://cyuynxogtal5" path="res://World/props/data_center_rack.glb" id="1_o7vvq"]
+[ext_resource type="Script" uid="uid://l65vs2kksr24" path="res://data/ChallengeTerminal.gd" id="2_ihe8t"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t1gyr"]
+size = Vector3(1.230896, 2.1479492, 1)
+
+[node name="echo_correlation" type="Node3D"]
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_o7vvq")]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Sketchfab_Scene"]
+script = ExtResource("2_ihe8t")
+challenge_type = "memory"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sketchfab_Scene/StaticBody3D" groups=["interactable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.021820068, 1.2668457, 0)
+shape = SubResource("BoxShape3D_t1gyr")

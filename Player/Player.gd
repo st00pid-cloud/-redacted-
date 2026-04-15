@@ -56,8 +56,11 @@ func _play_footstep() -> void:
 
 func _input(event):
 	if event.is_action_pressed("interact"):
-		# Block interaction during dialogue
+		# Block during dialogue
 		if DialogueManager and DialogueManager.is_active:
+			return
+		# Block during challenges (player is frozen via ChallengeTracker)
+		if ChallengeTracker and ChallengeTracker.is_player_frozen():
 			return
 		if ray.is_colliding():
 			var collider = ray.get_collider()

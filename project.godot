@@ -23,7 +23,7 @@ GameManager="*res://autoloads/GameManager.gd"
 SceneTransition="*res://ui/scene_transition/SceneTransition.tscn"
 EndScreenData="*res://autoloads/EndScreenData.gd"
 AmbientSound="*res://audio/AmbientSound (2).tscn"
-ChallengeSequencer="*res://autoloads/ChallengeSequencer.gd"
+ChallengeTracker="*res://autoloads/ChallengeTracker.gd"
 
 [global_group]
 
