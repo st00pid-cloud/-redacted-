@@ -67,28 +67,29 @@ const TERMINAL_LINES = {
 	},
 }
 
-const CHALLENGE_SCRIPTS = {
-	"echo":    "res://challenges/EchoCorrelation.gd",
-	"ghost":   "res://challenges/GhostCursor.gd",
-	"thermal": "res://challenges/ThermalScan.gd",
-	"memory":  "res://challenges/MemoryString.gd",
+# NEW (scene-based)
+const CHALLENGE_SCENES = {
+	"echo":    "res://challenges_tscn_version/EchoCorrelation.tscn",
+	"ghost":   "res://challenges_tscn_version/GhostCursor.tscn",
+	"thermal": "res://challenges_tscn_version/ThermalScan.tscn",
+	"memory":  "res://challenges_tscn_version/MemoryString.tscn",
 }
 
 func _ready() -> void:
-	_create_challenge_node()
+	_load_challenge_scene()
 
-func _create_challenge_node() -> void:
-	var script_path = CHALLENGE_SCRIPTS.get(challenge_type, "")
-	if script_path == "":
+func _load_challenge_scene() -> void:
+	var scene_path = CHALLENGE_SCENES.get(challenge_type, "")
+	if scene_path == "":
 		push_warning("ChallengeTerminal: Unknown challenge_type: " + challenge_type)
 		return
-	var scr = load(script_path)
-	if not scr:
-		push_warning("ChallengeTerminal: Failed to load script: " + script_path)
+	var scene = load(scene_path)
+	if not scene:
+		push_warning("ChallengeTerminal: Failed to load scene: " + scene_path)
 		return
-	_challenge_node = CanvasLayer.new()
-	_challenge_node.set_script(scr)
+	_challenge_node = scene.instantiate()
 	get_tree().root.call_deferred("add_child", _challenge_node)
+
 
 func interact() -> void:
 	# Complete — short system message

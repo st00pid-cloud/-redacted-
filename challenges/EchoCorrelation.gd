@@ -1,27 +1,24 @@
 extends CanvasLayer
 
-## EchoCorrelation.gd — All improvements integrated:
-## - _vbox stored as instance variable (fixes hardcoded child path)
-## - Wave draw signals connected once in _build_ui (not every frame)
-## - _target_sync randomized per open (0.55–0.85)
-## - 90-second timeout forces verification if player never syncs
-## - Feed labels typewriter-reveal when sync crosses threshold
-## - Ambient AudioStreamPlayer pitch/volume tracks sync level
+## EchoCorrelation.gd — Scene-based version
+## Assumes UI is pre-built in EchoCorrelation.tscn
+## Uses @onready to reference scene nodes instead of building UI at runtime
 
 signal challenge_completed(success: bool)
 
-var _root_control: Control
-var _vbox: VBoxContainer
-var _header: Label
-var _feedback: Label
-var _slider: HSlider
-var _wave_a: Control
-var _wave_b: Control
-var _feed_a_label: Label
-var _feed_b_label: Label
-var _sync_label: Label
-var _confirm_btn: Button
-var _ambient_sfx: AudioStreamPlayer
+# Scene UI references — auto-populated by @onready
+@onready var _root_control: Control = $RootControl
+@onready var _header: Label = $RootControl/Panel/VBoxContainer/HeaderLabel
+@onready var _feedback: Label = $RootControl/Panel/VBoxContainer/FeedbackLabel
+@onready var _slider: HSlider = $RootControl/Panel/VBoxContainer/AlignSlider
+@onready var _wave_a: Control = $RootControl/Panel/VBoxContainer/WaveAControl
+@onready var _wave_b: Control = $RootControl/Panel/VBoxContainer/WaveBControl
+@onready var _feed_a_label: Label = $RootControl/Panel/VBoxContainer/FeedALabel
+@onready var _feed_b_label: Label = $RootControl/Panel/VBoxContainer/FeedBLabel
+@onready var _sync_label: Label = $RootControl/Panel/VBoxContainer/SyncLabel
+@onready var _vbox: VBoxContainer = $RootControl/Panel/VBoxContainer
+@onready var _confirm_btn: Button = $RootControl/Panel/VBoxContainer/ConfirmButton
+
 var _phase: int = 0  # 0=adjusting, 1=verification, 2=done
 
 var _slider_value: float = 0.0
@@ -32,9 +29,16 @@ var _reveal_text_shown: bool = false
 var _timeout_timer: float = 0.0
 const TIMEOUT: float = 90.0
 
+var _ambient_sfx: AudioStreamPlayer
+
 func _ready():
 	add_to_group("challenge_echo")
 	hide()
+	# Connect signals once in _ready, not in _build_ui
+	_slider.value_changed.connect(_on_slider_changed)
+	_wave_a.draw.connect(_draw_wave_a)
+	_wave_b.draw.connect(_draw_wave_b)
+	_confirm_btn.pressed.connect(_on_confirm)
 
 func open_challenge() -> void:
 	_phase = 0
@@ -43,112 +47,32 @@ func open_challenge() -> void:
 	_timeout_timer = 0.0
 	# Randomize sweet spot each run
 	_target_sync = randf_range(0.55, 0.85)
-	_build_ui()
+	
+	# Reset UI state (scene already exists, just reset values)
+	_slider.value = 0.0
+	_feedback.text = ""
+	_sync_label.text = "Synchronization: 0%"
+	_reveal_text_shown = false
+	_confirm_btn.visible = false
+	_header.text = "ECHO CORRELATION — Audio Feed Alignment"
+	_feed_a_label.text = "FEED A : Room Microphone: [STATIC]"
+	_feed_b_label.text = "FEED B : Ventilation Intake: [STATIC]"
+	
+	# Create or reuse ambient audio
+	if not _ambient_sfx:
+		_ambient_sfx = AudioStreamPlayer.new()
+		_ambient_sfx.name = "AmbientSFX"
+		_root_control.add_child(_ambient_sfx)
+		var stream = _load_ambient_stream()
+		if stream:
+			_ambient_sfx.stream = stream
+			_ambient_sfx.volume_db = -20.0
+	
+	if _ambient_sfx:
+		_ambient_sfx.play()
+	
 	show()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
-func _build_ui() -> void:
-	for child in get_children():
-		child.queue_free()
-
-	_root_control = Control.new()
-	_root_control.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(_root_control)
-
-	var bg = ColorRect.new()
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.color = Color(0, 0, 0, 0.8)
-	_root_control.add_child(bg)
-
-	var panel = Panel.new()
-	panel.clip_contents = true
-	panel.set_anchors_preset(Control.PRESET_CENTER)
-	panel.custom_minimum_size = Vector2(760, 520)
-	panel.offset_left = -380
-	panel.offset_top = -260
-	panel.offset_right = 380
-	panel.offset_bottom = 260
-	_root_control.add_child(panel)
-
-	# Store vbox as instance variable — fixes hardcoded get_child path
-	_vbox = VBoxContainer.new()
-	_vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_vbox.offset_left = 24
-	_vbox.offset_top = 24
-	_vbox.offset_right = -24
-	_vbox.offset_bottom = -24
-	_vbox.add_theme_constant_override("separation", 12)
-	panel.add_child(_vbox)
-
-	_header = Label.new()
-	_header.text = "ECHO CORRELATION — Audio Feed Alignment"
-	_header.add_theme_font_size_override("font_size", 16)
-	_header.add_theme_color_override("font_color", Color(0.6, 1.0, 0.6))
-	_vbox.add_child(_header)
-
-	var instr = Label.new()
-	instr.text = "Align the two audio feeds using the slider to atch the waveforms."
-	instr.add_theme_font_size_override("font_size", 12)
-	instr.autowrap_mode = TextServer.AUTOWRAP_WORD
-	_vbox.add_child(instr)
-
-	_feed_a_label = Label.new()
-	_feed_a_label.text = "FEED A : Room Microphone: [STATIC]"
-	_feed_a_label.add_theme_font_size_override("font_size", 11)
-	_vbox.add_child(_feed_a_label)
-
-	_wave_a = Control.new()
-	_wave_a.custom_minimum_size = Vector2(680, 60)
-	_vbox.add_child(_wave_a)
-
-	_feed_b_label = Label.new()
-	_feed_b_label.text = "FEED B : Ventilation Intake: [STATIC]"
-	_feed_b_label.add_theme_font_size_override("font_size", 11)
-	_vbox.add_child(_feed_b_label)
-
-	_wave_b = Control.new()
-	_wave_b.custom_minimum_size = Vector2(680, 60)
-	_vbox.add_child(_wave_b)
-
-	_slider = HSlider.new()
-	_slider.min_value = 0.0
-	_slider.max_value = 1.0
-	_slider.step = 0.01
-	_slider.custom_minimum_size = Vector2(680, 24)
-	_slider.value_changed.connect(_on_slider_changed)
-	_vbox.add_child(_slider)
-
-	_sync_label = Label.new()
-	_sync_label.text = "Synchronization: 0%"
-	_sync_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_vbox.add_child(_sync_label)
-
-	_feedback = Label.new()
-	_feedback.text = ""
-	_feedback.autowrap_mode = TextServer.AUTOWRAP_WORD
-	_feedback.add_theme_font_size_override("font_size", 12)
-	_feedback.add_theme_color_override("font_color", Color(0.8, 0.3, 0.3))
-	_vbox.add_child(_feedback)
-
-	_confirm_btn = Button.new()
-	_confirm_btn.text = "[ LOCK ALIGNMENT ]"
-	_confirm_btn.visible = false
-	_confirm_btn.pressed.connect(_on_confirm)
-	_vbox.add_child(_confirm_btn)
-
-	# Connect wave draw signals once here — not every frame in _process
-	_wave_a.draw.connect(_draw_wave_a)
-	_wave_b.draw.connect(_draw_wave_b)
-
-	# Ambient audio — pitch and volume track sync level
-	_ambient_sfx = AudioStreamPlayer.new()
-	_ambient_sfx.name = "AmbientSFX"
-	_root_control.add_child(_ambient_sfx)
-	var stream = _load_ambient_stream()
-	if stream:
-		_ambient_sfx.stream = stream
-		_ambient_sfx.volume_db = -20.0
-		_ambient_sfx.play()
 
 func _load_ambient_stream() -> AudioStream:
 	var paths = [
@@ -210,7 +134,6 @@ func _on_confirm() -> void:
 
 	var hbox = HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 20)
-	# Use stored _vbox reference — no hardcoded child path
 	_vbox.add_child(hbox)
 
 	var btn_yes = Button.new()
@@ -247,7 +170,7 @@ func _process(delta: float) -> void:
 			return
 
 	_wave_timer += delta
-	# Queue redraws — signals already connected in _build_ui, not here
+	# Queue redraws — signals already connected in _ready, not here
 	if _wave_a:
 		_wave_a.queue_redraw()
 	if _wave_b:

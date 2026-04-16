@@ -1,21 +1,18 @@
 extends CanvasLayer
 
-## MemoryString.gd — All improvements integrated:
-## - _input_active = false set at start of _evaluate() (blocks keys during delay)
-## - Expanded string pool — 12 variants instead of 4
-## - Show duration shortens on repeat attempts (3.5 → 2.5 → 2.0s floor)
-## - System label self-corrects with occasional glitch characters
-## - Dual AudioStreamPlayer — player typing at normal pitch, system at 0.75
-## - Difficulty multiplier applied to show duration
+## MemoryString.gd — Scene-based version
+## Assumes core UI is pre-built in MemoryString.tscn
 
 signal challenge_completed(success: bool)
 
-var _root_control: Control
-var _header: Label
-var _feedback: Label
-var _display_label: Label
-var _input_label: Label
-var _system_label: Label
+# Scene UI references
+@onready var _root_control: Control = $RootControl
+@onready var _header: Label = $RootControl/HeaderLabel
+@onready var _feedback: Label = $RootControl/FeedbackLabel
+@onready var _display_label: Label = $RootControl/DisplayLabel
+@onready var _input_label: Label = $RootControl/InputLabel
+@onready var _system_label: Label = $RootControl/SystemLabel
+
 var _phase: int = 0  # 0=showing, 1=typing, 2=verification, 3=done
 
 var _target_string: String = ""
@@ -26,7 +23,7 @@ var _show_timer: float = 0.0
 var _show_duration: float = 3.5
 var _input_active: bool = false
 
-# Repeat attempt tracking — show duration shortens each attempt
+# Repeat attempt tracking
 var _attempt_count: int = 0
 
 # Glitch state for system label self-correction
@@ -64,96 +61,39 @@ func open_challenge() -> void:
 	# Pick from expanded pool
 	_target_string = STRING_POOL[randi() % STRING_POOL.size()]
 
-	_build_ui()
+	_reset_ui()
 	show()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-func _build_ui() -> void:
-	for child in get_children():
-		child.queue_free()
-
-	_root_control = Control.new()
-	_root_control.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(_root_control)
-
-	var bg = ColorRect.new()
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.color = Color(0, 0, 0, 0.9)
-	_root_control.add_child(bg)
-
-	_header = Label.new()
-	_header.text = "MEMORY STRING VALIDATION — Memorize the sequence"
-	_header.position = Vector2(40, 30)
-	_header.add_theme_font_size_override("font_size", 16)
-	_header.add_theme_color_override("font_color", Color(0.6, 1.0, 0.6))
-	_root_control.add_child(_header)
-
-	var instr = Label.new()
-	instr.text = "A string will appear for %.1f seconds. Memorize it, then type it back exactly." % _show_duration
-	instr.position = Vector2(40, 58)
-	instr.add_theme_font_size_override("font_size", 12)
-	instr.add_theme_color_override("font_color", Color(0.5, 0.8, 0.5, 0.7))
-	_root_control.add_child(instr)
-
-	_display_label = Label.new()
+func _reset_ui() -> void:
+	# Reset display
 	_display_label.text = _format_spaced(_target_string)
-	_display_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_display_label.position = Vector2(100, 150)
-	_display_label.size = Vector2(900, 60)
-	_display_label.add_theme_font_size_override("font_size", 40)
+	_display_label.modulate.a = 1.0
 	_display_label.add_theme_color_override("font_color", Color(0.4, 1.0, 0.4, 1.0))
-	_root_control.add_child(_display_label)
 
-	_feedback = Label.new()
-	_feedback.text = ""
-	_feedback.position = Vector2(40, 230)
-	_feedback.add_theme_font_size_override("font_size", 14)
-	_feedback.add_theme_color_override("font_color", Color(0.7, 0.7, 0.7))
-	_feedback.autowrap_mode = TextServer.AUTOWRAP_WORD
-	_feedback.size = Vector2(900, 40)
-	_root_control.add_child(_feedback)
-
-	var input_header = Label.new()
-	input_header.text = "YOUR INPUT:"
-	input_header.position = Vector2(100, 280)
-	input_header.add_theme_font_size_override("font_size", 12)
-	input_header.add_theme_color_override("font_color", Color(0.4, 0.7, 0.4, 0.6))
-	_root_control.add_child(input_header)
-
-	_input_label = Label.new()
+	# Reset input
 	_input_label.text = ""
-	_input_label.position = Vector2(100, 305)
-	_input_label.size = Vector2(900, 50)
-	_input_label.add_theme_font_size_override("font_size", 36)
-	_input_label.add_theme_color_override("font_color", Color(0.4, 1.0, 0.4))
-	_root_control.add_child(_input_label)
-
-	var sys_header = Label.new()
-	sys_header.text = "SYSTEM INPUT:"
-	sys_header.position = Vector2(100, 370)
-	sys_header.add_theme_font_size_override("font_size", 12)
-	sys_header.add_theme_color_override("font_color", Color(0.7, 0.3, 0.3, 0.6))
-	sys_header.visible = false
-	sys_header.name = "SysHeader"
-	_root_control.add_child(sys_header)
-
-	_system_label = Label.new()
 	_system_label.text = ""
-	_system_label.position = Vector2(100, 395)
-	_system_label.size = Vector2(900, 50)
-	_system_label.add_theme_font_size_override("font_size", 36)
-	_system_label.add_theme_color_override("font_color", Color(0.9, 0.2, 0.2, 0.8))
-	_root_control.add_child(_system_label)
 
-	# Dual typing audio — player at normal pitch, system at 0.75
-	_sfx_player = AudioStreamPlayer.new()
-	_sfx_player.name = "TypingSFX"
-	_root_control.add_child(_sfx_player)
+	# Reset feedback
+	_feedback.text = "Memorize now... %.1f s" % _show_duration
 
-	_sfx_system = AudioStreamPlayer.new()
-	_sfx_system.name = "SystemSFX"
-	_sfx_system.pitch_scale = 0.75
-	_root_control.add_child(_sfx_system)
+	# Hide system input header until phase 1
+	var sys_h = _root_control.get_node_or_null("SystemHeader")
+	if sys_h:
+		sys_h.visible = false
+
+	# Create audio players if needed
+	if not _sfx_player:
+		_sfx_player = AudioStreamPlayer.new()
+		_sfx_player.name = "TypingSFX"
+		_root_control.add_child(_sfx_player)
+
+	if not _sfx_system:
+		_sfx_system = AudioStreamPlayer.new()
+		_sfx_system.name = "SystemSFX"
+		_sfx_system.pitch_scale = 0.75
+		_root_control.add_child(_sfx_system)
 
 	var typing_stream = _load_typing_stream()
 	if typing_stream:
@@ -199,7 +139,7 @@ func _process(delta: float) -> void:
 			_display_label.add_theme_color_override("font_color", Color(0.3, 0.3, 0.3, 0.4))
 			_display_label.modulate.a = 1.0
 			_feedback.text = "Type the string from memory. Press ENTER when done."
-			var sys_h = _root_control.get_node_or_null("SysHeader")
+			var sys_h = _root_control.get_node_or_null("SystemHeader")
 			if sys_h:
 				sys_h.visible = true
 

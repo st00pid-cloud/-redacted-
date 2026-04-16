@@ -14,7 +14,7 @@ const CORRUPTED_SPEED = 0.15
 func _ready():
 	hide()
 	DialogueManager.dialogue_box = self
-	$Control/nextButton.pressed.connect(_on_next_pressed)
+	
 
 func start_dialogue(lines: Array[String]):
 	_current_lines = lines

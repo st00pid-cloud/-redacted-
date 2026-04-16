@@ -1,22 +1,18 @@
 extends CanvasLayer
 
-## GhostCursor.gd — All improvements integrated:
-## - Ghost target position derived from viewport size (no hardcoded resolution)
-## - Ghost accelerates when player is dragging (GHOST_SPEED_CHASE)
-## - Drag icon flashes red when ghost is within 80px (proximity warning)
-## - Noise-based wander with random direction changes (not fixed sin/cos)
-## - Ghost cursor drawn as a polygon cursor shape (not a plain ColorRect)
-## - Difficulty multiplier applied to ghost speed via ChallengeTracker
+## GhostCursor.gd — Scene-based version
+## Assumes UI is pre-built in GhostCursor.tscn
 
 signal challenge_completed(success: bool)
 
-var _root_control: Control
-var _header: Label
-var _feedback: Label
-var _drag_icon: Control
-var _drop_zone: ColorRect
-var _ghost_cursor: Control
-var _danger_btn_power: Button
+@onready var _root_control: Control = $RootControl
+@onready var _header: Label = $RootControl/HeaderLabel
+@onready var _feedback: Label = $RootControl/FeedbackLabel
+@onready var _drag_icon: ColorRect = $RootControl/DragIcon
+@onready var _drop_zone: ColorRect = $RootControl/DropZone
+@onready var _ghost_cursor: ColorRect = $RootControl/GhostCursor
+@onready var _danger_btn_power: Button = $RootControl/DangerButton
+
 var _phase: int = 0  # 0=dragging, 1=verification, 2=done
 
 var _is_dragging: bool = false
@@ -57,103 +53,22 @@ func open_challenge() -> void:
 	_ghost_speed_base = GHOST_SPEED_BASE * diff
 	_ghost_speed_chase = GHOST_SPEED_CHASE * diff
 
-	_build_ui()
-	show()
-	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
-func _build_ui() -> void:
-	for child in get_children():
-		child.queue_free()
-
-	_root_control = Control.new()
-	_root_control.set_anchors_preset(Control.PRESET_FULL_RECT)
-	add_child(_root_control)
-
-	var bg = ColorRect.new()
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.color = Color(0, 0, 0, 0.85)
-	_root_control.add_child(bg)
-
-	_header = Label.new()
+	# Reset UI state
 	_header.text = "GHOST CURSOR CALIBRATION — Peripheral Interface Test"
-	_header.position = Vector2(40, 20)
-	_header.add_theme_font_size_override("font_size", 16)
-	_header.add_theme_color_override("font_color", Color(0.6, 1.0, 0.6))
-	_root_control.add_child(_header)
-
-	var instr = Label.new()
-	instr.text = "Drag the DIAGNOSTIC TOOL to the DROP ZONE. Do NOT let the ghost cursor touch it."
-	instr.position = Vector2(40, 48)
-	instr.add_theme_font_size_override("font_size", 12)
-	instr.add_theme_color_override("font_color", Color(0.5, 0.8, 0.5, 0.7))
-	_root_control.add_child(instr)
-
-	_feedback = Label.new()
 	_feedback.text = "Time: %.1f" % _time_limit
-	_feedback.position = Vector2(40, 72)
-	_feedback.add_theme_font_size_override("font_size", 13)
-	_feedback.add_theme_color_override("font_color", Color(1.0, 0.6, 0.3))
-	_root_control.add_child(_feedback)
-
-	# Use viewport size for all layout — no hardcoded resolution
+	_drag_icon.visible = true
+	_ghost_cursor.visible = true
+	_drop_zone.visible = true
+	_danger_btn_power.visible = true
+	
+	# Set up ghost target from viewport
 	var vp = get_viewport().get_visible_rect().size
-
-	_drop_zone = ColorRect.new()
-	_drop_zone.position = Vector2(vp.x - 200, vp.y * 0.4)
-	_drop_zone.size = Vector2(100, 100)
-	_drop_zone.color = Color(0.2, 0.5, 0.2, 0.5)
-	_root_control.add_child(_drop_zone)
-
-	var drop_label = Label.new()
-	drop_label.text = "DROP\nZONE"
-	drop_label.position = Vector2(15, 30)
-	drop_label.add_theme_font_size_override("font_size", 14)
-	drop_label.add_theme_color_override("font_color", Color(0.5, 1.0, 0.5, 0.8))
-	_drop_zone.add_child(drop_label)
-
-	# Danger button — position derived from viewport
-	_danger_btn_power = Button.new()
-	_danger_btn_power.text = "[ POWER OFF ]"
-	_danger_btn_power.position = Vector2(vp.x - 230, vp.y - 140)
-	_danger_btn_power.size = Vector2(140, 40)
-	_danger_btn_power.add_theme_color_override("font_color", Color(1.0, 0.2, 0.2))
-	_root_control.add_child(_danger_btn_power)
-
-	# Ghost target derived from viewport — no hardcoded Vector2(820, 520)
 	_ghost_target_pos = Vector2(vp.x - 160, vp.y - 120)
-
-	# Drag icon
-	_drag_icon = Control.new()
-	_drag_icon.position = Vector2(150, vp.y * 0.45)
-	_drag_icon.size = Vector2(60, 60)
-	_root_control.add_child(_drag_icon)
-
-	var drag_bg = ColorRect.new()
-	drag_bg.size = Vector2(60, 60)
-	drag_bg.color = Color(0.3, 0.8, 0.3, 0.9)
-	_drag_icon.add_child(drag_bg)
-
-	var icon_label = Label.new()
-	icon_label.text = "DIAG\nTOOL"
-	icon_label.position = Vector2(5, 12)
-	icon_label.add_theme_font_size_override("font_size", 11)
-	icon_label.add_theme_color_override("font_color", Color(0, 0, 0))
-	_drag_icon.add_child(icon_label)
-
-	# Ghost cursor — polygon cursor shape instead of plain ColorRect
-	_ghost_cursor = Control.new()
 	_ghost_pos = Vector2(vp.x * 0.5, vp.y * 0.3)
 	_ghost_cursor.position = _ghost_pos
-	_ghost_cursor.size = Vector2(24, 24)
-	_root_control.add_child(_ghost_cursor)
 
-	var cursor_poly = Polygon2D.new()
-	cursor_poly.polygon = PackedVector2Array([
-		Vector2(0, 0), Vector2(0, 20), Vector2(5, 15),
-		Vector2(8, 22), Vector2(10, 21), Vector2(7, 14), Vector2(14, 14)
-	])
-	cursor_poly.color = Color(0.9, 0.15, 0.15, 0.6)
-	_ghost_cursor.add_child(cursor_poly)
+	show()
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _input(event: InputEvent) -> void:
 	if not visible or _phase != 0:
