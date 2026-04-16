@@ -30,9 +30,9 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
+offset_left = 200.0
 offset_top = 20.0
-offset_right = -20.0
+offset_right = -200.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -44,21 +44,21 @@ layout_mode = 2
 [node name="NameLabel" type="Label" parent="Control/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_rfrdu")
+theme_override_font_sizes/font_size = 30
 text = "[Bobby]"
 
 [node name="ContentLabel" type="RichTextLabel" parent="Control/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_fonts/normal_font = ExtResource("2_rfrdu")
+theme_override_font_sizes/normal_font_size = 40
 fit_content = true
 scroll_following = true
 
-[node name="nextButton" type="Button" parent="Control"]
-layout_mode = 0
-offset_left = 1080.0
-offset_top = 507.0
-offset_right = 1129.0
-offset_bottom = 538.0
-text = "NEXT"
-
-[connection signal="pressed" from="Control/nextButton" to="." method="_on_next_button_pressed"]
+[node name="Label" type="Label" parent="Control/Panel/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.4351923, 0.43519226, 0.43519226, 1)
+theme_override_fonts/font = ExtResource("2_rfrdu")
+text = "[PRESS SPACE TO CONTINUE]"
+horizontal_alignment = 1

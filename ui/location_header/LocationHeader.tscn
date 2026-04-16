@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://d0hiq5x7ekx71"]
+[gd_scene load_steps=3 format=3 uid="uid://d0hiq5x7ekx71"]
 
 [ext_resource type="Script" uid="uid://cfy6xa510cwtq" path="res://ui/location_header/LocationHeader.gd" id="1_loc"]
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_kam41"]
 
 [node name="LocationHeader" type="CanvasLayer"]
 script = ExtResource("1_loc")
@@ -25,11 +26,13 @@ theme_override_constants/separation = 2
 [node name="LocationLabel" type="Label" parent="Control/VBoxContainer"]
 modulate = Color(0.6, 0.8, 0.6, 0.7)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_fonts/font = ExtResource("2_kam41")
+theme_override_font_sizes/font_size = 20
 text = "Location: Central Command Console"
 
 [node name="ConditionLabel" type="Label" parent="Control/VBoxContainer"]
 modulate = Color(0.6, 0.8, 0.6, 0.7)
 layout_mode = 2
-theme_override_font_sizes/font_size = 11
+theme_override_fonts/font = ExtResource("2_kam41")
+theme_override_font_sizes/font_size = 20
 text = "Condition: Nominal"

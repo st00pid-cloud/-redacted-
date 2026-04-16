@@ -51,7 +51,7 @@ custom_minimum_size = Vector2(680, 260)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.4, 0.7, 0.4, 0.85)
 theme_override_fonts/normal_font = ExtResource("2_xeape")
-theme_override_font_sizes/normal_font_size = 12
+theme_override_font_sizes/normal_font_size = 40
 bbcode_enabled = true
 scroll_active = false
 
@@ -63,7 +63,7 @@ layout_mode = 2
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 1, 0.7, 1)
 theme_override_fonts/font = ExtResource("2_xeape")
-theme_override_font_sizes/font_size = 42
+theme_override_font_sizes/font_size = 80
 text = "-REDACTED-"
 
 [node name="SubtitleLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
@@ -85,6 +85,7 @@ theme_override_constants/separation = 10
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_xeape")
+theme_override_font_sizes/font_size = 25
 text = "[START]"
 alignment = 0
 
@@ -92,6 +93,7 @@ alignment = 0
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_xeape")
+theme_override_font_sizes/font_size = 25
 text = "[ EXIT ]"
 alignment = 0
 
@@ -107,8 +109,8 @@ offset_bottom = -8.0
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3, 0.45, 0.3, 0.6)
 theme_override_fonts/font = ExtResource("2_xeape")
-theme_override_font_sizes/font_size = 10
-text = "CBSYS-MGMT v2.3.1  |  Unauthorized access is prohibited"
+theme_override_font_sizes/font_size = 20
+text = "[REDACTED]  v1  |  Macario, JM"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_4snsn")
