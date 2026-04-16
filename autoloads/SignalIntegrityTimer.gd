@@ -2,15 +2,14 @@ extends CanvasLayer
 
 ## SignalIntegrityTimer — Autoload
 ## Displays an 8-minute "Signal Integrity" countdown in the top-left HUD.
+## Positioned at y=88 to sit cleanly below LocationHeader (which ends ~y=80).
 ## At zero: triggers GameManager.trigger_game_over("signal_lost").
 ##
-## Register as autoload: SignalIntegrityTimer  res://autoloads/SignalIntegrityTimer.gd
-##
 ## API:
-##   SignalIntegrityTimer.start()      — begin counting (call from Level _ready)
-##   SignalIntegrityTimer.stop()       — halt without game-over (call from EndScreen)
-##   SignalIntegrityTimer.pause_timer()   — pause during cutscenes
-##   SignalIntegrityTimer.resume_timer()  — resume
+##   SignalIntegrityTimer.start()        — begin counting (call from Level _ready)
+##   SignalIntegrityTimer.stop()         — halt without game-over (call from EndScreen)
+##   SignalIntegrityTimer.pause_timer()  — pause during cutscenes
+##   SignalIntegrityTimer.resume_timer() — resume
 
 const TOTAL_TIME: float = 480.0   # 8 minutes in seconds
 
@@ -19,7 +18,6 @@ var _running: bool = false
 var _expired: bool = false
 
 # UI nodes
-var _bar_bg: ColorRect
 var _bar_fill: ColorRect
 var _time_label: Label
 var _header_label: Label
@@ -28,15 +26,14 @@ var _blink_timer: float = 0.0
 var _blink_visible: bool = true
 var _shake_timer: float = 0.0
 
-# Thresholds for visual state changes
-const WARN_THRESHOLD: float   = 120.0  # 2 min — yellow
+const WARN_THRESHOLD: float   = 120.0  # 2 min  — yellow
 const DANGER_THRESHOLD: float = 30.0   # 30 sec — red + blink
 
 func _ready() -> void:
-	layer = 20   # below crosshair, above world
+	layer = 20
 	name = "SignalIntegrityTimerHUD"
 	_build_hud()
-	hide()   # hidden until start() is called
+	hide()
 
 func start() -> void:
 	_time_remaining = TOTAL_TIME
@@ -55,18 +52,19 @@ func resume_timer() -> void:
 	if not _expired:
 		_running = true
 
-# ── HUD Construction ─────────────────────────────────────────────────────
+# ── HUD construction ─────────────────────────────────────────────────────
 
 func _build_hud() -> void:
 	var root = Control.new()
 	root.set_anchors_preset(Control.PRESET_TOP_LEFT)
 	root.offset_right  = 260.0
 	root.offset_bottom = 68.0
-	root.position = Vector2(16, 48)   # below the LocationHeader
+	# y=88 places this just below LocationHeader (offset_top=16, two labels ~64px tall)
+	root.position = Vector2(16, 88)
 	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(root)
 
-	# Panel background — subtle terminal green-on-black
+	# Panel background
 	var panel_bg = ColorRect.new()
 	panel_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	panel_bg.color = Color(0.0, 0.03, 0.0, 0.55)
@@ -92,11 +90,11 @@ func _build_hud() -> void:
 	root.add_child(_time_label)
 
 	# Progress bar background
-	_bar_bg = ColorRect.new()
-	_bar_bg.position = Vector2(8, 22)
-	_bar_bg.size = Vector2(244, 6)
-	_bar_bg.color = Color(0.08, 0.12, 0.08, 0.8)
-	root.add_child(_bar_bg)
+	var bar_bg = ColorRect.new()
+	bar_bg.position = Vector2(8, 22)
+	bar_bg.size = Vector2(244, 6)
+	bar_bg.color = Color(0.08, 0.12, 0.08, 0.8)
+	root.add_child(bar_bg)
 
 	# Progress bar fill
 	_bar_fill = ColorRect.new()
@@ -122,47 +120,39 @@ func _process(delta: float) -> void:
 
 	_time_remaining -= delta
 	_time_remaining = max(0.0, _time_remaining)
-
 	_update_display(delta)
 
 	if _time_remaining <= 0.0:
 		_on_timer_expired()
 
 func _update_display(delta: float) -> void:
-	# Time label
 	var minutes = int(_time_remaining) / 60
 	var seconds = int(_time_remaining) % 60
 	_time_label.text = "%02d:%02d" % [minutes, seconds]
 
-	# Bar fill ratio
 	var ratio = _time_remaining / TOTAL_TIME
 	_bar_fill.size.x = 244.0 * ratio
 
-	# Color state machine
 	if _time_remaining <= DANGER_THRESHOLD:
-		# Red + blink
 		var red = Color(0.9, 0.15, 0.15, 0.95)
 		_bar_fill.color = red
 		_time_label.add_theme_color_override("font_color", red)
 		_header_label.add_theme_color_override("font_color", red)
 		_warning_label.text = "⚠ SIGNAL CRITICAL"
-		_warning_label.visible = _blink_visible
 		_warning_label.add_theme_color_override("font_color", red)
+		_warning_label.visible = _blink_visible
 
-		# Blink
 		_blink_timer += delta
 		if _blink_timer >= 0.4:
 			_blink_timer = 0.0
 			_blink_visible = not _blink_visible
 
-		# Subtle shake of the entire HUD
 		_shake_timer += delta
 		if _shake_timer >= 0.08:
 			_shake_timer = 0.0
 			offset = Vector2(randf_range(-2, 2), randf_range(-1, 1))
 
 	elif _time_remaining <= WARN_THRESHOLD:
-		# Yellow warning
 		var yellow = Color(0.85, 0.75, 0.2, 0.9)
 		_bar_fill.color = yellow
 		_time_label.add_theme_color_override("font_color", yellow)
@@ -170,8 +160,8 @@ func _update_display(delta: float) -> void:
 		_warning_label.text = "⚠ SIGNAL DEGRADING"
 		_warning_label.visible = true
 		offset = Vector2.ZERO
+
 	else:
-		# Normal green
 		_bar_fill.color = Color(0.3, 0.75, 0.3, 0.9)
 		_time_label.add_theme_color_override("font_color", Color(0.5, 0.85, 0.5, 0.85))
 		_header_label.add_theme_color_override("font_color", Color(0.4, 0.65, 0.4, 0.6))

@@ -60,7 +60,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_meeu0")
 transform = Transform3D(0.23546375, -0.27981722, -7.6913104, 0.7870689, 7.655442, -0.2544168, 7.656048, -0.7784007, 0.2627032, -32.011482, 8.719945, 8.733135)
 
 [node name="Player2" parent="." instance=ExtResource("4_bpnau")]
-transform = Transform3D(-1.0992994, 0, -0.48118633, 0, 1.1999999, 0, 0.48118633, 0, -1.0992994, -7.947733, 38.987434, 22.639372)
+transform = Transform3D(1.1923876, 0, 0.13494894, 0, 1.1999999, 0, -0.13494894, 0, 1.1923876, -7.947733, 38.987434, 22.639372)
 
 [node name="DiagnosticPanel" parent="." instance=ExtResource("6_ieywp")]
 
