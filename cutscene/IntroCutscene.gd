@@ -10,23 +10,23 @@ signal cutscene_finished
 @onready var bg: ColorRect = $BG
 
 const LINES = [
-	"MERIDIAN DATA CENTER — Sub-Level 3",
+	"ATONGANG DATA CENTER — Basement Level 3",
 	"November 14, 2:47 AM",
 	"",
-	"You are E. M. Butido an on-call infrastructure engineer.",
+	"Your name is E. M. Butido. You fix things when they break in the middle of the night.",
 	"",
-	"A routine maintenance ticket brought you here.",
-	"Rack 7 has been flagging errors for six weeks.",
-	"Two engineers before you signed off mid-shift.",
+	"You're here because of a routine work order. ",
+	"Rack 7 has been throwing red lights for six weeks straight. ",
+	"Two other techs were assigned to this before you; both quit mid-shift without saying why.",
 	"Neither filed a report.",
 	"",
-	"Your job is simple: run the diagnostic, isolate the fault, go home.",
+	"Your orders: run the scan, find the leak, and go home.",
 	"",
-	"The elevator behind you has already closed.",
+	"The elevator is already heading back up.",
 ]
 
 const CHAR_DELAY = 0.099  # seconds per character
-const LINE_PAUSE = 0.6   # pause between lines
+const LINE_PAUSE = 0.3   # pause between lines
 
 var _skip_requested: bool = false
 

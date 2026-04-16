@@ -28,7 +28,7 @@ var _ghost_target_pos: Vector2 = Vector2.ZERO
 var _task_success: bool = false
 var _ghost_touched: bool = false
 var _timer: float = 0.0
-var _time_limit: float = 15.0
+var _time_limit: float = 5.0
 
 var _wander_offset: Vector2 = Vector2.ZERO
 var _wander_change_timer: float = 0.0

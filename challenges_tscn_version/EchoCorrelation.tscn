@@ -67,35 +67,42 @@ theme_override_font_sizes/font_size = 20
 text = "Align the two audio feeds using the slider. Match the waveforms."
 autowrap_mode = 3
 
-[node name="FeedALabel" type="Label" parent="RootControl/Panel/VBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="RootControl/Panel"]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 145.0
+offset_right = 736.0
+offset_bottom = 406.0
+
+[node name="FeedALabel" type="Label" parent="RootControl/Panel/VBoxContainer2"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5, 0.8, 0.5, 0.7)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 20
 text = "FEED A — Room Microphone: [STATIC]"
 
-[node name="WaveAControl" type="Control" parent="RootControl/Panel/VBoxContainer"]
+[node name="WaveAControl" type="Control" parent="RootControl/Panel/VBoxContainer2"]
 custom_minimum_size = Vector2(680, 60)
 layout_mode = 2
 
-[node name="FeedBLabel" type="Label" parent="RootControl/Panel/VBoxContainer"]
+[node name="FeedBLabel" type="Label" parent="RootControl/Panel/VBoxContainer2"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5, 0.8, 0.5, 0.7)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 20
 text = "FEED B — Ventilation Intake: [STATIC]"
 
-[node name="WaveBControl" type="Control" parent="RootControl/Panel/VBoxContainer"]
+[node name="WaveBControl" type="Control" parent="RootControl/Panel/VBoxContainer2"]
 custom_minimum_size = Vector2(680, 60)
 layout_mode = 2
 
-[node name="AlignSlider" type="HSlider" parent="RootControl/Panel/VBoxContainer"]
+[node name="AlignSlider" type="HSlider" parent="RootControl/Panel/VBoxContainer2"]
 custom_minimum_size = Vector2(680, 24)
 layout_mode = 2
 max_value = 1.0
 step = 0.01
 
-[node name="SyncLabel" type="Label" parent="RootControl/Panel/VBoxContainer"]
+[node name="SyncLabel" type="Label" parent="RootControl/Panel/VBoxContainer2"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 0.9, 0.6, 0.9)
 theme_override_fonts/font = ExtResource("2_font")
@@ -103,13 +110,13 @@ theme_override_font_sizes/font_size = 20
 text = "Synchronization: 0%"
 horizontal_alignment = 1
 
-[node name="FeedbackLabel" type="Label" parent="RootControl/Panel/VBoxContainer"]
+[node name="FeedbackLabel" type="Label" parent="RootControl/Panel/VBoxContainer2"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8, 0.3, 0.3, 0.9)
 theme_override_font_sizes/font_size = 12
 autowrap_mode = 3
 
-[node name="ConfirmButton" type="Button" parent="RootControl/Panel/VBoxContainer"]
+[node name="ConfirmButton" type="Button" parent="RootControl/Panel/VBoxContainer2"]
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)

@@ -9,15 +9,15 @@ signal challenge_completed(success: bool)
 # Scene UI references — paths relative to EchoCorrelation (CanvasLayer root)
 @onready var _root_control: Control = $RootControl
 @onready var _header: Label = $RootControl/Panel/VBoxContainer/HeaderLabel
-@onready var _feedback: Label = $RootControl/Panel/VBoxContainer/FeedbackLabel
-@onready var _slider: HSlider = $RootControl/Panel/VBoxContainer/AlignSlider
-@onready var _wave_a: Control = $RootControl/Panel/VBoxContainer/WaveAControl
-@onready var _wave_b: Control = $RootControl/Panel/VBoxContainer/WaveBControl
-@onready var _feed_a_label: Label = $RootControl/Panel/VBoxContainer/FeedALabel
-@onready var _feed_b_label: Label = $RootControl/Panel/VBoxContainer/FeedBLabel
-@onready var _sync_label: Label = $RootControl/Panel/VBoxContainer/SyncLabel
+@onready var _feedback: Label = $RootControl/Panel/VBoxContainer2/FeedbackLabel
+@onready var _slider: HSlider = $RootControl/Panel/VBoxContainer2/AlignSlider
+@onready var _wave_a: Control = $RootControl/Panel/VBoxContainer2/WaveAControl
+@onready var _wave_b: Control = $RootControl/Panel/VBoxContainer2/WaveBControl
+@onready var _feed_a_label: Label = $RootControl/Panel/VBoxContainer2/FeedALabel
+@onready var _feed_b_label: Label = $RootControl/Panel/VBoxContainer2/FeedBLabel
+@onready var _sync_label: Label = $RootControl/Panel/VBoxContainer2/SyncLabel
 @onready var _vbox: VBoxContainer = $RootControl/Panel/VBoxContainer
-@onready var _confirm_btn: Button = $RootControl/Panel/VBoxContainer/ConfirmButton
+@onready var _confirm_btn: Button = $RootControl/Panel/VBoxContainer2/ConfirmButton
 
 var _phase: int = 0  # 0=adjusting, 1=verification, 2=done
 

@@ -9,12 +9,12 @@ extends Node2D
 @onready var scanline: ColorRect = $CanvasLayer/Scanline
 
 const BOOT_LINES = [
-	"CYBERBUNKER SYSTEMS — BIOS v4.1.7",
+	"GAMECONSOLEINTEGOUTPUT — BIOS v4.1.7",
 	"Initializing hardware...",
 	"RAM: 65536 KB OK",
 	"Storage array: ONLINE",
 	"Network interfaces: DETECTED",
-	"Rack 7 status: [WARNING] anomalous throughput",
+	"Rack 7 status: [WARNING] ANOMALOUS THROUGHPUT",
 	"Loading environment...",
 	".",
 	"..",

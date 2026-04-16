@@ -31,39 +31,39 @@ const UNLOCK_AFTER: Dictionary = {
 const TERMINAL_LINES = {
 	"echo": {
 		"intro": [
-			"[TERMINAL]: Audio monitoring station — Sub-Level 3, Bay 2.",
-			"[SYSTEM]: Anomalous audio feeds detected. Correlation required.",
-			"[SYSTEM]: Align the feeds to identify the source.",
+			"[TERMINAL]: Audio Monitor — Bay 2.",
+			"[SYSTEM]: Strange noise detected on internal mics. Cleanup required.",
+			"[SYSTEM]: Match the frequencies to find the source.",
 		],
-		"task_name": "Echo Correlation",
-		"task_desc": "Align audio feeds A and B using the slider. Identify the anomaly.",
+		"task_name": "Frequency Match",
+		"task_desc": "Use the slider to sync Feeds A and B. Find out what’s making that noise.",
 	},
 	"ghost": {
 		"intro": [
-			"[TERMINAL]: Peripheral interface console — Sub-Level 3, Bay 5.",
-			"[SYSTEM]: Input calibration drift detected on this terminal.",
-			"[SYSTEM]: Recalibrate by dragging the diagnostic tool to the drop zone.",
+			"[TERMINAL]: Interface Console — Bay 5.",
+			"[SYSTEM]: Input lag detected. Mouse tracking is drifting.",
+			"[SYSTEM]: Reset the sensor by dragging the tool to the target.",
 		],
-		"task_name": "Cursor Calibration",
-		"task_desc": "Drag the tool to the drop zone. Watch for peripheral interference.",
+		"task_name": "Sensor Reset",
+		"task_desc": "Drag the tool into the target zone. Don't let the drift pull you off course.",
 	},
 	"thermal": {
 		"intro": [
-			"[TERMINAL]: Environmental monitoring station — Sub-Level 3, Bay 9.",
-			"[SYSTEM]: Thermal grid shows multiple unpatched heat leaks.",
-			"[SYSTEM]: Patch all leaks. Report any anomalous signatures.",
+			"[TERMINAL]: Temp Control — Bay 9.",
+			"[SYSTEM]: Warning: Cooling failure. Multiple heat spikes detected.",
+			"[SYSTEM]: Seal the leaks before the rack overheats.",
 		],
-		"task_name": "Thermal Scan",
-		"task_desc": "Click heat leaks to patch them. Watch for anomalous signatures.",
+		"task_name": "Leak Repair",
+		"task_desc": "Click the hot spots to seal them. Keep an eye out for anything unusual",
 	},
 	"memory": {
 		"intro": [
-			"[TERMINAL]: Memory validation console — Sub-Level 3, Bay 12.",
-			"[SYSTEM]: Buffer integrity check required.",
-			"[SYSTEM]: Memorize the string. Reproduce it exactly.",
+			"[TERMINAL]: Data Security — Bay 12.",
+			"[SYSTEM]: Security code verification required.",
+			"[SYSTEM]: Watch the sequence. Repeat it back to unlock the tray.",
 		],
-		"task_name": "Memory Validation",
-		"task_desc": "A string will flash briefly. Type it back from memory.",
+		"task_name": "Security Override",
+		"task_desc": "A code will flash on screen. Type it back exactly as you saw it.",
 	},
 }
 

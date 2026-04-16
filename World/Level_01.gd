@@ -19,13 +19,13 @@ var _resist_ui_container: CanvasLayer = null
 var _resist_pulse_timer: float = 0.0
 
 const OPENING_LINES = [
-	"Hey there EM.",
-	"Routine maintenance call. Someone flagged an anomaly on Rack 7.",
-	"You've done this a hundred times. Pull the module, reseat it, go home.",
+	"Hey, EM. You're up.",
+	"Got a weird blip on Rack 7. Standard maintenance, you know the drill. ",
+	"You've done this a hundred times. Pop the component out, plug it back in, and call it a night.",
 	"[YOU] The server room is quieter than usual.",
 	"...",
-	"Multiple subsystem terminals require diagnostics before main console access.",
-	"Locate and complete all terminal checks. Then return to Rack 7.",
+	"The main computer is locked out. You'll need to hit the local stations first to run a health check.",
+	"Find the terminals, clear the errors, then head back to Rack 7.",
 ]
 
 func _ready() -> void:

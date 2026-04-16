@@ -24,12 +24,12 @@ func _ready():
 	update_display()
 
 func _input(event):
-	if event.is_action_pressed("toggle_task_view"):
+	if event.is_action_pressed("toggle_task"):
 		toggle_expand()
 
 func toggle_expand():
 	is_expanded = !is_expanded
-	
+	header_label.text = "[ ACTIVE TASK ] >>" if is_expanded else "<<"
 	# Determine where the box should be
 	# 0 is fully visible on the left, -ui_width is fully hidden
 	var target_x = 0 if is_expanded else -ui_width + 40 # Leave 40px visible as a "tab"
