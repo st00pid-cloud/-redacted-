@@ -19,8 +19,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.021820068, 1.2668457, 0)
 shape = SubResource("BoxShape3D_t1gyr")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Sketchfab_Scene/StaticBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.03684, 0.35582507, 0.25777256)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.85380435, 2.4003384, 0.42447782)
 light_color = Color(1, 0.06999999, 0.06999999, 1)
+light_bake_mode = 1
+omni_attenuation = 5.0
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Sketchfab_Scene/StaticBody3D"]
 stream = ExtResource("3_buw04")

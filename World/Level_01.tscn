@@ -61,7 +61,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_meeu0")
 transform = Transform3D(0.23546375, -0.27981722, -7.6913104, 0.7870689, 7.655442, -0.2544168, 7.656048, -0.7784007, 0.2627032, -32.011482, 8.719945, 8.733135)
 
 [node name="Player2" parent="." instance=ExtResource("4_bpnau")]
-transform = Transform3D(1.1923876, 0, 0.13494894, 0, 1.1999999, 0, -0.13494894, 0, 1.1923876, -7.947733, 38.987434, 22.639372)
+transform = Transform3D(1.1923876, 0, 0.13494894, 0, 1.1999999, 0, -0.13494894, 0, 1.1923876, -6.9759192, 38.987434, 22.639372)
 
 [node name="DiagnosticPanel" parent="." instance=ExtResource("6_ieywp")]
 
@@ -96,55 +96,26 @@ script = null
 environment = SubResource("Environment_meeu0")
 
 [node name="Bridge1-omni" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.8331056, 48.699093, 16.720438)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.1330714, 40.531532, 12.103359)
 layers = 1023
 light_energy = 20.0
 light_size = 100.0
 light_specular = 8.5
 light_bake_mode = 1
 light_cull_mask = 4294966273
-omni_range = 24.271805
+omni_range = 14.439776
 
 [node name="Bridge1-omni2" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27831888, 48.699093, -38.97116)
+transform = Transform3D(1, 0, 0, 0, 0.48679286, 0.87351745, 0, -0.87351745, 0.48679286, 10.61743, 31.044872, 23.088726)
 layers = 1023
 light_energy = 20.0
 light_size = 100.0
-light_specular = 8.5
 light_bake_mode = 1
 light_cull_mask = 4294966273
-omni_range = 24.271805
-
-[node name="Bridge1-omni3" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.814571, 37.299347, -38.289993)
-layers = 1023
-light_energy = 20.0
-light_size = 100.0
-light_specular = 8.5
-light_bake_mode = 1
-light_cull_mask = 4294966273
-omni_range = 24.199257
-
-[node name="Bridge1-omni4" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.585999, 29.152725, -10.58259)
-layers = 1023
-light_energy = 20.0
-light_size = 100.0
-light_specular = 8.5
-light_bake_mode = 1
-light_cull_mask = 4294966273
-omni_range = 24.199257
-
-[node name="Bridge1-omni5" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.10384, 23.60736, 33.210644)
-layers = 1023
-light_specular = 1.0
-light_bake_mode = 1
-light_cull_mask = 4294966273
-omni_range = 24.199257
+omni_range = 14.439776
 
 [node name="lamp" parent="." instance=ExtResource("21_8jeay")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -46.097954, 42.16422, 23.317074)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -49.98644, 44.976593, 23.317074)
 
 [node name="lamp2" parent="." instance=ExtResource("21_8jeay")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -46.097954, 44.023224, -28.962729)
@@ -175,6 +146,9 @@ theme = ExtResource("26_0c0ya")
 [node name="ThermalScan2" parent="." instance=ExtResource("29_582bg")]
 
 [node name="MemoryString2" parent="." instance=ExtResource("30_c7iac")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.0057770447, 0.9999833, 0, -0.9999833, 0.0057770447, 2.4529772, 31.56623, -4.2022557)
 
 [editable path="Sketchfab_Scene"]
 [editable path="Rack1"]
