@@ -152,14 +152,14 @@ func _on_challenge_done(success: bool) -> void:
 	# Show result dialogue
 	if success:
 		var lines: Array[String] = [
-			"[SYSTEM]: Diagnostic passed. Terminal secured.",
-			"[SYSTEM]: %d / %d subsystems checked." % [ChallengeTracker.get_completed_count(), ChallengeTracker.required_ids.size()],
+			"Diagnostic passed. Terminal secured.",
+			"%d / %d subsystems checked." % [ChallengeTracker.get_completed_count(), ChallengeTracker.required_ids.size()],
 		]
 		DialogueManager.show_dialogue(lines)
 	else:
 		var lines: Array[String] = [
-			"[SYSTEM]: Diagnostic anomaly detected. Result logged.",
-			"[SYSTEM]: %d / %d subsystems checked." % [ChallengeTracker.get_completed_count(), ChallengeTracker.required_ids.size()],
+			"Diagnostic anomaly detected. Result logged.",
+			"%d / %d subsystems checked." % [ChallengeTracker.get_completed_count(), ChallengeTracker.required_ids.size()],
 		]
 		DialogueManager.show_dialogue(lines)
 

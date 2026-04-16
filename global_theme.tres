@@ -1,0 +1,6 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://baag345alu48e"]
+
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="1_ofusn"]
+
+[resource]
+default_font = ExtResource("1_ofusn")

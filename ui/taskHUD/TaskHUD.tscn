@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://xbn53ewemqeb"]
+[gd_scene load_steps=3 format=3 uid="uid://xbn53ewemqeb"]
 
 [ext_resource type="Script" uid="uid://cci4q1rr536d4" path="res://ui/taskHUD/TaskHUD.gd" id="1_task"]
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_folnm"]
 
 [node name="TaskHud" type="CanvasLayer"]
 layer = 10
@@ -42,12 +43,14 @@ theme_override_constants/separation = 6
 [node name="taskHeader" type="Label" parent="Control/MarginContainer/VBoxContainer"]
 modulate = Color(0.4, 0.7, 0.4, 0.6)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_folnm")
 theme_override_font_sizes/font_size = 10
 text = "[ ACTIVE TASK ]"
 
 [node name="taskTitle" type="Label" parent="Control/MarginContainer/VBoxContainer"]
 modulate = Color(0.6, 1, 0.6, 0.9)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_folnm")
 theme_override_font_sizes/font_size = 16
 text = "---"
 

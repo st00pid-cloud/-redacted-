@@ -19,13 +19,13 @@ var _resist_ui_container: CanvasLayer = null
 var _resist_pulse_timer: float = 0.0
 
 const OPENING_LINES = [
-	"Central Command Console. 0300 hours.",
+	"Hey there EM.",
 	"Routine maintenance call. Someone flagged an anomaly on Rack 7.",
 	"You've done this a hundred times. Pull the module, reseat it, go home.",
-	"The server room is quieter than usual.",
+	"[YOU] The server room is quieter than usual.",
 	"...",
-	"[SYSTEM]: Multiple subsystem terminals require diagnostics before main console access.",
-	"[SYSTEM]: Locate and complete all terminal checks. Then return to Rack 7.",
+	"Multiple subsystem terminals require diagnostics before main console access.",
+	"Locate and complete all terminal checks. Then return to Rack 7.",
 ]
 
 func _ready() -> void:
@@ -51,7 +51,7 @@ func _ready() -> void:
 	var task = TaskData.new()
 	task.task_id = "task_01"
 	task.task_name = "Maintenance Call"
-	task.description = "Investigate anomalous buffer overflow — Server Rack 7."
+	task.description = "Investigate Server Rack 7."
 	TaskManager.set_task(task)
 
 	await get_tree().create_timer(1.2).timeout
@@ -132,9 +132,9 @@ func _input(event: InputEvent) -> void:
 func _on_resist_success() -> void:
 	_cleanup_all_overlays()
 	var lines: Array[String] = [
-		"[SYSTEM]: Integration rejected. Host signal unstable.",
-		"[SYSTEM]: Entity retreating to secondary buffer.",
-		"[SYSTEM]: ...silence.",
+		"Integration rejected. Host signal unstable.",
+		"[Entity retreating to secondary buffer.",
+		"...",
 	]
 	DialogueManager.show_dialogue(lines)
 	await DialogueManager.dialogue_finished

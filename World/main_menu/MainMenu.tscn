@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dow2ueifaa0yx"]
+[gd_scene load_steps=4 format=3 uid="uid://dow2ueifaa0yx"]
 
 [ext_resource type="Script" uid="uid://bau11wjc3devl" path="res://World/main_menu/MainMenu.gd" id="1_menu"]
 [ext_resource type="AudioStream" uid="uid://cayt56s1gr4qx" path="res://World/main_menu/343788__rurbital__vietnam-robot-flashback.mp3" id="2_4snsn"]
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_xeape"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_menu")
@@ -49,6 +50,7 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(680, 260)
 layout_mode = 2
 theme_override_colors/default_color = Color(0.4, 0.7, 0.4, 0.85)
+theme_override_fonts/normal_font = ExtResource("2_xeape")
 theme_override_font_sizes/normal_font_size = 12
 bbcode_enabled = true
 scroll_active = false
@@ -60,12 +62,14 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 1, 0.7, 1)
+theme_override_fonts/font = ExtResource("2_xeape")
 theme_override_font_sizes/font_size = 42
 text = "-REDACTED-"
 
 [node name="SubtitleLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.45, 0.7, 0.45, 0.8)
+theme_override_fonts/font = ExtResource("2_xeape")
 theme_override_font_sizes/font_size = 13
 text = "Central Command Console — Maintenance Access"
 
@@ -80,12 +84,14 @@ theme_override_constants/separation = 10
 [node name="StartButton" type="Button" parent="CanvasLayer/Control/VBoxContainer/ButtonContainer"]
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_xeape")
 text = "[START]"
 alignment = 0
 
 [node name="QuitButton" type="Button" parent="CanvasLayer/Control/VBoxContainer/ButtonContainer"]
 custom_minimum_size = Vector2(220, 0)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_xeape")
 text = "[ EXIT ]"
 alignment = 0
 
@@ -100,6 +106,7 @@ offset_right = 300.0
 offset_bottom = -8.0
 grow_vertical = 2
 theme_override_colors/font_color = Color(0.3, 0.45, 0.3, 0.6)
+theme_override_fonts/font = ExtResource("2_xeape")
 theme_override_font_sizes/font_size = 10
 text = "CBSYS-MGMT v2.3.1  |  Unauthorized access is prohibited"
 

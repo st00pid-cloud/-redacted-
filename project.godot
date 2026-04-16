@@ -27,6 +27,7 @@ ChallengeTracker="*res://autoloads/ChallengeTracker.gd"
 HorrorProgressionManager="*res://autoloads/HorrorProgressionManager.gd"
 FaceDistortion="*res://autoloads/FaceDistortion.gd"
 SignalIntegrityTimer="*res://autoloads/SignalIntegrityTimer.gd"
+GlobalTheme="*res://GlobalTheme.tscn"
 
 [global_group]
 

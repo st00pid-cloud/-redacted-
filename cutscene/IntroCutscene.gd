@@ -13,7 +13,7 @@ const LINES = [
 	"MERIDIAN DATA CENTER — Sub-Level 3",
 	"November 14, 2:47 AM",
 	"",
-	"You are R. Vasquez. Infrastructure engineer. Night shift.",
+	"You are E. M. Butido an on-call infrastructure engineer.",
 	"",
 	"A routine maintenance ticket brought you here.",
 	"Rack 7 has been flagging errors for six weeks.",
@@ -25,7 +25,7 @@ const LINES = [
 	"The elevator behind you has already closed.",
 ]
 
-const CHAR_DELAY = 0.03  # seconds per character
+const CHAR_DELAY = 0.099  # seconds per character
 const LINE_PAUSE = 0.6   # pause between lines
 
 var _skip_requested: bool = false

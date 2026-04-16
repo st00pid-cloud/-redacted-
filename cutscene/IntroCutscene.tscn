@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3 uid="uid://cl02o2k76xige"]
 
 [ext_resource type="Script" uid="uid://dat8dpjgsiown" path="res://cutscene/IntroCutscene.gd" id="1_intro"]
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_2wsxe"]
 
 [node name="IntroCutscene" type="CanvasLayer"]
 layer = 200
@@ -39,16 +40,17 @@ theme_override_constants/separation = 20
 alignment = 1
 
 [node name="TextLabel" type="RichTextLabel" parent="Control/VBox"]
-layout_mode = 2
 custom_minimum_size = Vector2(700, 250)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.5, 0.9, 0.5, 0.9)
+theme_override_fonts/normal_font = ExtResource("2_2wsxe")
+theme_override_font_sizes/normal_font_size = 16
 bbcode_enabled = true
-text = ""
 fit_content = true
 scroll_active = false
-theme_override_font_sizes/normal_font_size = 16
-theme_override_colors/default_color = Color(0.5, 0.9, 0.5, 0.9)
 
 [node name="SkipLabel" type="Label" parent="Control"]
+modulate = Color(0.4, 0.6, 0.4, 0.4)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -61,7 +63,6 @@ offset_right = 60.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
-text = "[ SPACE to skip ]"
 theme_override_font_sizes/font_size = 11
-modulate = Color(0.4, 0.6, 0.4, 0.4)
+text = "[ SPACE to skip ]"
 horizontal_alignment = 1
