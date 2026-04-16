@@ -1,7 +1,7 @@
 extends CanvasLayer
 
-## GhostCursor.gd — Scene-based version
-## Assumes UI is pre-built in GhostCursor.tscn
+## GhostCursor.gd — Scene-based version (CORRECTED PATHS)
+## Script attached to GhostCursor (CanvasLayer) node
 
 signal challenge_completed(success: bool)
 
@@ -19,7 +19,6 @@ var _is_dragging: bool = false
 var _drag_offset: Vector2 = Vector2.ZERO
 var _ghost_pos: Vector2 = Vector2(100, 100)
 
-# Speed constants — base scaled by difficulty multiplier at open
 const GHOST_SPEED_BASE: float = 45.0
 const GHOST_SPEED_CHASE: float = 90.0
 var _ghost_speed_base: float = GHOST_SPEED_BASE
@@ -31,7 +30,6 @@ var _ghost_touched: bool = false
 var _timer: float = 0.0
 var _time_limit: float = 15.0
 
-# Noise-based wander state
 var _wander_offset: Vector2 = Vector2.ZERO
 var _wander_change_timer: float = 0.0
 
@@ -48,12 +46,10 @@ func open_challenge() -> void:
 	_wander_offset = Vector2.ZERO
 	_wander_change_timer = 0.0
 
-	# Scale speed by how many challenges are already done
 	var diff = ChallengeTracker.get_difficulty_multiplier()
 	_ghost_speed_base = GHOST_SPEED_BASE * diff
 	_ghost_speed_chase = GHOST_SPEED_CHASE * diff
 
-	# Reset UI state
 	_header.text = "GHOST CURSOR CALIBRATION — Peripheral Interface Test"
 	_feedback.text = "Time: %.1f" % _time_limit
 	_drag_icon.visible = true
@@ -61,7 +57,6 @@ func open_challenge() -> void:
 	_drop_zone.visible = true
 	_danger_btn_power.visible = true
 	
-	# Set up ghost target from viewport
 	var vp = get_viewport().get_visible_rect().size
 	_ghost_target_pos = Vector2(vp.x - 160, vp.y - 120)
 	_ghost_pos = Vector2(vp.x * 0.5, vp.y * 0.3)
@@ -113,7 +108,6 @@ func _process(delta: float) -> void:
 			_show_verification()
 			return
 
-		# Noise-based wander — direction changes randomly every 0.8–2.0 seconds
 		_wander_change_timer -= delta
 		if _wander_change_timer <= 0.0:
 			_wander_change_timer = randf_range(0.8, 2.0)
@@ -122,12 +116,10 @@ func _process(delta: float) -> void:
 		var target = _ghost_target_pos + _wander_offset
 		var dir = (target - _ghost_pos).normalized()
 
-		# Ghost chases faster when player is actively dragging
 		var current_speed = _ghost_speed_chase if _is_dragging else _ghost_speed_base
 		_ghost_pos += dir * current_speed * delta
 		_ghost_cursor.position = _ghost_pos
 
-		# Proximity warning — drag icon flashes red when ghost is within 80px
 		if _is_dragging:
 			var dist = _ghost_pos.distance_to(_drag_icon.global_position)
 			if dist < 80.0:
@@ -136,7 +128,6 @@ func _process(delta: float) -> void:
 				if drag_bg:
 					drag_bg.color = Color(0.8, 0.2, 0.2, 0.9) if flash else Color(0.3, 0.8, 0.3, 0.9)
 
-			# Check collision
 			var ghost_rect = Rect2(_ghost_pos, _ghost_cursor.size)
 			var icon_rect = Rect2(_drag_icon.global_position, _drag_icon.size)
 			if ghost_rect.intersects(icon_rect):

@@ -1,11 +1,10 @@
 extends CanvasLayer
 
-## MemoryString.gd — Scene-based version
-## Assumes core UI is pre-built in MemoryString.tscn
+## MemoryString.gd — Scene-based version (CORRECTED PATHS)
+## Script attached to MemoryString (CanvasLayer) node
 
 signal challenge_completed(success: bool)
 
-# Scene UI references
 @onready var _root_control: Control = $RootControl
 @onready var _header: Label = $RootControl/HeaderLabel
 @onready var _feedback: Label = $RootControl/FeedbackLabel
@@ -23,17 +22,13 @@ var _show_timer: float = 0.0
 var _show_duration: float = 3.5
 var _input_active: bool = false
 
-# Repeat attempt tracking
 var _attempt_count: int = 0
 
-# Glitch state for system label self-correction
 var _glitch_timer: float = 0.0
 
-# Audio
 var _sfx_player: AudioStreamPlayer = null
 var _sfx_system: AudioStreamPlayer = null
 
-# Expanded string pool — 12 variants
 const STRING_POOL = [
 	"VASQUEZHELPM", "RACK7ENTITYX", "PORTISOLATEN", "HELPVASQUEZ0",
 	"CHEN0MISSING", "R0DRIGUEZNOW", "SUBLEVEL3KEY", "BUFFEROVERFL",
@@ -52,13 +47,10 @@ func open_challenge() -> void:
 	_input_active = false
 	_glitch_timer = 0.0
 
-	# Duration shortens with each attempt, floored at 2.0s
-	# Also scaled down by difficulty multiplier
 	var diff = ChallengeTracker.get_difficulty_multiplier()
 	_show_duration = max(2.0, (3.5 - (_attempt_count * 0.5)) / diff)
 	_attempt_count += 1
 
-	# Pick from expanded pool
 	_target_string = STRING_POOL[randi() % STRING_POOL.size()]
 
 	_reset_ui()
@@ -66,24 +58,19 @@ func open_challenge() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 func _reset_ui() -> void:
-	# Reset display
 	_display_label.text = _format_spaced(_target_string)
 	_display_label.modulate.a = 1.0
 	_display_label.add_theme_color_override("font_color", Color(0.4, 1.0, 0.4, 1.0))
 
-	# Reset input
 	_input_label.text = ""
 	_system_label.text = ""
 
-	# Reset feedback
 	_feedback.text = "Memorize now... %.1f s" % _show_duration
 
-	# Hide system input header until phase 1
 	var sys_h = _root_control.get_node_or_null("SystemHeader")
 	if sys_h:
 		sys_h.visible = false
 
-	# Create audio players if needed
 	if not _sfx_player:
 		_sfx_player = AudioStreamPlayer.new()
 		_sfx_player.name = "TypingSFX"
@@ -123,7 +110,6 @@ func _process(delta: float) -> void:
 	if not visible:
 		return
 
-	# Phase 0: showing the string
 	if _phase == 0:
 		_show_timer += delta
 		var remaining = _show_duration - _show_timer
@@ -143,7 +129,6 @@ func _process(delta: float) -> void:
 			if sys_h:
 				sys_h.visible = true
 
-	# Phase 1: system label self-corrects occasionally
 	elif _phase == 1 and _input_active:
 		_glitch_timer += delta
 		if _glitch_timer >= 0.4:
@@ -152,11 +137,9 @@ func _process(delta: float) -> void:
 				var correct_text = _system_message.substr(0, _char_index)
 				var glitch_idx = randi() % _char_index
 				var chars = correct_text.split("")
-				# Replace one character with a random uppercase letter
 				chars[glitch_idx] = char(randi_range(65, 90))
 				var glitched = "".join(chars)
 				_system_label.text = _format_spaced(glitched)
-				# Snap back to correct after 80ms
 				await get_tree().create_timer(0.08).timeout
 				if is_instance_valid(_system_label) and _phase == 1:
 					_system_label.text = _format_spaced(correct_text)
@@ -183,7 +166,6 @@ func _input(event: InputEvent) -> void:
 			_player_input += ch
 			_char_index = _player_input.length()
 			_update_display()
-			# Player typing sound
 			if _sfx_player and not _sfx_player.playing:
 				_sfx_player.play()
 
@@ -197,17 +179,14 @@ func _keycode_to_char(keycode: int) -> String:
 func _update_display() -> void:
 	_input_label.text = _format_spaced(_player_input)
 
-	# System types its message at the same pace as the player
 	var sys_len = min(_char_index, _system_message.length())
 	var sys_text = _system_message.substr(0, sys_len)
 	_system_label.text = _format_spaced(sys_text)
 
-	# System typing sound at lower pitch
 	if _sfx_system and not _sfx_system.playing:
 		_sfx_system.play()
 
 func _evaluate() -> void:
-	# Set input inactive immediately — blocks any keypresses during the 0.5s delay
 	_input_active = false
 	_phase = 2
 
@@ -248,7 +227,6 @@ func _on_verify(answered_yes: bool) -> void:
 	_phase = 3
 
 	var string_correct = (_player_input.to_upper() == _target_string.to_upper())
-	# NO is the correct answer — the system was also typing
 	var success = string_correct and not answered_yes
 
 	if not answered_yes:

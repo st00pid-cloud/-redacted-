@@ -1,12 +1,12 @@
 extends CanvasLayer
 
-## EchoCorrelation.gd — Scene-based version
-## Assumes UI is pre-built in EchoCorrelation.tscn
-## Uses @onready to reference scene nodes instead of building UI at runtime
+## EchoCorrelation.gd — Scene-based version (CORRECTED PATHS)
+## Script is attached to the EchoCorrelation (CanvasLayer) node
+## All @onready paths are relative to EchoCorrelation
 
 signal challenge_completed(success: bool)
 
-# Scene UI references — auto-populated by @onready
+# Scene UI references — paths relative to EchoCorrelation (CanvasLayer root)
 @onready var _root_control: Control = $RootControl
 @onready var _header: Label = $RootControl/Panel/VBoxContainer/HeaderLabel
 @onready var _feedback: Label = $RootControl/Panel/VBoxContainer/FeedbackLabel

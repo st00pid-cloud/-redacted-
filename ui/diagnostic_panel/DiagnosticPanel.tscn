@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://bje7iy1p2q0og"]
+[gd_scene load_steps=5 format=3 uid="uid://bje7iy1p2q0og"]
 
 [ext_resource type="Script" uid="uid://cklfbc2y1k1bx" path="res://ui/diagnostic_panel/DiagnosticPanel.gd" id="1_diag"]
 [ext_resource type="Shader" uid="uid://fsgkafwwx36p" path="res://shaders/crt_screen.gdshader" id="2_3unrs"]
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="3_wv7tj"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wv7tj"]
 shader = ExtResource("2_3unrs")
@@ -63,7 +64,10 @@ theme_override_constants/separation = 16
 
 [node name="HeaderLabel" type="Label" parent="Control/Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_wv7tj")
+theme_override_font_sizes/font_size = 40
 text = "DIAGNOSTIC INTERFACE"
+horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="PortContainer" type="VBoxContainer" parent="Control/Panel/VBoxContainer"]
@@ -77,4 +81,6 @@ theme_override_constants/separation = 12
 
 [node name="FeedbackLabel" type="Label" parent="Control/Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_wv7tj")
+theme_override_font_sizes/font_size = 20
 autowrap_mode = 3

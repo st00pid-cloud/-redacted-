@@ -1,12 +1,10 @@
 extends CanvasLayer
 
-## ThermalScan.gd — Scene-based version
-## Assumes grid UI is pre-built in ThermalScan.tscn
-## Leaks are created dynamically from a pool but tracked separately
+## ThermalScan.gd — Scene-based version (CORRECTED PATHS)
+## Script attached to ThermalScan (CanvasLayer) node
 
 signal challenge_completed(success: bool)
 
-# Scene UI references
 @onready var _root_control: Control = $RootControl
 @onready var _header: Label = $RootControl/HeaderLabel
 @onready var _feedback: Label = $RootControl/FeedbackLabel
@@ -24,7 +22,6 @@ const GRID_SIZE = Vector2(480, 360)
 const GRID_OFFSET = Vector2(180, 110)
 const CELL_SIZE = 24
 
-# Leak pool — 5 chosen randomly each run
 const LEAK_POOL = [
 	Vector2(3, 4),  Vector2(12, 8), Vector2(7, 2),  Vector2(16, 11),
 	Vector2(10, 6), Vector2(2, 9),  Vector2(14, 3),  Vector2(5, 12),
@@ -36,14 +33,12 @@ var _leak_nodes: Array = []
 var _silhouette_pos: Vector2 = Vector2(9, 10)
 var _player_pos: Vector2 = Vector2(9, 12)
 
-# Drift state
 var _silhouette_drift_timer: float = 0.0
 var _drift_interval: float = 3.0
 
 func _ready():
 	add_to_group("challenge_thermal")
 	hide()
-	# Connect silhouette hover
 	_silhouette_node.mouse_entered.connect(_on_silhouette_hover)
 
 func open_challenge() -> void:
@@ -53,10 +48,8 @@ func open_challenge() -> void:
 	_silhouette_visible = true
 	_silhouette_drift_timer = 0.0
 
-	# Scale drift speed by difficulty
 	_drift_interval = 3.0 / ChallengeTracker.get_difficulty_multiplier()
 
-	# Randomize 5 leak positions from pool each run
 	var pool = LEAK_POOL.duplicate()
 	pool.shuffle()
 	_leak_positions = pool.slice(0, 5)
@@ -72,11 +65,9 @@ func _reset_ui() -> void:
 			leak.queue_free()
 	_leak_nodes.clear()
 
-	# Reset feedback
 	_feedback.text = "Leaks patched: 0 / %d" % _total_leaks
 	_leaks_patched = 0
 
-	# Reset silhouette
 	_silhouette_visible = true
 	_silhouette_hovered = false
 	_silhouette_node.visible = true
@@ -93,7 +84,6 @@ func _reset_ui() -> void:
 		leak.mouse_filter = Control.MOUSE_FILTER_STOP
 		_grid_container.add_child(leak)
 		_leak_nodes.append(leak)
-		# Connect click signal with index
 		leak.gui_input.connect(_on_leak_clicked.bind(i))
 
 func _on_leak_clicked(event: InputEvent, index: int) -> void:
@@ -129,7 +119,6 @@ func _process(delta: float) -> void:
 	if not visible or _phase != 0:
 		return
 
-	# Silhouette drifts toward player icon — creates urgency
 	if _silhouette_visible and is_instance_valid(_silhouette_node):
 		_silhouette_drift_timer += delta
 		if _silhouette_drift_timer >= _drift_interval:
@@ -145,7 +134,6 @@ func _process(delta: float) -> void:
 func _show_verification() -> void:
 	_header.text = "VERIFICATION:"
 
-	# Hover state now meaningfully changes the question asked
 	if _silhouette_hovered:
 		_feedback.text = "An anomalous signature evaded your scan.\nIs the ambient temperature consistent with a single occupant?"
 	else:
@@ -175,7 +163,6 @@ func _on_verify(answered_yes: bool) -> void:
 		return
 	_phase = 2
 
-	# NO is correct — there is a second heat source.
 	var success = not answered_yes
 
 	if not answered_yes:
