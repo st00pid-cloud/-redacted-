@@ -1,4 +1,3 @@
-@tool
 extends CanvasLayer
 
 ## EchoCorrelation.gd — All improvements integrated:

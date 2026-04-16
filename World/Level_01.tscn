@@ -27,9 +27,9 @@
 [ext_resource type="PackedScene" uid="uid://cqhetryjbuvdy" path="res://challenges_per_rack/echo_correlation.tscn" id="25_0c0ya"]
 [ext_resource type="Theme" uid="uid://baag345alu48e" path="res://global_theme.tres" id="26_0c0ya"]
 [ext_resource type="PackedScene" uid="uid://byut5uclgbjfx" path="res://challenges_tscn_version/EchoCorrelation.tscn" id="27_0iud3"]
-[ext_resource type="PackedScene" path="res://challenges_tscn_version/GhostCursor.tscn" id="28_ef1pq"]
-[ext_resource type="PackedScene" path="res://challenges_tscn_version/ThermalScan.tscn" id="29_582bg"]
-[ext_resource type="PackedScene" path="res://challenges_tscn_version/MemoryString.tscn" id="30_c7iac"]
+[ext_resource type="PackedScene" uid="uid://bq7ua7wtranyq" path="res://challenges_tscn_version/GhostCursor.tscn" id="28_ef1pq"]
+[ext_resource type="PackedScene" uid="uid://c5a3c6r8ipgfs" path="res://challenges_tscn_version/ThermalScan.tscn" id="29_582bg"]
+[ext_resource type="PackedScene" uid="uid://bg0gcrn0qv6k" path="res://challenges_tscn_version/MemoryString.tscn" id="30_c7iac"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_meeu0"]
 albedo_texture = ExtResource("4_6ga61")
@@ -188,13 +188,11 @@ theme = ExtResource("26_0c0ya")
 [node name="EchoCorrelation2" parent="." instance=ExtResource("27_0iud3")]
 
 [node name="GhostCursor2" parent="." instance=ExtResource("28_ef1pq")]
-visible = false
+visible = true
 
 [node name="ThermalScan2" parent="." instance=ExtResource("29_582bg")]
-visible = false
 
 [node name="MemoryString2" parent="." instance=ExtResource("30_c7iac")]
-visible = false
 
 [editable path="Sketchfab_Scene"]
 [editable path="Rack1"]

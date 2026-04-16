@@ -1,10 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://dq5n8h7w2pm3x"]
+[gd_scene load_steps=3 format=3 uid="uid://c5a3c6r8ipgfs"]
 
 [ext_resource type="Script" uid="uid://dbfl2avru45lh" path="res://challenges/ThermalScan.gd" id="1_thermal"]
 [ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_font"]
 
 [node name="ThermalScan" type="CanvasLayer" groups=["challenge_thermal"]]
 layer = 100
+visible = false
 script = ExtResource("1_thermal")
 
 [node name="RootControl" type="Control" parent="."]
@@ -30,9 +31,9 @@ offset_left = 40.0
 offset_top = 20.0
 offset_right = 700.0
 offset_bottom = 45.0
+theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 16
-theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
 text = "THERMAL SILHOUETTE SCAN — Click heat leaks to patch them"
 
 [node name="FeedbackLabel" type="Label" parent="RootControl"]
@@ -41,12 +42,13 @@ offset_left = 40.0
 offset_top = 50.0
 offset_right = 400.0
 offset_bottom = 70.0
-theme_override_font_sizes/font_size = 13
 theme_override_colors/font_color = Color(0.5, 0.8, 0.5, 0.8)
+theme_override_font_sizes/font_size = 13
 text = "Leaks patched: 0 / 5"
 
 [node name="GridContainer" type="Control" parent="RootControl"]
 layout_mode = 1
+anchors_preset = 0
 offset_left = 180.0
 offset_top = 110.0
 offset_right = 660.0
@@ -74,9 +76,8 @@ layout_mode = 1
 offset_left = -4.0
 offset_top = -14.0
 offset_right = 28.0
-offset_bottom = 0.0
-theme_override_font_sizes/font_size = 9
 theme_override_colors/font_color = Color(0.3, 0.8, 1, 0.8)
+theme_override_font_sizes/font_size = 9
 text = "YOU"
 
 [node name="SilhouetteRect" type="ColorRect" parent="RootControl/GridContainer"]
@@ -86,7 +87,6 @@ offset_top = 240.0
 offset_right = 240.0
 offset_bottom = 312.0
 color = Color(0.8, 0.15, 0.1, 0.45)
-mouse_filter = 0
 
 [node name="Leak1" type="ColorRect" parent="RootControl/GridContainer"]
 layout_mode = 1
@@ -95,7 +95,6 @@ offset_top = 96.0
 offset_right = 120.0
 offset_bottom = 144.0
 color = Color(0.9, 0.5, 0.1, 0.6)
-mouse_filter = 0
 
 [node name="Leak2" type="ColorRect" parent="RootControl/GridContainer"]
 layout_mode = 1
@@ -104,7 +103,6 @@ offset_top = 192.0
 offset_right = 336.0
 offset_bottom = 240.0
 color = Color(0.9, 0.5, 0.1, 0.6)
-mouse_filter = 0
 
 [node name="Leak3" type="ColorRect" parent="RootControl/GridContainer"]
 layout_mode = 1
@@ -113,7 +111,6 @@ offset_top = 48.0
 offset_right = 216.0
 offset_bottom = 96.0
 color = Color(0.9, 0.5, 0.1, 0.6)
-mouse_filter = 0
 
 [node name="Leak4" type="ColorRect" parent="RootControl/GridContainer"]
 layout_mode = 1
@@ -122,7 +119,6 @@ offset_top = 264.0
 offset_right = 432.0
 offset_bottom = 312.0
 color = Color(0.9, 0.5, 0.1, 0.6)
-mouse_filter = 0
 
 [node name="Leak5" type="ColorRect" parent="RootControl/GridContainer"]
 layout_mode = 1
@@ -131,4 +127,3 @@ offset_top = 144.0
 offset_right = 288.0
 offset_bottom = 192.0
 color = Color(0.9, 0.5, 0.1, 0.6)
-mouse_filter = 0
