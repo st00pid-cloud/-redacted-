@@ -1,3 +1,4 @@
+@tool
 extends CanvasLayer
 
 ## EchoCorrelation.gd — All improvements integrated:
@@ -87,13 +88,13 @@ func _build_ui() -> void:
 	_vbox.add_child(_header)
 
 	var instr = Label.new()
-	instr.text = "Align the two audio feeds using the slider. Match the waveforms."
+	instr.text = "Align the two audio feeds using the slider to atch the waveforms."
 	instr.add_theme_font_size_override("font_size", 12)
 	instr.autowrap_mode = TextServer.AUTOWRAP_WORD
 	_vbox.add_child(instr)
 
 	_feed_a_label = Label.new()
-	_feed_a_label.text = "FEED A — Room Microphone: [STATIC]"
+	_feed_a_label.text = "FEED A : Room Microphone: [STATIC]"
 	_feed_a_label.add_theme_font_size_override("font_size", 11)
 	_vbox.add_child(_feed_a_label)
 
@@ -102,7 +103,7 @@ func _build_ui() -> void:
 	_vbox.add_child(_wave_a)
 
 	_feed_b_label = Label.new()
-	_feed_b_label.text = "FEED B — Ventilation Intake: [STATIC]"
+	_feed_b_label.text = "FEED B : Ventilation Intake: [STATIC]"
 	_feed_b_label.add_theme_font_size_override("font_size", 11)
 	_vbox.add_child(_feed_b_label)
 
@@ -205,7 +206,7 @@ func _on_confirm() -> void:
 	_phase = 1
 	_slider.editable = false
 	_confirm_btn.visible = false
-	_header.text = "VERIFICATION:"
+	_header.text = "VERIFICATION"
 	_feedback.text = "Did the audio signature in Feed B match a known biological entity?"
 
 	var hbox = HBoxContainer.new()

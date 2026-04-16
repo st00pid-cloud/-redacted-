@@ -1,0 +1,123 @@
+[gd_scene load_steps=3 format=3 uid="uid://c7n4m2p8xqr1k"]
+
+[ext_resource type="Script" uid="uid://whjhl8g6ssxj" path="res://challenges/GhostCursor.gd" id="1_ghost"]
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_font"]
+
+[node name="GhostCursor" type="CanvasLayer" groups=["challenge_ghost"]]
+layer = 100
+script = ExtResource("1_ghost")
+
+[node name="RootControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="RootControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.85)
+
+[node name="HeaderLabel" type="Label" parent="RootControl"]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 20.0
+offset_right = 800.0
+offset_bottom = 50.0
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
+text = "GHOST CURSOR CALIBRATION — Peripheral Interface Test"
+
+[node name="InstructionLabel" type="Label" parent="RootControl"]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 48.0
+offset_right = 900.0
+offset_bottom = 70.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.5, 0.8, 0.5, 0.7)
+text = "Drag the DIAGNOSTIC TOOL to the DROP ZONE. Do NOT let the ghost cursor touch it."
+
+[node name="FeedbackLabel" type="Label" parent="RootControl"]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 72.0
+offset_right = 300.0
+offset_bottom = 92.0
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1, 0.6, 0.3, 0.9)
+text = "Time: 15.0"
+
+[node name="DropZone" type="ColorRect" parent="RootControl"]
+layout_mode = 1
+offset_left = 800.0
+offset_top = 300.0
+offset_right = 900.0
+offset_bottom = 400.0
+color = Color(0.2, 0.5, 0.2, 0.5)
+
+[node name="DropLabel" type="Label" parent="RootControl/DropZone"]
+layout_mode = 1
+offset_left = 15.0
+offset_top = 30.0
+offset_right = 85.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.5, 1, 0.5, 0.8)
+text = "DROP
+ZONE"
+horizontal_alignment = 1
+
+[node name="DangerButton" type="Button" parent="RootControl"]
+layout_mode = 1
+offset_left = 750.0
+offset_top = 500.0
+offset_right = 890.0
+offset_bottom = 540.0
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
+text = "[ POWER OFF ]"
+
+[node name="DragIcon" type="ColorRect" parent="RootControl"]
+layout_mode = 1
+offset_left = 150.0
+offset_top = 350.0
+offset_right = 210.0
+offset_bottom = 410.0
+color = Color(0.3, 0.8, 0.3, 0.9)
+
+[node name="IconLabel" type="Label" parent="RootControl/DragIcon"]
+layout_mode = 1
+offset_left = 5.0
+offset_top = 12.0
+offset_right = 55.0
+offset_bottom = 48.0
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "DIAG
+TOOL"
+
+[node name="GhostCursor" type="ColorRect" parent="RootControl"]
+layout_mode = 1
+offset_left = 500.0
+offset_top = 200.0
+offset_right = 520.0
+offset_bottom = 220.0
+color = Color(0.8, 0.2, 0.2, 0.35)
+
+[node name="GhostPointer" type="Label" parent="RootControl/GhostCursor"]
+layout_mode = 1
+offset_left = 2.0
+offset_top = -2.0
+offset_right = 18.0
+offset_bottom = 16.0
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 0.5)
+text = "▶"

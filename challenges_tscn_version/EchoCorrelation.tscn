@@ -1,0 +1,116 @@
+[gd_scene load_steps=3 format=3 uid="uid://b5xm8qp1wn6j4"]
+
+[ext_resource type="Script" uid="uid://cxlxqwal2yjm2" path="res://challenges/EchoCorrelation.gd" id="1_echo"]
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_font"]
+
+[node name="EchoCorrelation" type="CanvasLayer" groups=["challenge_echo"]]
+layer = 100
+script = ExtResource("1_echo")
+
+[node name="RootControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="RootControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.8)
+
+[node name="Panel" type="Panel" parent="RootControl"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -380.0
+offset_top = -260.0
+offset_right = 380.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="RootControl/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="HeaderLabel" type="Label" parent="RootControl/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
+text = "ECHO CORRELATION — Audio Feed Alignment"
+
+[node name="InstructionLabel" type="Label" parent="RootControl/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.5, 0.8, 0.5, 0.8)
+text = "Align the two audio feeds using the slider. Match the waveforms."
+autowrap_mode = 3
+
+[node name="FeedALabel" type="Label" parent="RootControl/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.8, 0.5, 0.7)
+text = "FEED A — Room Microphone: [STATIC]"
+
+[node name="WaveAControl" type="Control" parent="RootControl/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(680, 60)
+layout_mode = 2
+
+[node name="FeedBLabel" type="Label" parent="RootControl/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 11
+theme_override_colors/font_color = Color(0.5, 0.8, 0.5, 0.7)
+text = "FEED B — Ventilation Intake: [STATIC]"
+
+[node name="WaveBControl" type="Control" parent="RootControl/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(680, 60)
+layout_mode = 2
+
+[node name="AlignSlider" type="HSlider" parent="RootControl/Panel/VBoxContainer"]
+custom_minimum_size = Vector2(680, 24)
+layout_mode = 2
+min_value = 0.0
+max_value = 1.0
+step = 0.01
+value = 0.0
+
+[node name="SyncLabel" type="Label" parent="RootControl/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.6, 0.9, 0.6, 0.9)
+text = "Synchronization: 0%"
+horizontal_alignment = 1
+
+[node name="FeedbackLabel" type="Label" parent="RootControl/Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.8, 0.3, 0.3, 0.9)
+text = ""
+autowrap_mode = 3
+
+[node name="ConfirmButton" type="Button" parent="RootControl/Panel/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
+text = "[ LOCK ALIGNMENT ]"

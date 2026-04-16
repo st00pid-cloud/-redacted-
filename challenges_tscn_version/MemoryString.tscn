@@ -1,0 +1,112 @@
+[gd_scene load_steps=3 format=3 uid="uid://c2x8m6n4wqp7r"]
+
+[ext_resource type="Script" uid="uid://ewscf8w1tff" path="res://challenges/MemoryString.gd" id="1_memory"]
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_font"]
+
+[node name="MemoryString" type="CanvasLayer" groups=["challenge_memory"]]
+layer = 100
+script = ExtResource("1_memory")
+
+[node name="RootControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="RootControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.9)
+
+[node name="HeaderLabel" type="Label" parent="RootControl"]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 30.0
+offset_right = 900.0
+offset_bottom = 55.0
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
+text = "MEMORY STRING VALIDATION — Memorize the sequence"
+
+[node name="InstructionLabel" type="Label" parent="RootControl"]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 58.0
+offset_right = 900.0
+offset_bottom = 82.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.5, 0.8, 0.5, 0.7)
+text = "A string will appear for 3.5 seconds. Memorize it, then type it back exactly."
+
+[node name="DisplayLabel" type="Label" parent="RootControl"]
+layout_mode = 1
+offset_left = 100.0
+offset_top = 150.0
+offset_right = 1000.0
+offset_bottom = 210.0
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(0.4, 1, 0.4, 1)
+text = "V  A  S  Q  U  E  Z  H  E  L  P  M"
+horizontal_alignment = 1
+
+[node name="FeedbackLabel" type="Label" parent="RootControl"]
+layout_mode = 1
+offset_left = 40.0
+offset_top = 230.0
+offset_right = 940.0
+offset_bottom = 270.0
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 0.9)
+text = ""
+autowrap_mode = 3
+
+[node name="InputHeader" type="Label" parent="RootControl"]
+layout_mode = 1
+offset_left = 100.0
+offset_top = 280.0
+offset_right = 300.0
+offset_bottom = 300.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.4, 0.7, 0.4, 0.6)
+text = "YOUR INPUT:"
+
+[node name="InputLabel" type="Label" parent="RootControl"]
+layout_mode = 1
+offset_left = 100.0
+offset_top = 305.0
+offset_right = 1000.0
+offset_bottom = 355.0
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color = Color(0.4, 1, 0.4, 1)
+text = ""
+
+[node name="SystemHeader" type="Label" parent="RootControl"]
+visible = false
+layout_mode = 1
+offset_left = 100.0
+offset_top = 370.0
+offset_right = 300.0
+offset_bottom = 390.0
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.7, 0.3, 0.3, 0.6)
+text = "SYSTEM INPUT:"
+
+[node name="SystemLabel" type="Label" parent="RootControl"]
+layout_mode = 1
+offset_left = 100.0
+offset_top = 395.0
+offset_right = 1000.0
+offset_bottom = 445.0
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 36
+theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 0.8)
+text = ""
