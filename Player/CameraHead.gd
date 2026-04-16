@@ -8,6 +8,12 @@ func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func _input(event):
+	# Block camera look when player is frozen (challenge open) or dialogue is active
+	if ChallengeTracker.is_player_frozen():
+		return
+	if DialogueManager.is_active:
+		return
+
 	if event is InputEventMouseMotion:
 		player.rotate_y(-event.relative.x * sensitivity)
 		

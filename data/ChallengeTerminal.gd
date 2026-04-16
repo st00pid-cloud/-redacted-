@@ -95,7 +95,7 @@ func interact() -> void:
 		DialogueManager.show_dialogue(lines)
 		return
 
-	# Already running (shouldn't happen if player is frozen, but safety check)
+	# Already running — hard block
 	if _interaction_stage == 1:
 		return
 
@@ -107,8 +107,9 @@ func interact() -> void:
 		DialogueManager.show_dialogue(lines)
 		return
 
-	# Start the challenge
+	# ── NEW: immediately set stage and freeze to close the re-entry window ──
 	_interaction_stage = 1
+	ChallengeTracker.freeze_player()        # freeze BEFORE any await
 
 	var data = TERMINAL_LINES.get(challenge_type, {})
 
@@ -128,9 +129,7 @@ func interact() -> void:
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
 
-	# Freeze player and launch challenge
-	ChallengeTracker.freeze_player()
-
+	# Launch challenge
 	if _challenge_node and _challenge_node.has_method("open_challenge"):
 		if not _challenge_node.challenge_completed.is_connected(_on_challenge_done):
 			_challenge_node.challenge_completed.connect(_on_challenge_done, CONNECT_ONE_SHOT)

@@ -11,7 +11,7 @@ size = Vector3(1.230896, 2.1479492, 1)
 
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("1_o7vvq")]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="Sketchfab_Scene"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Sketchfab_Scene" groups=["interactable"]]
 script = ExtResource("2_ihe8t")
 challenge_type = "memory"
 

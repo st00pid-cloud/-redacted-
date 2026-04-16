@@ -66,6 +66,7 @@ transform = Transform3D(-1.0992994, 0, -0.48118633, 0, 1.1999999, 0, 0.48118633,
 
 [node name="ConsoleTerminal" parent="." instance=ExtResource("9_faiek")]
 transform = Transform3D(5.5, 0, 0, 0, 5.5, 0, 0, 0, 5.5, 0, 12.287832, 0)
+visible = false
 
 [node name="ResistOverlay" parent="." instance=ExtResource("8_7wdav")]
 visible = false
@@ -127,6 +128,16 @@ omni_range = 24.271805
 
 [node name="Bridge1-omni3" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.814571, 37.299347, -38.289993)
+layers = 1023
+light_energy = 20.0
+light_size = 100.0
+light_specular = 8.5
+light_bake_mode = 1
+light_cull_mask = 4294966273
+omni_range = 24.199257
+
+[node name="Bridge1-omni4" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.814571, 29.152725, -10.58259)
 layers = 1023
 light_energy = 20.0
 light_size = 100.0
