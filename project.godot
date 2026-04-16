@@ -24,6 +24,9 @@ SceneTransition="*res://ui/scene_transition/SceneTransition.tscn"
 EndScreenData="*res://autoloads/EndScreenData.gd"
 AmbientSound="*res://audio/AmbientSound (2).tscn"
 ChallengeTracker="*res://autoloads/ChallengeTracker.gd"
+HorrorProgressionManager="*res://autoloads/HorrorProgressionManager.gd"
+FaceDistortion="*res://autoloads/FaceDistortion.gd"
+SignalIntegrityTimer="*res://autoloads/SignalIntegrityTimer.gd"
 
 [global_group]
 

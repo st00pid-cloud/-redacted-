@@ -1,152 +1,153 @@
 extends StaticBody3D
 
-## NetworkRack.gd — The MAIN console interactable (Rack 7)
-## Only allows the final diagnostic AFTER all 4 challenge terminals are complete.
-## Flow: check challenges → port diagnostic → horror questions → resist/ending
+## NetworkRack.gd
+## The final interactive prop. After all 4 challenges are complete,
+## plays a 3D metal clang sound from BEHIND the player before
+## opening the DiagnosticPanel.
+##
+## Attach to the StaticBody3D inside NetworkRack.tscn.
+## The scene must have:
+##   - An AudioStreamPlayer3D named "ClangSource" (or it will be created here)
+##   - The DiagnosticPanel autoload/CanvasLayer in the scene tree
 
-var _interaction_stage: int = 0  # 0=waiting, 1=diagnostic open, 2=completed
-var _diag_ref: Node = null
+@onready var _diagnostic_panel = _find_diagnostic_panel()
 
-const LOCKED_LINES: Array[String] = [
-	"[SYSTEM]: Rack 7 — primary diagnostic unavailable.",
-	"[SYSTEM]: Subsystem checks incomplete. Complete all terminal diagnostics first.",
-]
+var _interaction_stage: int = 0   # 0=idle, 1=clang_playing, 2=panel_open, 3=done
 
-const INTRO_LINES: Array[String] = [
-	"[SYSTEM]: All subsystems checked. Rack 7 diagnostic unlocked.",
-	"[SYSTEM]: Challenge results: %d / %d passed.",
-	"[SYSTEM]: Initiating port isolation. Select the corrupted port carefully.",
-]
+# How far behind the player to place the clang source
+const CLANG_BEHIND_DIST: float = 4.0
+# Delay between clang and dialogue opening (seconds)
+const CLANG_DELAY: float = 1.6
 
-const POST_SUCCESS_LINES: Array[String] = [
-	"[SYSTEM]: All diagnostics passed. Containment at 72%.",
-	"[SYSTEM]: Entity is resisting isolation.",
-	"[SYSTEM]: Brace yourself, R. Vasquez.",
-]
+func _ready() -> void:
+	add_to_group("interactable")
 
-const POST_FAIL_LINES: Array[String] = [
-	"[SYSTEM]: Diagnostic sequence failed. Integration vector widened.",
-	"[SYSTEM]: It knows you tried. It knows what you answered.",
-]
-
-func _get_diagnostic_panel() -> Node:
-	if _diag_ref and is_instance_valid(_diag_ref):
-		return _diag_ref
-	var nodes = get_tree().get_nodes_in_group("diagnostic_panel")
-	if nodes.size() > 0:
-		_diag_ref = nodes[0]
-	return _diag_ref
+	# Wire up the DiagnosticPanel completion signal
+	if _diagnostic_panel:
+		if not _diagnostic_panel.diagnostic_completed.is_connected(_on_diagnostic_done):
+			_diagnostic_panel.diagnostic_completed.connect(_on_diagnostic_done)
 
 func interact() -> void:
-	if _interaction_stage == 2:
-		var lines: Array[String] = ["[SYSTEM]: Rack 7 — all diagnostics complete. No further action."]
+	if _interaction_stage == 3:
+		# Already done — show brief system message
+		var lines: Array[String] = ["[SYSTEM]: Rack 7 diagnostic session closed."]
 		DialogueManager.show_dialogue(lines)
 		return
 
-	if _interaction_stage == 1:
-		_open_diagnostic()
-		return
+	if _interaction_stage != 0:
+		return   # mid-sequence, ignore
 
-	# Check if all challenges are done
 	if not ChallengeTracker.all_done():
+		# Not ready — guide the player
 		var remaining = ChallengeTracker.required_ids.size() - ChallengeTracker.get_completed_count()
-		var lines: Array[String] = []
-		for l in LOCKED_LINES:
-			lines.append(l)
-		lines.append("[SYSTEM]: %d terminal(s) remaining." % remaining)
+		var lines: Array[String] = [
+			"[SYSTEM]: Rack 7 — Main diagnostic console.",
+			"[SYSTEM]: %d subsystem terminal(s) must be cleared before running the main diagnostic." % remaining,
+		]
 		DialogueManager.show_dialogue(lines)
 		return
 
-	# All challenges done — unlock the diagnostic
+	# ── All 4 done — begin the horror pre-sequence ──
 	_interaction_stage = 1
+	ChallengeTracker.freeze_player()
+	_play_clang_behind_player()
 
-	var score = ChallengeTracker.get_success_count()
-	var total = ChallengeTracker.required_ids.size()
+func _play_clang_behind_player() -> void:
+	# Find the player node
+	var players = get_tree().get_nodes_in_group("player")
+	if players.size() == 0:
+		_after_clang()
+		return
 
-	_set_task("select_port", "Identify Corrupted Port", "All subsystems checked. Now isolate the corrupted port on Rack 7.")
+	var player = players[0]
 
-	var lines: Array[String] = []
-	for l in INTRO_LINES:
-		var formatted = l % [score, total] if l.contains("%d") else l
-		lines.append(formatted)
+	# Compute a position directly behind the player in world space
+	var player_forward = -player.global_transform.basis.z.normalized()
+	var behind_pos = player.global_position - player_forward * CLANG_BEHIND_DIST
+	behind_pos.y = player.global_position.y + 0.5  # roughly at ear height
+
+	# Create a temporary AudioStreamPlayer3D at that position
+	var clang_source = AudioStreamPlayer3D.new()
+	clang_source.position = behind_pos
+	clang_source.unit_size = 5.0
+	clang_source.max_db = 6.0
+	clang_source.attenuation_model = AudioStreamPlayer3D.ATTENUATION_INVERSE_DISTANCE
+
+	# Try to load the clang audio; fall back to silence if not present
+	var stream = _load_clang_stream()
+	if stream:
+		clang_source.stream = stream
+	else:
+		push_warning("NetworkRack: No clang audio stream found at res://audio/metal_clang.wav (or .ogg). Add one!")
+
+	get_tree().root.add_child(clang_source)
+
+	if stream:
+		clang_source.play()
+
+	# Wait for the clang to hit, then continue
+	await get_tree().create_timer(CLANG_DELAY).timeout
+
+	# Clean up the temporary audio node
+	clang_source.queue_free()
+
+	_after_clang()
+
+func _load_clang_stream() -> AudioStream:
+	# Try common paths — you only need ONE of these files in your project
+	var paths = [
+		"res://audio/metal_clang.wav",
+		"res://audio/metal_clang.ogg",
+		"res://audio/clang.wav",
+		"res://audio/clang.ogg",
+		"res://audio/506220__nucleartape__gross-glitch.wav",  # fallback to existing glitch sfx
+	]
+	for path in paths:
+		if ResourceLoader.exists(path):
+			return load(path)
+	return null
+
+func _after_clang() -> void:
+	_interaction_stage = 2
+
+	# Show pre-diagnostic dialogue
+	var lines: Array[String] = [
+		"[SYSTEM]: Rack 7 — Main diagnostic interface.",
+		"[SYSTEM]: All subsystem feeds confirmed.",
+		"[SYSTEM]: Initiating final containment sequence...",
+	]
 	DialogueManager.show_dialogue(lines)
 	await DialogueManager.dialogue_finished
 
-	_open_diagnostic()
-
-func _open_diagnostic() -> void:
-	var panel = _get_diagnostic_panel()
-	if not panel:
-		push_warning("NetworkRack: No diagnostic_panel found!")
-		return
-
-	# Freeze player during diagnostic
-	ChallengeTracker.freeze_player()
-
-	var loc_header = _find_node_by_script("LocationHeader")
-	if loc_header and loc_header.has_method("hide_header"):
-		loc_header.hide_header()
-	panel.open_diagnostic()
-	if not panel.diagnostic_completed.is_connected(_on_diagnostic_done):
-		panel.diagnostic_completed.connect(_on_diagnostic_done, CONNECT_ONE_SHOT)
+	# Open the diagnostic panel
+	if _diagnostic_panel:
+		_diagnostic_panel.open_diagnostic()
+	else:
+		push_warning("NetworkRack: Could not find DiagnosticPanel in the scene tree.")
+		ChallengeTracker.unfreeze_player()
+		_interaction_stage = 0
 
 func _on_diagnostic_done(success: bool) -> void:
-	_interaction_stage = 2
-	var loc_header = _find_node_by_script("LocationHeader")
-	if loc_header and loc_header.has_method("show_header"):
-		loc_header.show_header()
-
-	TaskManager.complete_task("select_port")
+	_interaction_stage = 3
+	ChallengeTracker.unfreeze_player()
 
 	if success:
-		_set_task("survive", "Survive", "Something is wrong. Brace yourself.")
-
-		var lines: Array[String] = []
-		for l in POST_SUCCESS_LINES:
-			lines.append(l)
-		DialogueManager.show_dialogue(lines)
-		await DialogueManager.dialogue_finished
-
-		# Player stays frozen
-		TaskManager.begin_corruption()
-		_set_task("resist", "RESIST", "The entity is attempting integration. Fight back.")
-
-		await get_tree().create_timer(2.0).timeout
-
-		var level = get_tree().current_scene
-		if level and level.has_method("start_resist_sequence"):
-			level.start_resist_sequence()
-		else:
-			GameManager.trigger_ending("engineer_resisted")
+		GameManager.trigger_ending("engineer_resisted")
 	else:
-		_set_task("failed", "---", "Diagnostic failed.")
+		GameManager.trigger_ending("integration_complete")
 
-		var lines: Array[String] = []
-		for l in POST_FAIL_LINES:
-			lines.append(l)
-		DialogueManager.show_dialogue(lines)
-		await DialogueManager.dialogue_finished
+# ── Helpers ──────────────────────────────────────────────────────────────
 
-		GameManager.trigger_game_over("integration_accelerated")
-
-func _set_task(id: String, title: String, desc: String) -> void:
-	var task = TaskData.new()
-	task.task_id = id
-	task.task_name = title
-	task.description = desc
-	TaskManager.set_task(task)
-
-func _find_player() -> CharacterBody3D:
-	var players = get_tree().get_nodes_in_group("player")
-	if players.size() > 0:
-		return players[0]
-	return null
-
-func _find_node_by_script(script_hint: String) -> Node:
+func _find_diagnostic_panel() -> Node:
+	# Search common locations for DiagnosticPanel
+	var panel = get_tree().get_first_node_in_group("diagnostic_panel")
+	if panel:
+		return panel
+	# Fallback: check root children
 	for child in get_tree().root.get_children():
-		if child.name.contains(script_hint) or (child.get_script() and child.get_script().resource_path.contains(script_hint)):
+		if child.name == "DiagnosticPanel" or child.is_in_group("diagnostic_panel"):
 			return child
 		for sub in child.get_children():
-			if sub.name.contains(script_hint) or (sub.get_script() and sub.get_script().resource_path.contains(script_hint)):
+			if sub.name == "DiagnosticPanel" or sub.is_in_group("diagnostic_panel"):
 				return sub
 	return null

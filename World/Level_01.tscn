@@ -137,11 +137,19 @@ light_cull_mask = 4294966273
 omni_range = 24.199257
 
 [node name="Bridge1-omni4" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.814571, 29.152725, -10.58259)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.585999, 29.152725, -10.58259)
 layers = 1023
 light_energy = 20.0
 light_size = 100.0
 light_specular = 8.5
+light_bake_mode = 1
+light_cull_mask = 4294966273
+omni_range = 24.199257
+
+[node name="Bridge1-omni5" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.10384, 23.60736, 33.210644)
+layers = 1023
+light_specular = 1.0
 light_bake_mode = 1
 light_cull_mask = 4294966273
 omni_range = 24.199257

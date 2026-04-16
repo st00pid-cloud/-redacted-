@@ -4,7 +4,6 @@ extends Node2D
 @onready var sub_label = $CanvasLayer/Control/VBoxContainer/SubLabel
 @onready var restart_button = $CanvasLayer/Control/VBoxContainer/RestartButton
 
-# Full ending cutscene data — each ending has multiple phases
 const ENDINGS = {
 	"engineer_resisted": {
 		"phases": [
@@ -41,12 +40,29 @@ const ENDINGS = {
 		"final_sub": "Some anomalies grow stronger when observed.\nYou observed too closely.",
 		"final_color": "red",
 	},
+
+	# ── New: Signal Integrity timeout ending ─────────────────────────────
+	"signal_lost": {
+		"phases": [
+			{"text": "...", "duration": 1.5, "color": "red"},
+			{"text": "[SYSTEM]: Signal integrity threshold reached.", "duration": 2.5, "color": "red"},
+			{"text": "The feed cut out.", "duration": 2.0, "color": "white"},
+			{"text": "No one knew how long she had been sitting there.", "duration": 3.0, "color": "white"},
+			{"text": "The rack's light was green.", "duration": 3.0, "color": "red"},
+		],
+		"final_message": "SESSION EXPIRED",
+		"final_sub": "Eight minutes was all it needed.\nYou gave it nine.",
+		"final_color": "red",
+	},
 }
 
 func _ready():
 	get_tree().paused = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	_cleanup_overlays()
+
+	# Stop the Signal Integrity timer so it doesn't keep ticking on the end screen
+	SignalIntegrityTimer.stop()
 
 	var reason = EndScreenData.reason
 	var ending = ENDINGS.get(reason, null)
@@ -58,7 +74,6 @@ func _ready():
 	if ending:
 		await _play_cutscene(ending)
 	else:
-		# Fallback for unknown endings
 		message_label.text = "— SIGNAL LOST —"
 		await get_tree().create_timer(2.0).timeout
 		restart_button.show()
@@ -68,7 +83,6 @@ func _ready():
 func _play_cutscene(ending: Dictionary) -> void:
 	var phases = ending["phases"]
 
-	# Phase-by-phase text reveals
 	for phase in phases:
 		var color = _get_color(phase["color"])
 		message_label.add_theme_color_override("font_color", color)
@@ -81,13 +95,11 @@ func _play_cutscene(ending: Dictionary) -> void:
 
 		await get_tree().create_timer(phase["duration"]).timeout
 
-		# Fade out between phases
 		var fade = create_tween()
 		fade.tween_property(message_label, "modulate:a", 0.0, 0.4)
 		await fade.finished
 		message_label.modulate.a = 1.0
 
-	# Final message — stays on screen
 	await get_tree().create_timer(0.5).timeout
 
 	var final_color = _get_color(ending["final_color"])
@@ -112,18 +124,15 @@ func _play_cutscene(ending: Dictionary) -> void:
 
 func _get_color(name: String) -> Color:
 	match name:
-		"red":
-			return Color(0.9, 0.25, 0.2, 1.0)
-		"green":
-			return Color(0.4, 0.9, 0.4, 1.0)
-		"white":
-			return Color(0.85, 0.85, 0.85, 1.0)
-		_:
-			return Color(0.7, 0.7, 0.7, 1.0)
+		"red":   return Color(0.9, 0.25, 0.2, 1.0)
+		"green": return Color(0.4, 0.9, 0.4, 1.0)
+		"white": return Color(0.85, 0.85, 0.85, 1.0)
+		_:       return Color(0.7, 0.7, 0.7, 1.0)
 
 func _on_restart() -> void:
 	EndScreenData.reason = ""
 	EndScreenData.is_game_over = false
+	ChallengeTracker.reset()
 	get_tree().change_scene_to_file("res://World/Level_01.tscn")
 
 func _cleanup_overlays() -> void:

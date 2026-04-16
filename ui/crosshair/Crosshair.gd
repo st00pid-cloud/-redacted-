@@ -10,7 +10,6 @@ var _dialogue_active: bool = false
 func _ready() -> void:
 	await get_tree().process_frame
 	_find_player_ray()
-	# Listen for dialogue state to suppress [E] prompt
 	if DialogueManager:
 		DialogueManager.dialogue_started.connect(_on_dialogue_started)
 		DialogueManager.dialogue_finished.connect(_on_dialogue_finished)
@@ -36,8 +35,8 @@ func _process(_delta: float) -> void:
 		_find_player_ray()
 		return
 
-	# Don't show interact prompt during dialogue
-	if _dialogue_active:
+	# Never show prompt during dialogue or while a challenge is running
+	if _dialogue_active or ChallengeTracker.is_player_frozen():
 		interact_label.text = ""
 		center_dot.color = Color(0.5, 0.9, 0.5, 0.3)
 		return
@@ -45,7 +44,6 @@ func _process(_delta: float) -> void:
 	if _ray.is_colliding():
 		var collider = _ray.get_collider()
 		if collider and collider.is_in_group("interactable"):
-			# Check if the interactable has already been used up
 			if _is_interactable_exhausted(collider):
 				interact_label.text = ""
 				center_dot.color = Color(0.5, 0.9, 0.5, 0.5)
@@ -58,14 +56,10 @@ func _process(_delta: float) -> void:
 	center_dot.color = Color(0.5, 0.9, 0.5, 0.5)
 
 func _is_interactable_exhausted(node: Node) -> bool:
-	# NetworkRack stage 2 = completed
-	if node.has_method("interact") and "interaction_stage" in node:
-		# Use get() to safely check — NetworkRack uses _interaction_stage
-		pass
-	# Check common "has_been_read" pattern (LoginTerminal, MaintenanceLog)
-	if "has_been_read" in node and node.has_been_read:
+	# Stage 1 = challenge actively running; stage 2 = completed — both suppress the prompt
+	if "_interaction_stage" in node and node._interaction_stage >= 1:
 		return true
-	# Check NetworkRack completion via its internal var
-	if "_interaction_stage" in node and node._interaction_stage == 2:
+	# LoginTerminal / MaintenanceLog pattern
+	if "has_been_read" in node and node.has_been_read:
 		return true
 	return false

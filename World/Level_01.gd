@@ -28,7 +28,7 @@ const OPENING_LINES = [
 	"[SYSTEM]: Locate and complete all terminal checks. Then return to Rack 7.",
 ]
 
-func _ready():
+func _ready() -> void:
 	if horror_overlay:
 		horror_overlay.visible = false
 		horror_overlay.modulate.a = 0.0
@@ -71,6 +71,9 @@ func _ready():
 	t.task_name = "Subsystem Diagnostics"
 	t.description = "Locate and complete 4 terminal diagnostics throughout the data center."
 	TaskManager.set_task(t)
+
+	SignalIntegrityTimer.start()
+
 
 func _process(delta: float) -> void:
 	if not _resist_active:

@@ -1,7 +1,8 @@
 extends CanvasLayer
 
 ## DiagnosticPanel — Port selection + horror questions.
-## Challenges are now handled by individual ChallengeTerminal nodes in the level.
+## On open: checks HorrorProgressionManager.pending_face_distortion and
+## fires FaceDistortion if set (milestone 3 scare).
 
 signal diagnostic_completed(success: bool)
 
@@ -88,6 +89,14 @@ func open_diagnostic():
 		_clear_horror_buttons()
 	show()
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+	# ── Milestone 3 face distortion ──────────────────────────────────────
+	# If the horror manager has a pending distortion, fire it now.
+	# This happens on the frame the panel opens, creating a 1-2 frame
+	# corruption flash before the player can interact.
+	if HorrorProgressionManager.pending_face_distortion:
+		HorrorProgressionManager.emit_signal("face_distortion_requested")
+		# The flag is cleared by FaceDistortion._process once it finishes.
 
 func _build_port_buttons():
 	for i in range(port_data.size()):
@@ -207,7 +216,6 @@ func _finish_sequence() -> void:
 	if horror_container:
 		horror_container.visible = false
 
-	# Scoring: port correct + 3/4 horror + challenge results from tracker
 	var horror_pass = _horror_correct_count >= 3
 	var challenge_pass = ChallengeTracker.get_success_count() >= 3
 	var overall = _port_success and horror_pass and challenge_pass

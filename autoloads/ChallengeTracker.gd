@@ -2,20 +2,35 @@ extends Node
 
 ## ChallengeTracker — Autoload
 ## Tracks which challenges the player has completed.
-## NetworkRack checks this before allowing the final diagnostic.
+## Emits milestone signals at 2 and 3 completions for the horror progression system.
 
 signal challenge_done(challenge_id: String, success: bool)
 signal all_challenges_done
+signal milestone_reached(count: int)   ## fired at 2, 3, and 4 completions
 
 var completed: Dictionary = {}  # { "echo": true, "ghost": false, ... }
 var required_ids: Array[String] = ["echo", "ghost", "thermal", "memory"]
 
 var _player_frozen: bool = false
+var _last_milestone: int = 0   ## prevents double-firing
 
 func register_result(challenge_id: String, success: bool) -> void:
 	completed[challenge_id] = success
 	emit_signal("challenge_done", challenge_id, success)
-	if get_completed_count() >= required_ids.size():
+
+	var count = get_completed_count()
+
+	# Fire milestone at 2, 3, and 4
+	if count >= 2 and _last_milestone < 2:
+		_last_milestone = 2
+		emit_signal("milestone_reached", 2)
+	if count >= 3 and _last_milestone < 3:
+		_last_milestone = 3
+		emit_signal("milestone_reached", 3)
+	if count >= required_ids.size():
+		if _last_milestone < 4:
+			_last_milestone = 4
+			emit_signal("milestone_reached", 4)
 		emit_signal("all_challenges_done")
 
 func get_completed_count() -> int:
@@ -40,6 +55,7 @@ func all_done() -> bool:
 
 func reset() -> void:
 	completed.clear()
+	_last_milestone = 0
 
 ## ── Player freeze/unfreeze during challenges ──
 
@@ -58,7 +74,6 @@ func unfreeze_player() -> void:
 		var p = players[0]
 		p.set_physics_process(true)
 		p.set_process_input(true)
-	# Re-capture mouse for FPS
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 func is_player_frozen() -> bool:
