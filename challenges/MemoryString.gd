@@ -1,9 +1,5 @@
 extends CanvasLayer
 
-## MemoryString — Pattern/typing challenge
-## A 12-char string flashes for 3 seconds. Player must type it back.
-## As they type, the system types its own message in red alongside: I AM BEHIND YOU
-
 signal challenge_completed(success: bool)
 
 var _root_control: Control
@@ -198,6 +194,7 @@ func _update_display() -> void:
 	_system_label.text = _format_spaced(sys_text)
 
 func _evaluate() -> void:
+	_input_active = false
 	_phase = 2
 	var correct = (_player_input.to_upper() == _target_string.to_upper())
 

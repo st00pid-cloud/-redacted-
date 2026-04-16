@@ -15,7 +15,7 @@ var _confirm_btn: Button
 var _phase: int = 0  # 0=adjusting, 1=verification, 2=done
 
 var _slider_value: float = 0.0
-var _target_sync: float = 0.72  # sweet spot
+var _target_sync: float = 0.0  # sweet spot
 var _sync_threshold: float = 0.08
 var _wave_timer: float = 0.0
 var _reveal_text_shown: bool = false
@@ -31,8 +31,10 @@ func open_challenge() -> void:
 	_build_ui() 
 	show() 
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE) 
+	_target_sync = randf_range(0.55, 0.85)
 
 func _build_ui() -> void:
+	
 	for child in get_children():
 		child.queue_free() 
 
@@ -56,45 +58,46 @@ func _build_ui() -> void:
 	panel.offset_right = 380
 	panel.offset_bottom = 260
 	_root_control.add_child(panel) 
-
-	var vbox = VBoxContainer.new()
-	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
-	vbox.offset_left = 24
-	vbox.offset_top = 24
-	vbox.offset_right = -24
-	vbox.offset_bottom = -24
-	vbox.add_theme_constant_override("separation", 12) 
-	panel.add_child(vbox)
+	
+	var _vbox: VBoxContainer
+	_vbox = VBoxContainer.new()
+	_vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_vbox.offset_left = 24
+	_vbox.offset_top = 24
+	_vbox.offset_right = -24
+	_vbox.offset_bottom = -24
+	_vbox.add_theme_constant_override("separation", 12) 
+	panel.add_child(_vbox)
 
 	_header = Label.new()
 	_header.text = "ECHO CORRELATION — Audio Feed Alignment" 
 	_header.add_theme_font_size_override("font_size", 16)
 	_header.add_theme_color_override("font_color", Color(0.6, 1.0, 0.6))
-	vbox.add_child(_header) 
+	_vbox.add_child(_header) 
 
 	var instr = Label.new()
 	instr.text = "Align the two audio feeds using the slider. Match the waveforms." 
 	instr.add_theme_font_size_override("font_size", 12)
 	instr.autowrap_mode = TextServer.AUTOWRAP_WORD
-	vbox.add_child(instr) 
+	_vbox.add_child(instr) 
 
 	_feed_a_label = Label.new()
 	_feed_a_label.text = "FEED A — Room Microphone: [STATIC]" 
 	_feed_a_label.add_theme_font_size_override("font_size", 11)
-	vbox.add_child(_feed_a_label) 
+	_vbox.add_child(_feed_a_label) 
 
 	_wave_a = Control.new()
 	_wave_a.custom_minimum_size = Vector2(680, 60) 
-	vbox.add_child(_wave_a) 
+	_vbox.add_child(_wave_a) 
 
 	_feed_b_label = Label.new()
 	_feed_b_label.text = "FEED B — Ventilation Intake: [STATIC]" 
 	_feed_b_label.add_theme_font_size_override("font_size", 11)
-	vbox.add_child(_feed_b_label) 
+	_vbox.add_child(_feed_b_label) 
 
 	_wave_b = Control.new()
 	_wave_b.custom_minimum_size = Vector2(680, 60) 
-	vbox.add_child(_wave_b) 
+	_vbox.add_child(_wave_b) 
 
 	_slider = HSlider.new()
 	_slider.min_value = 0.0
@@ -102,25 +105,29 @@ func _build_ui() -> void:
 	_slider.step = 0.01
 	_slider.custom_minimum_size = Vector2(680, 24)
 	_slider.value_changed.connect(_on_slider_changed) 
-	vbox.add_child(_slider) 
+	_vbox.add_child(_slider) 
 
 	_sync_label = Label.new()
 	_sync_label.text = "Synchronization: 0%" 
 	_sync_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(_sync_label) 
+	_vbox.add_child(_sync_label) 
 
 	_feedback = Label.new()
 	_feedback.text = "" 
 	_feedback.autowrap_mode = TextServer.AUTOWRAP_WORD
 	_feedback.add_theme_font_size_override("font_size", 12)
 	_feedback.add_theme_color_override("font_color", Color(0.8, 0.3, 0.3))
-	vbox.add_child(_feedback) 
+	_vbox.add_child(_feedback) 
 
 	_confirm_btn = Button.new()
 	_confirm_btn.text = "[ LOCK ALIGNMENT ]" 
 	_confirm_btn.visible = false
 	_confirm_btn.pressed.connect(_on_confirm) 
-	vbox.add_child(_confirm_btn) 
+	_vbox.add_child(_confirm_btn) 
+	
+	_wave_a.draw.connect(_draw_wave_a)
+	_wave_b.draw.connect(_draw_wave_b)
+	
 
 func _on_slider_changed(value: float) -> void:
 	_slider_value = value 
@@ -152,10 +159,11 @@ func _on_confirm() -> void:
 	_confirm_btn.visible = false 
 	_header.text = "VERIFICATION:" 
 	_feedback.text = "Did the audio signature in Feed B match a known biological entity?" 
-
+	
+	var _vbox: VBoxContainer
 	var hbox = HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 20)
-	_root_control.get_child(1).get_child(0).add_child(hbox) 
+	_vbox.add_child(hbox) 
 
 	var btn_yes = Button.new()
 	btn_yes.text = "[ YES ]" 
@@ -183,11 +191,6 @@ func _process(delta: float) -> void:
 	if _wave_a: _wave_a.queue_redraw() 
 	if _wave_b: _wave_b.queue_redraw() 
 	
-	if _wave_a and not _wave_a.draw.is_connected(_draw_wave_a):
-		_wave_a.draw.connect(_draw_wave_a) 
-	if _wave_b and not _wave_b.draw.is_connected(_draw_wave_b):
-		_wave_b.draw.connect(_draw_wave_b) 
-
 func _draw_wave_a() -> void:
 	if not _wave_a: return 
 	var w = _wave_a.size.x 

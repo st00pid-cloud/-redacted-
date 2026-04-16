@@ -1,9 +1,5 @@
 extends CanvasLayer
 
-## ThermalScan — Visual task
-## Top-down thermal grid. Click heat leaks to patch them.
-## One "leak" is a humanoid silhouette that ducks out when hovered.
-
 signal challenge_completed(success: bool)
 
 var _root_control: Control
@@ -159,11 +155,11 @@ func _on_silhouette_hover() -> void:
 		var tween = create_tween()
 		tween.tween_property(_silhouette_node, "modulate:a", 0.0, 0.2)
 		tween.tween_callback(func():
-			if is_instance_valid(_silhouette_node):
+			if not is_instance_valid(_silhouette_node):
+				return
 				_silhouette_node.position += Vector2(-CELL_SIZE * 4, -CELL_SIZE * 2)
 				_silhouette_node.modulate.a = 0.2
-		)
-
+			)
 func _show_verification() -> void:
 	_header.text = "VERIFICATION:"
 	if _silhouette_hovered:

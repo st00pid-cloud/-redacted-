@@ -1,10 +1,5 @@
 extends CanvasLayer
 
-## GhostCursor — Input challenge
-## Player drags a diagnostic icon to a drop zone.
-## A ghost cursor moves independently toward dangerous buttons.
-## If ghost cursor touches player's drag icon, they fail.
-
 signal challenge_completed(success: bool)
 
 var _root_control: Control
@@ -99,8 +94,11 @@ func _build_ui() -> void:
 	_danger_btn_power.size = Vector2(140, 40)
 	_danger_btn_power.add_theme_color_override("font_color", Color(1.0, 0.2, 0.2))
 	_root_control.add_child(_danger_btn_power)
-	_ghost_target_pos = Vector2(820, 520)
-
+	
+	var vp = get_viewport().get_visible_rect().size
+	_ghost_target_pos = Vector2(vp.x - 200, vp.y - 120)
+	_danger_btn_power.position = Vector2(vp.x - 230, vp.y - 140)
+	
 	# Drag icon (left side)
 	_drag_icon = ColorRect.new()
 	_drag_icon.position = Vector2(150, 350)
