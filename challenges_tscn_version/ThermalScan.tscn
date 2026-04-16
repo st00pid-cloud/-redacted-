@@ -5,7 +5,6 @@
 
 [node name="ThermalScan" type="CanvasLayer" groups=["challenge_thermal"]]
 layer = 100
-visible = false
 script = ExtResource("1_thermal")
 
 [node name="RootControl" type="Control" parent="."]
@@ -28,31 +27,38 @@ color = Color(0, 0, 0, 0.85)
 [node name="HeaderLabel" type="Label" parent="RootControl"]
 layout_mode = 1
 offset_left = 40.0
-offset_top = 20.0
+offset_top = 50.0
 offset_right = 700.0
-offset_bottom = 45.0
+offset_bottom = 77.0
 theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
 theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 30
 text = "THERMAL SILHOUETTE SCAN — Click heat leaks to patch them"
 
 [node name="FeedbackLabel" type="Label" parent="RootControl"]
 layout_mode = 1
 offset_left = 40.0
-offset_top = 50.0
+offset_top = 90.0
 offset_right = 400.0
-offset_bottom = 70.0
+offset_bottom = 110.0
 theme_override_colors/font_color = Color(0.5, 0.8, 0.5, 0.8)
-theme_override_font_sizes/font_size = 13
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 20
 text = "Leaks patched: 0 / 5"
 
 [node name="GridContainer" type="Control" parent="RootControl"]
 layout_mode = 1
-anchors_preset = 0
-offset_left = 180.0
-offset_top = 110.0
-offset_right = 660.0
-offset_bottom = 470.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -180.0
+offset_right = 240.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="GridBackground" type="ColorRect" parent="RootControl/GridContainer"]
 layout_mode = 1

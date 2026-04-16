@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=29 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/dialogue_box/DialogueBox.tscn" id="3_ccxtb"]
@@ -16,10 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://btoiamg4a4i21" path="res://ui/crosshair/Crosshair.tscn" id="13_eukdw"]
 [ext_resource type="PackedScene" uid="uid://cl02o2k76xige" path="res://cutscene/IntroCutscene.tscn" id="14_ybi3m"]
 [ext_resource type="PackedScene" uid="uid://xbn53ewemqeb" path="res://ui/taskHUD/TaskHUD.tscn" id="15_6vn4c"]
-[ext_resource type="Script" uid="uid://cxlxqwal2yjm2" path="res://challenges/EchoCorrelation.gd" id="16_meeu0"]
-[ext_resource type="Script" uid="uid://whjhl8g6ssxj" path="res://challenges/GhostCursor.gd" id="17_6ga61"]
-[ext_resource type="Script" uid="uid://dbfl2avru45lh" path="res://challenges/ThermalScan.gd" id="18_8jeay"]
-[ext_resource type="Script" uid="uid://ewscf8w1tff" path="res://challenges/MemoryString.gd" id="19_puub4"]
 [ext_resource type="PackedScene" uid="uid://bvg3lnoclioxv" path="res://World/props/lamp.glb" id="21_8jeay"]
 [ext_resource type="PackedScene" uid="uid://c3fxflxm0x0yg" path="res://challenges_per_rack/ghost_cursor.tscn" id="22_3ymyv"]
 [ext_resource type="PackedScene" uid="uid://nollfwle6qhv" path="res://challenges_per_rack/thermal_scan.tscn" id="23_0ux88"]
@@ -95,19 +91,6 @@ script = null
 [node name="IntroCutscene" parent="." instance=ExtResource("14_ybi3m")]
 
 [node name="TaskHud" parent="." instance=ExtResource("15_6vn4c")]
-
-[node name="EchoCorrelation" type="CanvasLayer" parent="."]
-visible = false
-script = ExtResource("16_meeu0")
-
-[node name="GhostCursor" type="CanvasLayer" parent="."]
-script = ExtResource("17_6ga61")
-
-[node name="ThermalScan" type="CanvasLayer" parent="."]
-script = ExtResource("18_8jeay")
-
-[node name="MemoryString" type="CanvasLayer" parent="."]
-script = ExtResource("19_puub4")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_meeu0")
@@ -188,7 +171,6 @@ theme = ExtResource("26_0c0ya")
 [node name="EchoCorrelation2" parent="." instance=ExtResource("27_0iud3")]
 
 [node name="GhostCursor2" parent="." instance=ExtResource("28_ef1pq")]
-visible = true
 
 [node name="ThermalScan2" parent="." instance=ExtResource("29_582bg")]
 
