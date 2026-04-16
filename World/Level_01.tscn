@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=33 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/dialogue_box/DialogueBox.tscn" id="3_ccxtb"]
@@ -26,6 +26,10 @@
 [ext_resource type="PackedScene" uid="uid://dmeevhvlniemg" path="res://challenges_per_rack/memory_string.tscn" id="24_db8xy"]
 [ext_resource type="PackedScene" uid="uid://cqhetryjbuvdy" path="res://challenges_per_rack/echo_correlation.tscn" id="25_0c0ya"]
 [ext_resource type="Theme" uid="uid://baag345alu48e" path="res://global_theme.tres" id="26_0c0ya"]
+[ext_resource type="PackedScene" uid="uid://byut5uclgbjfx" path="res://challenges_tscn_version/EchoCorrelation.tscn" id="27_0iud3"]
+[ext_resource type="PackedScene" path="res://challenges_tscn_version/GhostCursor.tscn" id="28_ef1pq"]
+[ext_resource type="PackedScene" path="res://challenges_tscn_version/ThermalScan.tscn" id="29_582bg"]
+[ext_resource type="PackedScene" path="res://challenges_tscn_version/MemoryString.tscn" id="30_c7iac"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_meeu0"]
 albedo_texture = ExtResource("4_6ga61")
@@ -42,79 +46,73 @@ glow_bloom = 0.2
 volumetric_fog_enabled = true
 volumetric_fog_albedo = Color(2.1658838e-07, 0.124740444, 0.1247404, 1)
 
-[node name="UITheme" type="Control"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-theme = ExtResource("26_0c0ya")
-
-[node name="Level01" type="Node3D" parent="."]
+[node name="Level01" type="Node3D"]
 script = ExtResource("1_bpnau")
 
-[node name="DialogueBox" parent="Level01" instance=ExtResource("3_ccxtb")]
+[node name="DialogueBox" parent="." instance=ExtResource("3_ccxtb")]
 
-[node name="Sketchfab_Scene" parent="Level01" instance=ExtResource("4_lohiu")]
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("4_lohiu")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -531.57196, -221.40868, 122.18797)
 metadata/_edit_lock_ = true
 
-[node name="Sketchfab_model" parent="Level01/Sketchfab_Scene" index="0"]
+[node name="Sketchfab_model" parent="Sketchfab_Scene" index="0"]
 transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 1.4015198, 16.165413, 50.194504)
 
-[node name="Object_11" parent="Level01/Sketchfab_Scene/Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles" index="9"]
+[node name="Object_11" parent="Sketchfab_Scene/Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles" index="9"]
 surface_material_override/0 = SubResource("StandardMaterial3D_meeu0")
 
-[node name="Rack1" parent="Level01" instance=ExtResource("4_clck7")]
+[node name="Rack1" parent="." instance=ExtResource("4_clck7")]
 transform = Transform3D(0.23546375, -0.27981722, -7.6913104, 0.7870689, 7.655442, -0.2544168, 7.656048, -0.7784007, 0.2627032, -32.011482, 8.719945, 8.733135)
 
-[node name="Player2" parent="Level01" instance=ExtResource("4_bpnau")]
+[node name="Player2" parent="." instance=ExtResource("4_bpnau")]
 transform = Transform3D(1.1923876, 0, 0.13494894, 0, 1.1999999, 0, -0.13494894, 0, 1.1923876, -7.947733, 38.987434, 22.639372)
 
-[node name="DiagnosticPanel" parent="Level01" instance=ExtResource("6_ieywp")]
+[node name="DiagnosticPanel" parent="." instance=ExtResource("6_ieywp")]
 
-[node name="ConsoleTerminal" parent="Level01" instance=ExtResource("9_faiek")]
+[node name="ConsoleTerminal" parent="." instance=ExtResource("9_faiek")]
 transform = Transform3D(5.5, 0, 0, 0, 5.5, 0, 0, 0, 5.5, 0, 12.287832, 0)
 visible = false
 
-[node name="ResistOverlay" parent="Level01" instance=ExtResource("8_7wdav")]
+[node name="ResistOverlay" parent="." instance=ExtResource("8_7wdav")]
 visible = false
 
-[node name="HorrorOverlay" parent="Level01" instance=ExtResource("7_ieywp")]
+[node name="HorrorOverlay" parent="." instance=ExtResource("7_ieywp")]
 
-[node name="Control" parent="Level01/HorrorOverlay" instance=ExtResource("8_7wdav")]
+[node name="Control" parent="HorrorOverlay" instance=ExtResource("8_7wdav")]
 layout_mode = 1
 
-[node name="AmbientSound" parent="Level01" instance=ExtResource("10_egdld")]
+[node name="AmbientSound" parent="." instance=ExtResource("10_egdld")]
 
-[node name="PauseMenu" parent="Level01" instance=ExtResource("11_j4qah")]
+[node name="PauseMenu" parent="." instance=ExtResource("11_j4qah")]
 visible = false
 script = null
 
-[node name="LocationHeader" parent="Level01" instance=ExtResource("12_wojfw")]
+[node name="LocationHeader" parent="." instance=ExtResource("12_wojfw")]
 script = null
 
-[node name="Crosshair" parent="Level01" instance=ExtResource("13_eukdw")]
+[node name="Crosshair" parent="." instance=ExtResource("13_eukdw")]
 
-[node name="IntroCutscene" parent="Level01" instance=ExtResource("14_ybi3m")]
+[node name="IntroCutscene" parent="." instance=ExtResource("14_ybi3m")]
 
-[node name="TaskHud" parent="Level01" instance=ExtResource("15_6vn4c")]
+[node name="TaskHud" parent="." instance=ExtResource("15_6vn4c")]
 
-[node name="EchoCorrelation" type="CanvasLayer" parent="Level01"]
+[node name="EchoCorrelation" type="CanvasLayer" parent="."]
+visible = false
 script = ExtResource("16_meeu0")
 
-[node name="GhostCursor" type="CanvasLayer" parent="Level01"]
+[node name="GhostCursor" type="CanvasLayer" parent="."]
 script = ExtResource("17_6ga61")
 
-[node name="ThermalScan" type="CanvasLayer" parent="Level01"]
+[node name="ThermalScan" type="CanvasLayer" parent="."]
 script = ExtResource("18_8jeay")
 
-[node name="MemoryString" type="CanvasLayer" parent="Level01"]
+[node name="MemoryString" type="CanvasLayer" parent="."]
 script = ExtResource("19_puub4")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="Level01"]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_meeu0")
 
-[node name="Bridge1-omni" type="OmniLight3D" parent="Level01"]
+[node name="Bridge1-omni" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.8331056, 48.699093, 16.720438)
 layers = 1023
 light_energy = 20.0
@@ -124,7 +122,7 @@ light_bake_mode = 1
 light_cull_mask = 4294966273
 omni_range = 24.271805
 
-[node name="Bridge1-omni2" type="OmniLight3D" parent="Level01"]
+[node name="Bridge1-omni2" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.27831888, 48.699093, -38.97116)
 layers = 1023
 light_energy = 20.0
@@ -134,7 +132,7 @@ light_bake_mode = 1
 light_cull_mask = 4294966273
 omni_range = 24.271805
 
-[node name="Bridge1-omni3" type="OmniLight3D" parent="Level01"]
+[node name="Bridge1-omni3" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 27.814571, 37.299347, -38.289993)
 layers = 1023
 light_energy = 20.0
@@ -144,7 +142,7 @@ light_bake_mode = 1
 light_cull_mask = 4294966273
 omni_range = 24.199257
 
-[node name="Bridge1-omni4" type="OmniLight3D" parent="Level01"]
+[node name="Bridge1-omni4" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.585999, 29.152725, -10.58259)
 layers = 1023
 light_energy = 20.0
@@ -154,7 +152,7 @@ light_bake_mode = 1
 light_cull_mask = 4294966273
 omni_range = 24.199257
 
-[node name="Bridge1-omni5" type="OmniLight3D" parent="Level01"]
+[node name="Bridge1-omni5" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -62.10384, 23.60736, 33.210644)
 layers = 1023
 light_specular = 1.0
@@ -162,23 +160,41 @@ light_bake_mode = 1
 light_cull_mask = 4294966273
 omni_range = 24.199257
 
-[node name="lamp" parent="Level01" instance=ExtResource("21_8jeay")]
+[node name="lamp" parent="." instance=ExtResource("21_8jeay")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -46.097954, 42.16422, 23.317074)
 
-[node name="lamp2" parent="Level01" instance=ExtResource("21_8jeay")]
+[node name="lamp2" parent="." instance=ExtResource("21_8jeay")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -46.097954, 44.023224, -28.962729)
 
-[node name="ghost_cursor" parent="Level01" instance=ExtResource("22_3ymyv")]
+[node name="ghost_cursor" parent="." instance=ExtResource("22_3ymyv")]
 transform = Transform3D(-0.54114056, -0.7453693, -7.644709, -0.052630235, 7.663839, -0.74350893, 7.68078, 0, -0.54369384, 23.93931, 8.351957, 27.38104)
 
-[node name="thermal_scan" parent="Level01" instance=ExtResource("23_0ux88")]
+[node name="thermal_scan" parent="." instance=ExtResource("23_0ux88")]
 transform = Transform3D(-0.51915896, 2.392838e-08, -7.6824775, 0.7144415, 7.6666355, -0.048279807, 7.649187, -0.7160709, -0.51690906, -16.3344, 9.796797, -27.986776)
 
-[node name="memory_string" parent="Level01" instance=ExtResource("24_db8xy")]
+[node name="memory_string" parent="." instance=ExtResource("24_db8xy")]
 transform = Transform3D(-0.33036444, 0, 7.6929083, 0.4571767, 7.68639, 0.019633006, -7.6793118, 0.4575981, -0.32978055, -8.51376, 9.086611, 8.089486)
 
-[node name="echo_correlation" parent="Level01" instance=ExtResource("25_0c0ya")]
+[node name="echo_correlation" parent="." instance=ExtResource("25_0c0ya")]
 transform = Transform3D(0.89369303, 0, -7.64796, 0, 7.699999, 0, 7.64796, 0, 0.89369303, 0.070168495, 9.676219, 26.487413)
 
-[editable path="Level01/Sketchfab_Scene"]
-[editable path="Level01/Rack1"]
+[node name="UITheme" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme = ExtResource("26_0c0ya")
+
+[node name="EchoCorrelation2" parent="." instance=ExtResource("27_0iud3")]
+
+[node name="GhostCursor2" parent="." instance=ExtResource("28_ef1pq")]
+visible = false
+
+[node name="ThermalScan2" parent="." instance=ExtResource("29_582bg")]
+visible = false
+
+[node name="MemoryString2" parent="." instance=ExtResource("30_c7iac")]
+visible = false
+
+[editable path="Sketchfab_Scene"]
+[editable path="Rack1"]
