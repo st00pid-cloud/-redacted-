@@ -1,14 +1,10 @@
 extends StaticBody3D
 
-## ChallengeTerminal.gd
-## Attach to a StaticBody3D in the "interactable" group.
-## Set challenge_type in the inspector to assign which challenge this terminal runs.
-##
-## Usage in the scene:
-##   1. Instance a NetworkRack or any mesh with a StaticBody3D child
-##   2. Attach this script to the StaticBody3D
-##   3. Set challenge_type to "echo", "ghost", "thermal", or "memory"
-##   4. The terminal auto-creates the challenge CanvasLayer at runtime
+## ChallengeTerminal.gd — All improvements integrated:
+## - Named stage constants instead of magic ints
+## - Retry system: failed terminals allow one re-entry with corruption penalty
+## - Soft ordering: thermal requires echo done, memory requires ghost done
+## - TaskManager.begin_corruption() called when challenge opens
 
 @onready var status_light: OmniLight3D = $OmniLight3D
 @onready var hum_audio: AudioStreamPlayer3D = $AudioStreamPlayer3D
@@ -16,11 +12,22 @@ extends StaticBody3D
 @export_enum("echo", "ghost", "thermal", "memory") var challenge_type: String = "echo"
 
 var _challenge_node: Node = null
-var _interaction_stage: int = 0  # 0=available, 1=running, 2=completed
-var has_been_read: bool = false  # for crosshair exhaustion check
 
+# Named stage constants — replaces magic 0/1/2 ints
+const STAGE_IDLE     = 0
+const STAGE_RUNNING  = 1
+const STAGE_FAILED   = 2
+const STAGE_COMPLETE = 3
 
-# Dialogue lines per challenge type (intro flavor)
+var _interaction_stage: int = STAGE_IDLE
+var has_been_read: bool = false
+
+# Soft unlock requirements — key must be done before value is accessible
+const UNLOCK_AFTER: Dictionary = {
+	"thermal": ["echo"],
+	"memory":  ["ghost"],
+}
+
 const TERMINAL_LINES = {
 	"echo": {
 		"intro": [
@@ -60,16 +67,14 @@ const TERMINAL_LINES = {
 	},
 }
 
-# Script paths for each challenge type
 const CHALLENGE_SCRIPTS = {
-	"echo": "res://challenges/EchoCorrelation.gd",
-	"ghost": "res://challenges/GhostCursor.gd",
+	"echo":    "res://challenges/EchoCorrelation.gd",
+	"ghost":   "res://challenges/GhostCursor.gd",
 	"thermal": "res://challenges/ThermalScan.gd",
-	"memory": "res://challenges/MemoryString.gd",
+	"memory":  "res://challenges/MemoryString.gd",
 }
 
 func _ready() -> void:
-	# Create the challenge node at runtime
 	_create_challenge_node()
 
 func _create_challenge_node() -> void:
@@ -77,50 +82,73 @@ func _create_challenge_node() -> void:
 	if script_path == "":
 		push_warning("ChallengeTerminal: Unknown challenge_type: " + challenge_type)
 		return
-
 	var scr = load(script_path)
 	if not scr:
 		push_warning("ChallengeTerminal: Failed to load script: " + script_path)
 		return
-
 	_challenge_node = CanvasLayer.new()
 	_challenge_node.set_script(scr)
-	# Add to scene tree at root level so the CanvasLayer renders properly
 	get_tree().root.call_deferred("add_child", _challenge_node)
 
 func interact() -> void:
-	# Already done
-	if _interaction_stage == 2:
+	# Complete — short system message
+	if _interaction_stage == STAGE_COMPLETE:
 		var lines: Array[String] = ["[SYSTEM]: This terminal's diagnostic is complete."]
 		DialogueManager.show_dialogue(lines)
 		return
 
 	# Already running — hard block
-	if _interaction_stage == 1:
+	if _interaction_stage == STAGE_RUNNING:
 		return
 
-	# Check if this challenge was already completed via tracker
+	# Already tracked as done
 	if ChallengeTracker.is_challenge_done(challenge_type):
-		_interaction_stage = 2
+		_interaction_stage = STAGE_COMPLETE
 		has_been_read = true
 		var lines: Array[String] = ["[SYSTEM]: This terminal's diagnostic is complete."]
 		DialogueManager.show_dialogue(lines)
 		return
 
-	# ── NEW: immediately set stage and freeze to close the re-entry window ──
-	_interaction_stage = 1
-	ChallengeTracker.freeze_player()        # freeze BEFORE any await
+	# ── Retry path — previously failed terminal ───────────────────────────
+	if _interaction_stage == STAGE_FAILED:
+		var lines: Array[String] = [
+			"[SYSTEM]: Previous diagnostic incomplete.",
+			"[SYSTEM]: Re-entry permitted. Corruption penalty applied.",
+		]
+		DialogueManager.show_dialogue(lines)
+		await DialogueManager.dialogue_finished
+		# Corruption penalty for retry
+		TaskManager._corruption_level = min(TaskManager._corruption_level + 0.2, 1.0)
+		TaskManager.corruption_tick.emit()
+		_interaction_stage = STAGE_IDLE
+		# Fall through to normal open below
+
+	# ── Soft ordering check ───────────────────────────────────────────────
+	var prereqs: Array = UNLOCK_AFTER.get(challenge_type, [])
+	for req in prereqs:
+		if not ChallengeTracker.is_challenge_done(req):
+			var lines: Array[String] = [
+				"[SYSTEM]: Subsystem locked.",
+				"[SYSTEM]: Complete an earlier diagnostic terminal first.",
+			]
+			DialogueManager.show_dialogue(lines)
+			return
+
+	# ── Normal open ───────────────────────────────────────────────────────
+	_interaction_stage = STAGE_RUNNING
+	ChallengeTracker.freeze_player()
+
+	# Begin corruption immediately when challenge opens
+	TaskManager.begin_corruption()
 
 	var data = TERMINAL_LINES.get(challenge_type, {})
 
-	# Set task
 	var task = TaskData.new()
 	task.task_id = challenge_type
 	task.task_name = data.get("task_name", "Diagnostic")
 	task.description = data.get("task_desc", "Complete the diagnostic.")
 	TaskManager.set_task(task)
 
-	# Show intro dialogue
 	var intro = data.get("intro", [])
 	if intro.size() > 0:
 		var lines: Array[String] = []
@@ -129,7 +157,6 @@ func interact() -> void:
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
 
-	# Launch challenge
 	if _challenge_node and _challenge_node.has_method("open_challenge"):
 		if not _challenge_node.challenge_completed.is_connected(_on_challenge_done):
 			_challenge_node.challenge_completed.connect(_on_challenge_done, CONNECT_ONE_SHOT)
@@ -137,19 +164,16 @@ func interact() -> void:
 	else:
 		push_warning("ChallengeTerminal: Challenge node not ready for type: " + challenge_type)
 		ChallengeTracker.unfreeze_player()
-		_interaction_stage = 0
+		_interaction_stage = STAGE_IDLE
 
 func _on_challenge_done(success: bool) -> void:
-	_interaction_stage = 2
+	# Set stage based on outcome
+	_interaction_stage = STAGE_COMPLETE if success else STAGE_FAILED
 	has_been_read = true
 
-	# Register result
 	ChallengeTracker.register_result(challenge_type, success)
-
-	# Unfreeze player
 	ChallengeTracker.unfreeze_player()
 
-	# Show result dialogue
 	if success:
 		var lines: Array[String] = [
 			"Diagnostic passed. Terminal secured.",
@@ -159,13 +183,13 @@ func _on_challenge_done(success: bool) -> void:
 	else:
 		var lines: Array[String] = [
 			"Diagnostic anomaly detected. Result logged.",
+			"[SYSTEM]: Re-entry available. Corruption penalty will apply.",
 			"%d / %d subsystems checked." % [ChallengeTracker.get_completed_count(), ChallengeTracker.required_ids.size()],
 		]
 		DialogueManager.show_dialogue(lines)
 
 	await DialogueManager.dialogue_finished
 
-	# Update task to guide player to next terminal or the main rack
 	if ChallengeTracker.all_done():
 		var task = TaskData.new()
 		task.task_id = "return_rack"
@@ -180,18 +204,18 @@ func _on_challenge_done(success: bool) -> void:
 		task.description = "%d terminal(s) remaining. Locate and complete them." % remaining
 		TaskManager.set_task(task)
 
-
 func _process(delta: float) -> void:
-	# Only flicker if the terminal is still available (stage 0)
-	if _interaction_stage == 0:
-		# Pulse the light energy using a sine wave
-		status_light.light_energy = 1.0 + (sin(Time.get_ticks_msec() * 0.005) * 0.5) 
-		# Random "glitch" flicker
+	if _interaction_stage == STAGE_IDLE:
+		status_light.light_energy = 1.0 + (sin(Time.get_ticks_msec() * 0.005) * 0.5)
 		if randf() < 0.02:
 			status_light.visible = !status_light.visible
-	# If completed, turn light green and dim the audio
-	elif _interaction_stage == 2:
+	elif _interaction_stage == STAGE_FAILED:
+		# Dim red pulse for failed terminals
+		status_light.visible = true
+		status_light.light_color = Color(0.8, 0.1, 0.1)
+		status_light.light_energy = 0.4 + (sin(Time.get_ticks_msec() * 0.003) * 0.2)
+	elif _interaction_stage == STAGE_COMPLETE:
 		status_light.visible = true
 		status_light.light_color = Color.GREEN
 		status_light.light_energy = 0.5
-		hum_audio.unit_size = lerp(hum_audio.unit_size, 0.0, 0.1) # Fade out sound
+		hum_audio.unit_size = lerp(hum_audio.unit_size, 0.0, 0.1)

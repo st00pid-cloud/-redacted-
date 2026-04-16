@@ -1,5 +1,12 @@
 extends Node
 
+## ChallengeTracker — Autoload
+## All improvements integrated:
+## - milestone_reached signal at counts 2, 3, 4
+## - get_difficulty_multiplier() for challenge scaling
+## - freeze/unfreeze hides SignalIntegrityTimer, TaskHUD, LocationHeader
+## - reset() clears milestone and difficulty state
+
 signal challenge_done(challenge_id: String, success: bool)
 signal all_challenges_done
 signal milestone_reached(count: int)
@@ -48,6 +55,11 @@ func is_challenge_done(challenge_id: String) -> bool:
 func all_done() -> bool:
 	return get_completed_count() >= required_ids.size()
 
+## Each completed challenge adds 0.25 to the multiplier.
+## 0 done = 1.0x, 1 done = 1.25x, 2 done = 1.5x, 3 done = 1.75x, 4 done = 2.0x
+func get_difficulty_multiplier() -> float:
+	return 1.0 + (get_completed_count() * 0.25)
+
 func reset() -> void:
 	completed.clear()
 	_last_milestone = 0
@@ -57,9 +69,9 @@ func reset() -> void:
 func freeze_player() -> void:
 	_player_frozen = true
 
-	# Hide HUD elements that would overlap challenge UIs
 	SignalIntegrityTimer.hide()
 	_set_task_hud_visible(false)
+	_set_location_header_visible(false)
 
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
@@ -70,13 +82,13 @@ func freeze_player() -> void:
 func unfreeze_player() -> void:
 	_player_frozen = false
 
-	# Restore timer only if it is still actively counting
 	if SignalIntegrityTimer._running:
 		SignalIntegrityTimer.show()
 
-	# Restore task HUD only if there is an active task to show
 	if TaskManager.active_task != null:
 		_set_task_hud_visible(true)
+
+	_set_location_header_visible(true)
 
 	var players = get_tree().get_nodes_in_group("player")
 	if players.size() > 0:
@@ -91,8 +103,12 @@ func is_player_frozen() -> bool:
 ## ── Helpers ──────────────────────────────────────────────────────────────
 
 func _set_task_hud_visible(visible: bool) -> void:
-	# TaskHUD is a CanvasLayer in the scene tree, not an autoload.
-	# Find it by group so this works regardless of scene structure.
-	var nodes = get_tree().get_nodes_in_group("task_hud")
-	for node in nodes:
+	for node in get_tree().get_nodes_in_group("task_hud"):
 		node.visible = visible
+
+func _set_location_header_visible(visible: bool) -> void:
+	for node in get_tree().get_nodes_in_group("location_header"):
+		if visible:
+			node.show_header()
+		else:
+			node.hide_header()
