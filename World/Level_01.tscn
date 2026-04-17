@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=35 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/dialogue_box/DialogueBox.tscn" id="3_ccxtb"]
@@ -30,6 +30,7 @@
 [ext_resource type="PackedScene" uid="uid://c0v0q26os6epu" path="res://boxxy_ver2.tscn" id="29_8ll1u"]
 [ext_resource type="PackedScene" uid="uid://c5a3c6r8ipgfs" path="res://challenges_tscn_version/ThermalScan.tscn" id="29_582bg"]
 [ext_resource type="PackedScene" uid="uid://bg0gcrn0qv6k" path="res://challenges_tscn_version/MemoryString.tscn" id="30_c7iac"]
+[ext_resource type="PackedScene" uid="uid://4y68bkv54i1o" path="res://objectDialogueAdd/DialogueUI.tscn" id="31_ef1pq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_meeu0"]
 albedo_texture = ExtResource("4_6ga61")
@@ -45,6 +46,9 @@ glow_strength = 0.5
 glow_bloom = 0.2
 volumetric_fog_enabled = true
 volumetric_fog_albedo = Color(2.1658838e-07, 0.124740444, 0.1247404, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0iud3"]
+size = Vector3(0.9581299, 1.8793945, 1.5874023)
 
 [node name="Level01" type="Node3D"]
 script = ExtResource("1_bpnau")
@@ -152,9 +156,15 @@ transform = Transform3D(1, 0, 0, 0, 0.0057770447, 0.9999833, 0, -0.9999833, 0.00
 
 [node name="SignalIntegrityTimer" parent="." instance=ExtResource("27_5l5j7")]
 
-[node name="boxxy_" parent="." instance=ExtResource("28_ysi65")]
+[node name="boxxy_" parent="." groups=["interactable"] instance=ExtResource("28_ysi65")]
 transform = Transform3D(4.898297, 0, 1.003338, 0, 5, 0, -1.003338, 0, 4.898297, -13.809384, 33.39552, 16.254528)
+
+[node name="Area3D" type="Area3D" parent="boxxy_"]
 script = ExtResource("29_0iud3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="boxxy_/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 0.99999976, 0, 0, 0, 1, -0.020934582, 0.43969727, -0.2937014)
+shape = SubResource("BoxShape3D_0iud3")
 
 [node name="boxxy_2" parent="." instance=ExtResource("28_ysi65")]
 transform = Transform3D(4.1345196, 0, 2.811716, 0, 4.9999995, 0, -2.811716, 0, 4.1345196, -2.6057844, 33.39552, 3.254528)
@@ -167,6 +177,10 @@ transform = Transform3D(2.7205834, 0, 5.3477497, 0, 6, 0, -5.3477497, 0, 2.72058
 
 [node name="boxxy_4" parent="." instance=ExtResource("29_8ll1u")]
 transform = Transform3D(0.89068806, 0, 5.9335213, 0, 6, 0, -5.9335213, 0, 0.89068806, -11.611752, 33, -31.621157)
+
+[node name="DialogueUI" parent="." instance=ExtResource("31_ef1pq")]
+
+[connection signal="body_entered" from="boxxy_/Area3D" to="boxxy_/Area3D" method="_on_body_entered"]
 
 [editable path="Sketchfab_Scene"]
 [editable path="Rack1"]
