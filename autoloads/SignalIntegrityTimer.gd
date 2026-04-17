@@ -1,40 +1,29 @@
 extends CanvasLayer
 
 ## SignalIntegrityTimer — Autoload
-## Displays an 8-minute "Signal Integrity" countdown in the top-left HUD.
-## At zero: triggers GameManager.trigger_game_over("signal_lost").
-##
-## API:
-##   SignalIntegrityTimer.start()        — begin counting (call from Level _ready)
-##   SignalIntegrityTimer.stop()         — halt without game-over (call from EndScreen)
-##   SignalIntegrityTimer.reset()        — clear all state (call from EndScreen on restart)
-##   SignalIntegrityTimer.pause_timer()  — pause during cutscenes / menu
-##   SignalIntegrityTimer.resume_timer() — resume
+## Displays an 8-minute "Signal Integrity" countdown.
 
-const TOTAL_TIME: float = 480.0   # 8 minutes in seconds
+const TOTAL_TIME: float = 480.0 
 
 var _time_remaining: float = TOTAL_TIME
 var _running: bool = false
 var _expired: bool = false
 
 # UI nodes
-@onready var main_container: PanelContainer = $PanelContainer
-@onready var progress_bar = $PanelContainer/VBoxContainer/ProgressBar
-@onready var time_label = $PanelContainer/VBoxContainer/HBoxContainer/TimeLabel
-@onready var header_label = $PanelContainer/VBoxContainer/HeaderLabel
-# Separate node from time_label so warning text doesn't overwrite the countdown.
-@onready var warning_label = $PanelContainer/VBoxContainer/HBoxContainer/WarningLabel
+@onready var main_container: PanelContainer = $CenterContainer/PanelContainer
+@onready var progress_bar = $CenterContainer/PanelContainer/VBoxContainer/ProgressBar
+@onready var time_label = $CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/TimeLabel
+@onready var header_label = $CenterContainer/PanelContainer/VBoxContainer/HeaderLabel
+@onready var warning_label = $CenterContainer/PanelContainer/VBoxContainer/HBoxContainer/WarningLabel
 
 var _blink_timer: float = 0.0
 var _blink_visible: bool = true
 var _shake_timer: float = 0.0
 
-const WARN_THRESHOLD: float   = 120.0  # 2 min  — yellow
-const DANGER_THRESHOLD: float = 30.0   # 30 sec — red + blink
+const WARN_THRESHOLD: float   = 120.0
+const DANGER_THRESHOLD: float = 30.0
 
 func _ready() -> void:
-	# ALWAYS so pause_timer() is the single source of truth for whether the
-	# countdown is running, independent of get_tree().paused.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	hide()
 
@@ -48,8 +37,6 @@ func stop() -> void:
 	_running = false
 	hide()
 
-## Clears all state so a restarted playthrough begins clean.
-## Call from EndScreen._on_restart() before change_scene_to_file().
 func reset() -> void:
 	_time_remaining = TOTAL_TIME
 	_running = false
@@ -67,8 +54,6 @@ func pause_timer() -> void:
 func resume_timer() -> void:
 	if not _expired:
 		_running = true
-
-# ── Update loop ──────────────────────────────────────────────────────────
 
 func _process(delta: float) -> void:
 	if not _running or _expired:
@@ -96,7 +81,6 @@ func _update_display(delta: float) -> void:
 		time_label.add_theme_color_override("font_color", danger_color)
 		header_label.add_theme_color_override("font_color", danger_color)
 
-		# Warning text + blinking
 		warning_label.text = "⚠ SIGNAL CRITICAL"
 		warning_label.add_theme_color_override("font_color", danger_color)
 
@@ -106,14 +90,13 @@ func _update_display(delta: float) -> void:
 			_blink_visible = not _blink_visible
 		warning_label.visible = _blink_visible
 
-		# Shake the container (not the CanvasLayer).
+		# SHAKE FIX: We shake around (0,0) because the Anchor handles the centering.
 		_shake_timer += delta
 		if _shake_timer >= 0.08:
 			_shake_timer = 0.0
-			main_container.position = Vector2(randf_range(-2, 2), randf_range(-1, 1))
+			main_container.position = Vector2(randf_range(-3, 3), randf_range(-3, 3))
 
 	elif _time_remaining <= WARN_THRESHOLD:
-		# Warning styling (yellow)
 		var warn_color = Color(0.85, 0.75, 0.2, 0.9)
 		progress_bar.self_modulate = warn_color
 		time_label.add_theme_color_override("font_color", warn_color)
@@ -121,14 +104,16 @@ func _update_display(delta: float) -> void:
 
 		warning_label.text = "⚠ SIGNAL DEGRADING"
 		warning_label.visible = true
+		# Return to true center
 		main_container.position = Vector2.ZERO
 
 	else:
-		# Healthy styling (green)
+		# Healthy styling
 		progress_bar.self_modulate = Color(0.3, 0.75, 0.3, 0.9)
 		time_label.add_theme_color_override("font_color", Color(0.5, 0.85, 0.5, 0.85))
 		header_label.add_theme_color_override("font_color", Color(0.4, 0.65, 0.4, 0.6))
 		warning_label.visible = false
+		# Return to true center
 		main_container.position = Vector2.ZERO
 
 func _on_timer_expired() -> void:

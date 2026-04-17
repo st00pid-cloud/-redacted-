@@ -9,8 +9,8 @@ signal challenge_completed(success: bool)
 @onready var _header: Label = $RootControl/HeaderLabel
 @onready var _feedback: Label = $RootControl/FeedbackLabel
 @onready var _display_label: Label = $RootControl/DisplayLabel
-@onready var _input_label: Label = $RootControl/InputLabel
-@onready var _system_label: Label = $RootControl/SystemLabel
+@onready var _input_label: Label = $RootControl/HBoxContainer/InputHeader
+@onready var _system_label: Label = $RootControl/HBoxContainer2/SystemLabel
 
 var _phase: int = 0  # 0=showing, 1=typing, 2=verification, 3=done
 
@@ -30,10 +30,11 @@ var _sfx_player: AudioStreamPlayer = null
 var _sfx_system: AudioStreamPlayer = null
 
 const STRING_POOL = [
-	"VASQUEZHELPM", "RACK7ENTITYX", "PORTISOLATEN", "HELPVASQUEZ0",
+	"MBUTIDOHELPM", "RACK7ENTITYX", "PORTISOLATEN", "HELPEMBUTIDO",
 	"CHEN0MISSING", "R0DRIGUEZNOW", "SUBLEVEL3KEY", "BUFFEROVERFL",
 	"ITSINSIDEYOU", "RACK7ALIGNED", "NODATAEXISTS", "YOUARESTAYED",
-]
+] 
+  
 
 func _ready():
 	add_to_group("challenge_memory")

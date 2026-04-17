@@ -32,7 +32,7 @@ var port_data = [
 
 const HORROR_QUESTIONS = [
 	{
-		"question": "FINAL VERIFICATION 1/4:\nDo you believe R. Vasquez is still alone in this room?",
+		"question": "FINAL VERIFICATION 1/4:\nDo you believe E.M. Butido is still alone in this room?",
 		"answers": ["YES", "NO"], "correct": 1,
 		"success_text": "Correct. You were never alone.",
 		"fail_text": "Denial noted. Integration preference: willing host.",
@@ -44,7 +44,7 @@ const HORROR_QUESTIONS = [
 		"fail_text": "You listened too closely. It appreciates that.",
 	},
 	{
-		"question": "FINAL VERIFICATION 3/4:\nWho authorized your night shift, R. Vasquez?",
+		"question": "FINAL VERIFICATION 3/4:\nWho authorized your night shift,  E.M. Butido?",
 		"answers": ["DISPATCH", "I DON'T REMEMBER"], "correct": 0,
 		"success_text": "Authorization verified.",
 		"fail_text": "Memory gaps detected. Integration compatible.",

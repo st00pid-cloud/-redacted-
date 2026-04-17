@@ -60,5 +60,5 @@ layout_mode = 2
 size_flags_vertical = 8
 theme_override_colors/font_color = Color(0.4351923, 0.43519226, 0.43519226, 1)
 theme_override_fonts/font = ExtResource("2_rfrdu")
-text = "[PRESS SPACE TO CONTINUE]"
+text = "[E TO CONTINUE]"
 horizontal_alignment = 1

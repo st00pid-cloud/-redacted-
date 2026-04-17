@@ -28,6 +28,10 @@ HorrorProgressionManager="*res://autoloads/HorrorProgressionManager.gd"
 FaceDistortion="*res://autoloads/FaceDistortion.gd"
 SignalIntegrityTimer="*res://ui/SignalIntegrityDecay/SignalIntegrityTimer.tscn"
 
+[display]
+
+window/size/resizable=false
+
 [global_group]
 
 interactable=""

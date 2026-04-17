@@ -4,7 +4,7 @@ var has_been_read: bool = false
 
 const LOGIN_LINES = [
 	"[TERMINAL LOGIN — Session Active]",
-	"User: R.VASQUEZ",
+	"User:  E.M. Butido",
 	"Clearance: Level 2 — Infrastructure",
 	"Last login: 03:14 AM — Today",
 	"Active session duration: 00:47:12",
