@@ -1,21 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://dow2ueifaa0yx"]
+[gd_scene load_steps=5 format=3 uid="uid://dow2ueifaa0yx"]
 
 [ext_resource type="Script" uid="uid://bau11wjc3devl" path="res://World/main_menu/MainMenu.gd" id="1_menu"]
 [ext_resource type="AudioStream" uid="uid://cayt56s1gr4qx" path="res://World/main_menu/343788__rurbital__vietnam-robot-flashback.mp3" id="2_4snsn"]
+[ext_resource type="Texture2D" uid="uid://bw3um8lmgxkg1" path="res://World/main_menu/Your Horror Awaits, Flesh.png" id="2_gtf6l"]
 [ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_xeape"]
 
 [node name="MainMenu" type="Node2D"]
 script = ExtResource("1_menu")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Background" type="ColorRect" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.02, 0.04, 0.02, 1)
 
 [node name="Scanline" type="ColorRect" parent="CanvasLayer"]
 anchors_preset = 15
@@ -25,6 +18,26 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 0)
+
+[node name="Background" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.02, 0.04, 0.02, 1)
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -384.0
+offset_top = -216.0
+offset_right = 384.0
+offset_bottom = 216.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_gtf6l")
 
 [node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
@@ -62,6 +75,7 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.7, 1, 0.7, 1)
+theme_override_colors/font_shadow_color = Color(0.9764706, 0.27058825, 0.24313726, 1)
 theme_override_fonts/font = ExtResource("2_xeape")
 theme_override_font_sizes/font_size = 80
 text = "-REDACTED-"

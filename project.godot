@@ -13,7 +13,6 @@ config_version=5
 config/name="-REDACTED-"
 run/main_scene="res://World/main_menu/MainMenu.tscn"
 config/features=PackedStringArray("4.5", "Forward Plus")
-config/icon="res://icon.svg"
 
 [autoload]
 
@@ -31,6 +30,7 @@ SignalIntegrityTimer="*res://ui/SignalIntegrityDecay/SignalIntegrityTimer.tscn"
 [display]
 
 window/size/resizable=false
+window/size/maximize_disabled=true
 
 [global_group]
 
