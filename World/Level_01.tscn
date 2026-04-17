@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=31 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/dialogue_box/DialogueBox.tscn" id="3_ccxtb"]
@@ -9,12 +9,12 @@
 [ext_resource type="PackedScene" uid="uid://bje7iy1p2q0og" path="res://ui/diagnostic_panel/DiagnosticPanel.tscn" id="6_ieywp"]
 [ext_resource type="PackedScene" uid="uid://d17uht2oiic26" path="res://ui/horror_overlay/color_rect.tscn" id="7_ieywp"]
 [ext_resource type="PackedScene" uid="uid://b8w0veatu7gb1" path="res://ui/horror_overlay/resist_overlay.tscn" id="8_7wdav"]
-[ext_resource type="PackedScene" uid="uid://q06spmostej3" path="res://World/propsGd/ConsoleTerminal.tscn" id="9_faiek"]
 [ext_resource type="PackedScene" uid="uid://x8u82i7o7khc" path="res://audio/AmbientSound (2).tscn" id="10_egdld"]
 [ext_resource type="PackedScene" uid="uid://djqs4vt8tbcn0" path="res://ui/menu/PauseMenu.tscn" id="11_j4qah"]
 [ext_resource type="PackedScene" uid="uid://d0hiq5x7ekx71" path="res://ui/location_header/LocationHeader.tscn" id="12_wojfw"]
 [ext_resource type="PackedScene" uid="uid://btoiamg4a4i21" path="res://ui/crosshair/Crosshair.tscn" id="13_eukdw"]
 [ext_resource type="PackedScene" uid="uid://cl02o2k76xige" path="res://cutscene/IntroCutscene.tscn" id="14_ybi3m"]
+[ext_resource type="Script" uid="uid://chcjama0vwwpb" path="res://environment/flicker_lamp.gd" id="15_5l5j7"]
 [ext_resource type="PackedScene" uid="uid://xbn53ewemqeb" path="res://ui/taskHUD/TaskHUD.tscn" id="15_6vn4c"]
 [ext_resource type="PackedScene" uid="uid://bvg3lnoclioxv" path="res://World/props/lamp.glb" id="21_8jeay"]
 [ext_resource type="PackedScene" uid="uid://c3fxflxm0x0yg" path="res://challenges_per_rack/ghost_cursor.tscn" id="22_3ymyv"]
@@ -25,6 +25,7 @@
 [ext_resource type="PackedScene" uid="uid://byut5uclgbjfx" path="res://challenges_tscn_version/EchoCorrelation.tscn" id="27_0iud3"]
 [ext_resource type="PackedScene" uid="uid://c3ybha4iorguy" path="res://ui/SignalIntegrityDecay/SignalIntegrityTimer.tscn" id="27_5l5j7"]
 [ext_resource type="PackedScene" uid="uid://bq7ua7wtranyq" path="res://challenges_tscn_version/GhostCursor.tscn" id="28_ef1pq"]
+[ext_resource type="PackedScene" uid="uid://gwh1njmh1j8c" path="res://boxxy.tscn" id="28_ysi65"]
 [ext_resource type="PackedScene" uid="uid://c5a3c6r8ipgfs" path="res://challenges_tscn_version/ThermalScan.tscn" id="29_582bg"]
 [ext_resource type="PackedScene" uid="uid://bg0gcrn0qv6k" path="res://challenges_tscn_version/MemoryString.tscn" id="30_c7iac"]
 
@@ -66,10 +67,6 @@ transform = Transform3D(1.1923876, 0, 0.13494894, 0, 1.1999999, 0, -0.13494894, 
 
 [node name="DiagnosticPanel" parent="." instance=ExtResource("6_ieywp")]
 
-[node name="ConsoleTerminal" parent="." instance=ExtResource("9_faiek")]
-transform = Transform3D(5.5, 0, 0, 0, 5.5, 0, 0, 0, 5.5, 0, 12.287832, 0)
-visible = false
-
 [node name="ResistOverlay" parent="." instance=ExtResource("8_7wdav")]
 visible = false
 
@@ -103,19 +100,21 @@ light_cull_mask = 4294966273
 omni_range = 14.439776
 
 [node name="Bridge1-omni2" type="OmniLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.48679286, 0.87351745, 0, -0.87351745, 0.48679286, 10.61743, 31.044872, 23.088726)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.1330714, 40.531532, -34.050426)
 layers = 1023
 light_energy = 20.0
 light_size = 100.0
+light_specular = 8.5
 light_bake_mode = 1
 light_cull_mask = 4294966273
 omni_range = 14.439776
+script = ExtResource("15_5l5j7")
 
 [node name="lamp" parent="." instance=ExtResource("21_8jeay")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -49.98644, 44.976593, 23.317074)
 
 [node name="lamp2" parent="." instance=ExtResource("21_8jeay")]
-transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -46.097954, 44.023224, -28.962729)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -49.83352, 44.023224, -28.962729)
 
 [node name="ghost_cursor" parent="." instance=ExtResource("22_3ymyv")]
 transform = Transform3D(-0.54114056, -0.7453693, -7.644709, -0.052630235, 7.663839, -0.74350893, 7.68078, 0, -0.54369384, 23.93931, 8.351957, 27.38104)
@@ -150,6 +149,12 @@ transform = Transform3D(1, 0, 0, 0, 0.0057770447, 0.9999833, 0, -0.9999833, 0.00
 [node name="PauseMenu" parent="." instance=ExtResource("11_j4qah")]
 
 [node name="SignalIntegrityTimer" parent="." instance=ExtResource("27_5l5j7")]
+
+[node name="boxxy_" parent="." instance=ExtResource("28_ysi65")]
+transform = Transform3D(4.898297, 0, 1.003338, 0, 5, 0, -1.003338, 0, 4.898297, -13.809384, 33.39552, 16.254528)
+
+[node name="boxxy_2" parent="." instance=ExtResource("28_ysi65")]
+transform = Transform3D(4.1345196, 0, 2.811716, 0, 4.9999995, 0, -2.811716, 0, 4.1345196, -2.6057844, 33.39552, 3.254528)
 
 [editable path="Sketchfab_Scene"]
 [editable path="Rack1"]
