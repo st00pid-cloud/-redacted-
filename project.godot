@@ -26,8 +26,7 @@ AmbientSound="*res://audio/AmbientSound (2).tscn"
 ChallengeTracker="*res://autoloads/ChallengeTracker.gd"
 HorrorProgressionManager="*res://autoloads/HorrorProgressionManager.gd"
 FaceDistortion="*res://autoloads/FaceDistortion.gd"
-SignalIntegrityTimer="*res://autoloads/SignalIntegrityTimer.gd"
-GlobalTheme="*res://GlobalTheme.tscn"
+SignalIntegrityTimer="*res://ui/SignalIntegrityDecay/SignalIntegrityTimer.tscn"
 
 [global_group]
 
