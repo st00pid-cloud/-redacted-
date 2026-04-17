@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxvb3603pesd5"]
+
+[ext_resource type="PackedScene" uid="uid://bvg3lnoclioxv" path="res://World/props/lamp.glb" id="1_ycrk3"]
+[ext_resource type="Script" uid="uid://bqajd1cp87shm" path="res://environment/LightFlicker.gd" id="2_4ldvk"]
+
+[node name="lamp2" instance=ExtResource("1_ycrk3")]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.77569115, 0)
+script = ExtResource("2_4ldvk")
