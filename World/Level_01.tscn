@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=33 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/dialogue_box/DialogueBox.tscn" id="3_ccxtb"]
@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://c3ybha4iorguy" path="res://ui/SignalIntegrityDecay/SignalIntegrityTimer.tscn" id="27_5l5j7"]
 [ext_resource type="PackedScene" uid="uid://bq7ua7wtranyq" path="res://challenges_tscn_version/GhostCursor.tscn" id="28_ef1pq"]
 [ext_resource type="PackedScene" uid="uid://gwh1njmh1j8c" path="res://boxxy.tscn" id="28_ysi65"]
+[ext_resource type="Script" uid="uid://c2qissmovf05u" path="res://objectDialogueAdd/differentDialogue/boxxyDia.gd" id="29_0iud3"]
 [ext_resource type="PackedScene" uid="uid://c0v0q26os6epu" path="res://boxxy_ver2.tscn" id="29_8ll1u"]
 [ext_resource type="PackedScene" uid="uid://c5a3c6r8ipgfs" path="res://challenges_tscn_version/ThermalScan.tscn" id="29_582bg"]
 [ext_resource type="PackedScene" uid="uid://bg0gcrn0qv6k" path="res://challenges_tscn_version/MemoryString.tscn" id="30_c7iac"]
@@ -153,6 +154,7 @@ transform = Transform3D(1, 0, 0, 0, 0.0057770447, 0.9999833, 0, -0.9999833, 0.00
 
 [node name="boxxy_" parent="." instance=ExtResource("28_ysi65")]
 transform = Transform3D(4.898297, 0, 1.003338, 0, 5, 0, -1.003338, 0, 4.898297, -13.809384, 33.39552, 16.254528)
+script = ExtResource("29_0iud3")
 
 [node name="boxxy_2" parent="." instance=ExtResource("28_ysi65")]
 transform = Transform3D(4.1345196, 0, 2.811716, 0, 4.9999995, 0, -2.811716, 0, 4.1345196, -2.6057844, 33.39552, 3.254528)
