@@ -176,7 +176,7 @@ func _on_verify(answered_yes: bool) -> void:
 	if answered_yes:
 		_feedback.text = "Presence confirmed.\n You are sharing this terminal with someone else."
 	else:
-		_feedback.text = "Lie detected. You aren't the one moving that cursor anymore."
+		_feedback.text = "Lie detected.\n You aren't the one moving that cursor anymore."
 
 	await get_tree().create_timer(2.0).timeout
 	hide()

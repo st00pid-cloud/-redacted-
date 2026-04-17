@@ -1,8 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://btoiamg4a4i21"]
+[gd_scene load_steps=4 format=3 uid="uid://btoiamg4a4i21"]
 
 [ext_resource type="Script" uid="uid://bvk8gsasm8lwo" path="res://ui/crosshair/Crosshair.gd" id="1_xhair"]
-
-[sub_resource type="SystemFont" id="SystemFont_v1b5c"]
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_4qr3q"]
+[ext_resource type="Texture2D" uid="uid://2087xrnxel75" path="res://ui/crosshair/Crosshair-PNG-Pic.png" id="3_4urwq"]
 
 [node name="Crosshair" type="CanvasLayer"]
 layer = 50
@@ -16,22 +16,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="CenterDot" type="ColorRect" parent="Control"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -2.0
-offset_top = -2.0
-offset_right = 2.0
-offset_bottom = 2.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.5, 0.9, 0.5, 0.6)
 
 [node name="InteractLabel" type="Label" parent="Control"]
 modulate = Color(0.6, 1, 0.6, 0.8)
@@ -47,6 +31,23 @@ offset_right = 80.0
 offset_bottom = 30.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = SubResource("SystemFont_v1b5c")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("2_4qr3q")
+theme_override_font_sizes/font_size = 60
 horizontal_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5208333
+anchor_top = 0.46913576
+anchor_right = 0.5208333
+anchor_bottom = 0.4691358
+offset_left = -56.0
+offset_top = -24.0
+offset_right = 456.0
+offset_bottom = 488.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.16047947, 0.16047947)
+texture = ExtResource("3_4urwq")
+metadata/_edit_use_anchors_ = true

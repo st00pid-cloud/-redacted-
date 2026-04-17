@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=30 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/dialogue_box/DialogueBox.tscn" id="3_ccxtb"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://cqhetryjbuvdy" path="res://challenges_per_rack/echo_correlation.tscn" id="25_0c0ya"]
 [ext_resource type="Theme" uid="uid://baag345alu48e" path="res://global_theme.tres" id="26_0c0ya"]
 [ext_resource type="PackedScene" uid="uid://byut5uclgbjfx" path="res://challenges_tscn_version/EchoCorrelation.tscn" id="27_0iud3"]
+[ext_resource type="PackedScene" uid="uid://c3ybha4iorguy" path="res://ui/SignalIntegrityDecay/SignalIntegrityTimer.tscn" id="27_5l5j7"]
 [ext_resource type="PackedScene" uid="uid://bq7ua7wtranyq" path="res://challenges_tscn_version/GhostCursor.tscn" id="28_ef1pq"]
 [ext_resource type="PackedScene" uid="uid://c5a3c6r8ipgfs" path="res://challenges_tscn_version/ThermalScan.tscn" id="29_582bg"]
 [ext_resource type="PackedScene" uid="uid://bg0gcrn0qv6k" path="res://challenges_tscn_version/MemoryString.tscn" id="30_c7iac"]
@@ -149,6 +150,8 @@ theme = ExtResource("26_0c0ya")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.0057770447, 0.9999833, 0, -0.9999833, 0.0057770447, 2.4529772, 31.56623, -4.2022557)
+
+[node name="SignalIntegrityTimer" parent="." instance=ExtResource("27_5l5j7")]
 
 [editable path="Sketchfab_Scene"]
 [editable path="Rack1"]

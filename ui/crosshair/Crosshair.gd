@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-@onready var center_dot: ColorRect = $Control/CenterDot
+@onready var center_dot: TextureRect = $Control/TextureRect
 @onready var interact_label: Label = $Control/InteractLabel
 
 var _player: CharacterBody3D = null
@@ -38,7 +38,6 @@ func _process(_delta: float) -> void:
 	# Never show prompt during dialogue or while a challenge is running
 	if _dialogue_active or ChallengeTracker.is_player_frozen():
 		interact_label.text = ""
-		center_dot.color = Color(0.5, 0.9, 0.5, 0.3)
 		return
 
 	if _ray.is_colliding():
@@ -46,14 +45,12 @@ func _process(_delta: float) -> void:
 		if collider and collider.is_in_group("interactable"):
 			if _is_interactable_exhausted(collider):
 				interact_label.text = ""
-				center_dot.color = Color(0.5, 0.9, 0.5, 0.5)
 				return
 			interact_label.text = "[E] Interact"
-			center_dot.color = Color(0.9, 1.0, 0.9, 0.9)
 			return
 
 	interact_label.text = ""
-	center_dot.color = Color(0.5, 0.9, 0.5, 0.5)
+	
 
 func _is_interactable_exhausted(node: Node) -> bool:
 	# Stage 1 = challenge actively running; stage 2 = completed — both suppress the prompt

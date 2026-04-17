@@ -32,8 +32,8 @@ const TERMINAL_LINES = {
 	"echo": {
 		"intro": [
 			"[TERMINAL]: Audio Monitor — Bay 2.",
-			"[SYSTEM]: Strange noise detected on internal mics. Cleanup required.",
-			"[SYSTEM]: Match the frequencies to find the source.",
+			"Strange noise detected on internal mics. Cleanup required.",
+			"Match the frequencies to find the source.",
 		],
 		"task_name": "Frequency Match",
 		"task_desc": "Use the slider to sync Feeds A and B. Find out what’s making that noise.",
@@ -41,8 +41,8 @@ const TERMINAL_LINES = {
 	"ghost": {
 		"intro": [
 			"[TERMINAL]: Interface Console — Bay 5.",
-			"[SYSTEM]: Input lag detected. Mouse tracking is drifting.",
-			"[SYSTEM]: Reset the sensor by dragging the tool to the target.",
+			"Input lag detected. Mouse tracking is drifting.",
+			"Reset the sensor by dragging the tool to the target.",
 		],
 		"task_name": "Sensor Reset",
 		"task_desc": "Drag the tool into the target zone. Don't let the drift pull you off course.",
@@ -50,8 +50,8 @@ const TERMINAL_LINES = {
 	"thermal": {
 		"intro": [
 			"[TERMINAL]: Temp Control — Bay 9.",
-			"[SYSTEM]: Warning: Cooling failure. Multiple heat spikes detected.",
-			"[SYSTEM]: Seal the leaks before the rack overheats.",
+			"Warning: Cooling failure. Multiple heat spikes detected.",
+			"Seal the leaks before the rack overheats.",
 		],
 		"task_name": "Leak Repair",
 		"task_desc": "Click the hot spots to seal them. Keep an eye out for anything unusual",
@@ -59,8 +59,8 @@ const TERMINAL_LINES = {
 	"memory": {
 		"intro": [
 			"[TERMINAL]: Data Security — Bay 12.",
-			"[SYSTEM]: Security code verification required.",
-			"[SYSTEM]: Watch the sequence. Repeat it back to unlock the tray.",
+			"Security code verification required.",
+			"Watch the sequence. Repeat it back to unlock the tray.",
 		],
 		"task_name": "Security Override",
 		"task_desc": "A code will flash on screen. Type it back exactly as you saw it.",

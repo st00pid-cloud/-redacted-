@@ -32,7 +32,7 @@ const DANGER_THRESHOLD: float = 30.0   # 30 sec — red + blink
 func _ready() -> void:
 	layer = 20
 	name = "SignalIntegrityTimerHUD"
-	_build_hud()
+	
 	hide()
 
 func start() -> void:
@@ -52,65 +52,6 @@ func resume_timer() -> void:
 	if not _expired:
 		_running = true
 
-# ── HUD construction ─────────────────────────────────────────────────────
-
-func _build_hud() -> void:
-	var root = Control.new()
-	root.set_anchors_preset(Control.PRESET_TOP_LEFT)
-	root.offset_right  = 260.0
-	root.offset_bottom = 68.0
-	# y=88 places this just below LocationHeader (offset_top=16, two labels ~64px tall)
-	root.position = Vector2(16, 88)
-	root.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(root)
-
-	# Panel background
-	var panel_bg = ColorRect.new()
-	panel_bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	panel_bg.color = Color(0.0, 0.03, 0.0, 0.55)
-	panel_bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	root.add_child(panel_bg)
-
-	# Header label
-	_header_label = Label.new()
-	_header_label.text = "SIG INTEGRITY"
-	_header_label.position = Vector2(8, 4)
-	_header_label.add_theme_font_size_override("font_size", 9)
-	_header_label.add_theme_color_override("font_color", Color(0.4, 0.65, 0.4, 0.6))
-	root.add_child(_header_label)
-
-	# Time label (right-aligned)
-	_time_label = Label.new()
-	_time_label.text = "08:00"
-	_time_label.position = Vector2(170, 2)
-	_time_label.size = Vector2(80, 20)
-	_time_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_time_label.add_theme_font_size_override("font_size", 12)
-	_time_label.add_theme_color_override("font_color", Color(0.5, 0.85, 0.5, 0.85))
-	root.add_child(_time_label)
-
-	# Progress bar background
-	var bar_bg = ColorRect.new()
-	bar_bg.position = Vector2(8, 22)
-	bar_bg.size = Vector2(244, 6)
-	bar_bg.color = Color(0.08, 0.12, 0.08, 0.8)
-	root.add_child(bar_bg)
-
-	# Progress bar fill
-	_bar_fill = ColorRect.new()
-	_bar_fill.position = Vector2(8, 22)
-	_bar_fill.size = Vector2(244, 6)
-	_bar_fill.color = Color(0.3, 0.75, 0.3, 0.9)
-	root.add_child(_bar_fill)
-
-	# Warning label (hidden until danger zone)
-	_warning_label = Label.new()
-	_warning_label.text = "⚠ SIGNAL DEGRADING"
-	_warning_label.position = Vector2(8, 32)
-	_warning_label.add_theme_font_size_override("font_size", 9)
-	_warning_label.add_theme_color_override("font_color", Color(0.9, 0.4, 0.1, 0.9))
-	_warning_label.visible = false
-	root.add_child(_warning_label)
 
 # ── Update loop ──────────────────────────────────────────────────────────
 
