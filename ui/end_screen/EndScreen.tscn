@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cy67xnw6t2ivb"]
+[gd_scene load_steps=4 format=3 uid="uid://cy67xnw6t2ivb"]
 
 [ext_resource type="Script" uid="uid://cgwtpboffsyax" path="res://ui/end_screen/EndScreen.gd" id="1_g7leb"]
 [ext_resource type="AudioStream" uid="uid://nr85knggarqa" path="res://audio/Creepy Elevator - Happy Appy Theme.mp3" id="2_lgt8l"]
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_pm2r6"]
 
 [node name="EndScreen" type="Node2D"]
 script = ExtResource("1_g7leb")
@@ -42,17 +43,25 @@ alignment = 1
 
 [node name="MessageLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_pm2r6")
+theme_override_font_sizes/font_size = 30
+text = "TEST"
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="SubLabel" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_pm2r6")
+theme_override_font_sizes/font_size = 30
+text = "TEST"
 horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="RestartButton" type="Button" parent="CanvasLayer/Control/VBoxContainer"]
 visible = false
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_pm2r6")
+theme_override_font_sizes/font_size = 45
 text = "[ RECONNECT ]"
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

@@ -51,12 +51,12 @@ func open_challenge() -> void:
 	# Reset UI state (scene already exists, just reset values)
 	_slider.value = 0.0
 	_feedback.text = ""
-	_sync_label.text = "Synchronization: 0%"
+	_sync_label.text = "Sync Status: 0%"
 	_reveal_text_shown = false
 	_confirm_btn.visible = false
-	_header.text = "ECHO CORRELATION — Audio Feed Alignment"
-	_feed_a_label.text = "FEED A : Room Microphone: [STATIC]"
-	_feed_b_label.text = "FEED B : Ventilation Intake: [STATIC]"
+	_header.text = "AUDIO MATCH — Pinpointing Source"
+	_feed_a_label.text = "MIC A : Room Floor: [STATIC]"
+	_feed_b_label.text = "MIC B : Air Vents: [STATIC]"
 	
 	# Create or reuse ambient audio
 	if not _ambient_sfx:
@@ -88,7 +88,7 @@ func _load_ambient_stream() -> AudioStream:
 func _on_slider_changed(value: float) -> void:
 	_slider_value = value
 	var sync_pct = _get_sync_percent()
-	_sync_label.text = "Synchronization: %d%%" % int(sync_pct * 100)
+	_sync_label.text = "Sync Status: %d%%" % int(sync_pct * 100)
 
 	# Update ambient audio to track sync
 	if _ambient_sfx and _ambient_sfx.playing:
@@ -99,17 +99,17 @@ func _on_slider_changed(value: float) -> void:
 		_reveal_text_shown = true
 		# Typewriter reveal instead of instant assignment
 		_typewrite_label(_feed_a_label,
-			"FEED A — Room Microphone: [KEYBOARD TYPING — IDENTIFIED AS LOCAL INPUT]", 0.03)
+			"MIC A — Room Floor: [TYPING — Sound of your own keyboard]", 0.03)
 		_typewrite_label(_feed_b_label,
-			"FEED B — Ventilation Intake: [BIOLOGICAL — RESPIRATORY PATTERN DETECTED]", 0.03)
-		_feedback.text = "WARNING: Feed B contains a respiratory signature.\nThis does not match the room's registered occupant count."
+			"MIC B — Air Vents: [HEAVY BREATHING — Pattern detected]", 0.03)
+		_feedback.text = "WARNING: Air vent audio contains a heartbeat.\n You are the only person registered in this sector."
 		_confirm_btn.visible = true
 	elif sync_pct < 0.8:
 		_confirm_btn.visible = false
 		if _reveal_text_shown:
 			_reveal_text_shown = false
-			_feed_a_label.text = "FEED A — Room Microphone: [RESOLVING...]"
-			_feed_b_label.text = "FEED B — Ventilation Intake: [RESOLVING...]"
+			_feed_a_label.text = "MIC A — Room Floor: [FILTERING...]"
+			_feed_b_label.text = "MIC B — Air Vents: [FILTERING...]"
 			_feedback.text = ""
 
 func _typewrite_label(label: Label, text: String, speed: float) -> void:
@@ -130,7 +130,7 @@ func _on_confirm() -> void:
 	_slider.editable = false
 	_confirm_btn.visible = false
 	_header.text = "VERIFICATION"
-	_feedback.text = "Did the audio signature in Feed B match a known biological entity?"
+	_feedback.text = "Did you hear something living in the vents?"
 
 	var hbox = HBoxContainer.new()
 	hbox.add_theme_constant_override("separation", 20)
@@ -151,7 +151,7 @@ func _on_verify(answered_yes: bool) -> void:
 		return
 	_phase = 2
 	var success = answered_yes
-	_feedback.text = "Acknowledged. Anomalous presence confirmed." if success else "Denial logged. The feed continues."
+	_feedback.text = "Confirmed. You are not alone down here." if success else "Ignoring the evidence. Proceeding anyway."
 	await get_tree().create_timer(2.0).timeout
 	hide()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -165,7 +165,7 @@ func _process(delta: float) -> void:
 	if _phase == 0:
 		_timeout_timer += delta
 		if _timeout_timer >= TIMEOUT and not _reveal_text_shown:
-			_feedback.text = "Feed alignment window expired. Proceeding to verification."
+			_feedback.text = "Time's up. Locking the results in now."
 			_on_confirm()
 			return
 

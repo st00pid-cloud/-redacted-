@@ -50,7 +50,7 @@ func open_challenge() -> void:
 	_ghost_speed_base = GHOST_SPEED_BASE * diff
 	_ghost_speed_chase = GHOST_SPEED_CHASE * diff
 
-	_header.text = "GHOST CURSOR CALIBRATION — Peripheral Interface Test"
+	_header.text = "CONTROLLER RESET — Checking for Input Interference"
 	_feedback.text = "Time: %.1f" % _time_limit
 	_drag_icon.visible = true
 	_ghost_cursor.visible = true
@@ -132,7 +132,7 @@ func _process(delta: float) -> void:
 			var icon_rect = Rect2(_drag_icon.global_position, _drag_icon.size)
 			if ghost_rect.intersects(icon_rect):
 				_ghost_touched = true
-				_feedback.text = "INTERFERENCE DETECTED — Ghost cursor contacted diagnostic tool."
+				_feedback.text = "WARNING: External input detected. Something else is moving your cursor."
 				_phase = 1
 				_task_success = false
 				await get_tree().create_timer(1.5).timeout
@@ -145,7 +145,7 @@ func _show_verification() -> void:
 	_danger_btn_power.visible = false
 
 	_header.text = "VERIFICATION:"
-	_feedback.text = "Did you feel resistance in the peripheral interface?"
+	_feedback.text = "Did the mouse feel like it was fighting you?"
 	_feedback.add_theme_color_override("font_color", Color(0.8, 0.3, 0.3))
 
 	await get_tree().create_timer(0.5).timeout
@@ -174,9 +174,9 @@ func _on_verify(answered_yes: bool) -> void:
 
 	var success = _task_success and answered_yes
 	if answered_yes:
-		_feedback.text = "Peripheral anomaly acknowledged.\nThe interface has a second operator."
+		_feedback.text = "Presence confirmed.\n You are sharing this terminal with someone else."
 	else:
-		_feedback.text = "Denial logged. The cursor was not yours.\nIt never was."
+		_feedback.text = "Lie detected. You aren't the one moving that cursor anymore."
 
 	await get_tree().create_timer(2.0).timeout
 	hide()

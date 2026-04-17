@@ -30,9 +30,8 @@ func _input(event):
 func toggle_expand():
 	is_expanded = !is_expanded
 	header_label.text = "[ ACTIVE TASK ] >>" if is_expanded else "<<"
-	# Determine where the box should be
-	# 0 is fully visible on the left, -ui_width is fully hidden
-	var target_x = 0 if is_expanded else -ui_width + 40 # Leave 40px visible as a "tab"
+
+	var target_x = 0 if is_expanded else -ui_width + 40 
 	
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)

@@ -135,9 +135,9 @@ func _show_verification() -> void:
 	_header.text = "VERIFICATION:"
 
 	if _silhouette_hovered:
-		_feedback.text = "An anomalous signature evaded your scan.\nIs the ambient temperature consistent with a single occupant?"
+		_feedback.text = "A heat signature vanished before you could patch it."
 	else:
-		_feedback.text = "All leaks patched.\nIs the ambient temperature consistent with a single occupant?"
+		_feedback.text = "Does the room feel warmer than it should for just one person?"
 
 	_feedback.add_theme_color_override("font_color", Color(0.8, 0.3, 0.3))
 
@@ -167,14 +167,14 @@ func _on_verify(answered_yes: bool) -> void:
 
 	if not answered_yes:
 		if _silhouette_hovered:
-			_feedback.text = "You saw it move.\nCorrect. It was never a sensor artifact."
+			_feedback.text = "You saw it move."
 		else:
-			_feedback.text = "Correct. Thermal anomaly logged.\nSomething warm stood behind you."
+			_feedback.text = "You’re right, that wasn't a glitch in the sensor. It was real."
 	else:
 		if _silhouette_hovered:
-			_feedback.text = "You watched it leave.\nAnd still said nothing was there."
+			_feedback.text = "Confirmed. Thermal spike logged.\nAnd still said nothing was there."
 		else:
-			_feedback.text = "Temperature data contradicts your answer.\nThe second signature remains."
+			_feedback.text = "Temperature data contradicts your answer.\nSomething warm is standing directly behind you."
 
 	await get_tree().create_timer(2.0).timeout
 	hide()

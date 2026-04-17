@@ -177,15 +177,15 @@ func _on_challenge_done(success: bool) -> void:
 
 	if success:
 		var lines: Array[String] = [
-			"Diagnostic passed. Terminal secured.",
-			"%d / %d subsystems checked." % [ChallengeTracker.get_completed_count(), ChallengeTracker.required_ids.size()],
+			"Station cleared. System stabilized",
+			"Progress: %d of %d nodes online." % [ChallengeTracker.get_completed_count(), ChallengeTracker.required_ids.size()],
 		]
 		DialogueManager.show_dialogue(lines)
 	else:
 		var lines: Array[String] = [
-			"Diagnostic anomaly detected. Result logged.",
-			"[SYSTEM]: Re-entry available. Corruption penalty will apply.",
-			"%d / %d subsystems checked." % [ChallengeTracker.get_completed_count(), ChallengeTracker.required_ids.size()],
+			"Error: Test failed. Data corrupted.",
+			"[SYSTEM]: System reset required. Warning: Instability detected.",
+			"Progress: %d of %d nodes online" % [ChallengeTracker.get_completed_count(), ChallengeTracker.required_ids.size()],
 		]
 		DialogueManager.show_dialogue(lines)
 
