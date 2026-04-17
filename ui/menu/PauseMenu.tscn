@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://djqs4vt8tbcn0"]
+[gd_scene load_steps=3 format=3 uid="uid://djqs4vt8tbcn0"]
 
 [ext_resource type="Script" uid="uid://b356ekmq1s6jo" path="res://ui/menu/PauseMenu.gd" id="1_pause"]
+[ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_mbbto"]
 
 [node name="PauseMenu" type="CanvasLayer"]
 layer = 128
@@ -40,15 +41,21 @@ alignment = 1
 
 [node name="TitleLabel" type="Label" parent="Control/VBoxContainer"]
 layout_mode = 2
-text = "[ PAUSED ]"
+theme_override_fonts/font = ExtResource("2_mbbto")
+theme_override_font_sizes/font_size = 50
+text = " PAUSED "
 horizontal_alignment = 1
 
 [node name="ResumeButton" type="Button" parent="Control/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_mbbto")
+theme_override_font_sizes/font_size = 50
 text = "[ RESUME ]"
 
 [node name="QuitButton" type="Button" parent="Control/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_mbbto")
+theme_override_font_sizes/font_size = 50
 text = "[ QUIT ]"
 
 [connection signal="pressed" from="Control/VBoxContainer/ResumeButton" to="." method="_on_resume_pressed"]

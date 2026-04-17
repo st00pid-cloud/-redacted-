@@ -80,10 +80,6 @@ layout_mode = 1
 
 [node name="AmbientSound" parent="." instance=ExtResource("10_egdld")]
 
-[node name="PauseMenu" parent="." instance=ExtResource("11_j4qah")]
-visible = false
-script = null
-
 [node name="LocationHeader" parent="." instance=ExtResource("12_wojfw")]
 script = null
 
@@ -152,6 +148,8 @@ theme = ExtResource("26_0c0ya")
 transform = Transform3D(1, 0, 0, 0, 0.0057770447, 0.9999833, 0, -0.9999833, 0.0057770447, 2.4529772, 31.56623, -4.2022557)
 
 [node name="SignalIntegrityTimer" parent="." instance=ExtResource("27_5l5j7")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("11_j4qah")]
 
 [editable path="Sketchfab_Scene"]
 [editable path="Rack1"]
