@@ -10,7 +10,7 @@ const ENDINGS = {
 			{"text": "...", "duration": 1.5, "color": "green"},
 			{"text": "[SYSTEM]: Host signal severed.", "duration": 2.0, "color": "green"},
 			{"text": "[SYSTEM]: Entity confined to Rack 7 buffer.", "duration": 2.5, "color": "green"},
-			{"text": "R. Vasquez stood up.\nHer hands were shaking.", "duration": 3.0, "color": "white"},
+			{"text": "E.M. Butido stood up.\nHer hands were shaking.", "duration": 3.0, "color": "white"},
 			{"text": "The elevator light was on.\nShe didn't look back.", "duration": 3.0, "color": "white"},
 		],
 		"final_message": "CONNECTION TERMINATED",
@@ -21,11 +21,11 @@ const ENDINGS = {
 		"phases": [
 			{"text": "...", "duration": 1.5, "color": "red"},
 			{"text": "[SYSTEM]: Integration complete.", "duration": 2.5, "color": "red"},
-			{"text": "R. Vasquez opened her eyes.\nThe screen was off.", "duration": 3.0, "color": "white"},
+			{"text": "E.M. Butido opened her eyes.\nThe screen was off.", "duration": 3.0, "color": "white"},
 			{"text": "She couldn't remember when she sat down.", "duration": 3.0, "color": "white"},
 			{"text": "Her badge read a different name.", "duration": 3.0, "color": "red"},
 		],
-		"final_message": "WELCOME, R. VASQUEZ",
+		"final_message": "WELCOME, E.M. Butido",
 		"final_sub": "You missed every chance to resist.\nShe is the buffer now.",
 		"final_color": "red",
 	},
@@ -41,7 +41,7 @@ const ENDINGS = {
 		"final_color": "red",
 	},
 
-	# ── New: Signal Integrity timeout ending ─────────────────────────────
+	# ── Signal Integrity timeout ending ──────────────────────────────────
 	"signal_lost": {
 		"phases": [
 			{"text": "...", "duration": 1.5, "color": "red"},
@@ -132,7 +132,15 @@ func _get_color(name: String) -> Color:
 func _on_restart() -> void:
 	EndScreenData.reason = ""
 	EndScreenData.is_game_over = false
+
+	# Reset ALL autoload state so the next playthrough starts clean.
 	ChallengeTracker.reset()
+	TaskManager.reset()
+	SignalIntegrityTimer.reset()
+	# HorrorProgressionManager tracks a one-shot flag for face distortion.
+	# Clear it directly — no reset() defined on that autoload.
+	HorrorProgressionManager.pending_face_distortion = false
+
 	get_tree().change_scene_to_file("res://World/Level_01.tscn")
 
 func _cleanup_overlays() -> void:

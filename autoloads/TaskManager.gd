@@ -24,6 +24,22 @@ func complete_task(task_id: String) -> void:
 func begin_corruption() -> void:
 	_is_corrupting = true
 
+## Adds a one-time corruption bump (e.g. retry penalty).
+## Prefer this over mutating _corruption_level directly from other scripts.
+func apply_corruption_penalty(amount: float) -> void:
+	_corruption_level = min(_corruption_level + amount, 1.0)
+	corruption_tick.emit()
+	task_updated.emit()
+
+## Clears all state so a restarted playthrough starts clean.
+## Call from EndScreen._on_restart() alongside ChallengeTracker.reset().
+func reset() -> void:
+	active_task = null
+	_corruption_level = 0.0
+	_corruption_timer = 0.0
+	_is_corrupting = false
+	task_updated.emit()
+
 func _process(delta: float) -> void:
 	if not _is_corrupting or not active_task:
 		return

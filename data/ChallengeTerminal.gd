@@ -1,10 +1,12 @@
 extends StaticBody3D
 
-## ChallengeTerminal.gd — All improvements integrated:
-## - Named stage constants instead of magic ints
-## - Retry system: failed terminals allow one re-entry with corruption penalty
-## - Soft ordering: thermal requires echo done, memory requires ghost done
-## - TaskManager.begin_corruption() called when challenge opens
+## ChallengeTerminal.gd — PATCHED
+## Fixes:
+##   #1: Challenge scene is now instantiated lazily per-interaction and freed on completion.
+##       Previously every terminal instantiated its own copy on _ready() and parented it
+##       to get_tree().root, stacking multiple CanvasLayers and never freeing them.
+##   #2: No more CONNECT_ONE_SHOT. The challenge node is freed after each run, so the
+##       connection dies with it. Retries get a fresh node + fresh connection.
 
 @onready var status_light: OmniLight3D = $OmniLight3D
 @onready var hum_audio: AudioStreamPlayer3D = $AudioStreamPlayer3D
@@ -67,7 +69,6 @@ const TERMINAL_LINES = {
 	},
 }
 
-# NEW (scene-based)
 const CHALLENGE_SCENES = {
 	"echo":    "res://challenges_tscn_version/EchoCorrelation.tscn",
 	"ghost":   "res://challenges_tscn_version/GhostCursor.tscn",
@@ -75,21 +76,37 @@ const CHALLENGE_SCENES = {
 	"memory":  "res://challenges_tscn_version/MemoryString.tscn",
 }
 
-func _ready() -> void:
-	_load_challenge_scene()
+# NOTE: _ready() no longer instantiates the challenge scene.
+# Instantiation happens lazily in interact() via _ensure_challenge_node().
 
-func _load_challenge_scene() -> void:
-	var scene_path = CHALLENGE_SCENES.get(challenge_type, "")
+func _exit_tree() -> void:
+	# If the terminal is freed while a challenge instance is alive, clean it up.
+	if is_instance_valid(_challenge_node):
+		_challenge_node.queue_free()
+		_challenge_node = null
+
+## Lazily instantiate the challenge scene. Returns true on success.
+## Adds the node to the scene tree and waits one frame so @onready vars resolve
+## before open_challenge() is called.
+func _ensure_challenge_node() -> bool:
+	if is_instance_valid(_challenge_node):
+		return true
+
+	var scene_path: String = CHALLENGE_SCENES.get(challenge_type, "")
 	if scene_path == "":
 		push_warning("ChallengeTerminal: Unknown challenge_type: " + challenge_type)
-		return
-	var scene = load(scene_path)
-	if not scene:
-		push_warning("ChallengeTerminal: Failed to load scene: " + scene_path)
-		return
-	_challenge_node = scene.instantiate()
-	get_tree().root.call_deferred("add_child", _challenge_node)
+		return false
 
+	var scene: PackedScene = load(scene_path)
+	if scene == null:
+		push_warning("ChallengeTerminal: Failed to load scene: " + scene_path)
+		return false
+
+	_challenge_node = scene.instantiate()
+	get_tree().root.add_child(_challenge_node)
+	# One frame so @onready and _ready() run before we call open_challenge().
+	await get_tree().process_frame
+	return true
 
 func interact() -> void:
 	# Complete — short system message
@@ -158,16 +175,25 @@ func interact() -> void:
 		DialogueManager.show_dialogue(lines)
 		await DialogueManager.dialogue_finished
 
-	if _challenge_node and _challenge_node.has_method("open_challenge"):
-		if not _challenge_node.challenge_completed.is_connected(_on_challenge_done):
-			_challenge_node.challenge_completed.connect(_on_challenge_done, CONNECT_ONE_SHOT)
-		_challenge_node.open_challenge()
-	else:
+	# Lazy-instantiate the challenge scene for this interaction.
+	var ready_ok: bool = await _ensure_challenge_node()
+	if not ready_ok or not _challenge_node.has_method("open_challenge"):
 		push_warning("ChallengeTerminal: Challenge node not ready for type: " + challenge_type)
 		ChallengeTracker.unfreeze_player()
 		_interaction_stage = STAGE_IDLE
+		return
+
+	# Plain connect — no CONNECT_ONE_SHOT. The node is freed in _on_challenge_done,
+	# which automatically tears down the connection.
+	_challenge_node.challenge_completed.connect(_on_challenge_done)
+	_challenge_node.open_challenge()
 
 func _on_challenge_done(success: bool) -> void:
+	# Free the challenge instance — next retry will create a fresh one.
+	if is_instance_valid(_challenge_node):
+		_challenge_node.queue_free()
+	_challenge_node = null
+
 	# Set stage based on outcome
 	_interaction_stage = STAGE_COMPLETE if success else STAGE_FAILED
 	has_been_read = true
