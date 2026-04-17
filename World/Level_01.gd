@@ -2,6 +2,7 @@ extends Node3D
 
 @onready var horror_overlay: ColorRect = $HorrorOverlay
 
+
 var _player: CharacterBody3D = null
 var _resist_active: bool = false
 var _resist_presses_needed: int = 8

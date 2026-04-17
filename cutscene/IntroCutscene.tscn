@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cl02o2k76xige"]
+[gd_scene load_steps=4 format=3 uid="uid://cl02o2k76xige"]
 
 [ext_resource type="Script" uid="uid://dat8dpjgsiown" path="res://cutscene/IntroCutscene.gd" id="1_intro"]
 [ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_2wsxe"]
+[ext_resource type="Texture2D" uid="uid://tmtf2mpg1as3" path="res://cutscene/introUi.png" id="2_dnb54"]
 
 [node name="IntroCutscene" type="CanvasLayer"]
 layer = 200
@@ -15,11 +16,17 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_right = 1155.0
+offset_bottom = 650.0
+texture = ExtResource("2_dnb54")
+
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 

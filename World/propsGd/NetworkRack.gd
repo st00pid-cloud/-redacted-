@@ -112,6 +112,9 @@ func _after_clang() -> void:
 
 	# Show pre-diagnostic dialogue
 	var lines: Array[String] = [
+		"[SYSTEM]: ...",
+		"[SYSTEM]: ...",
+		"[SYSTEM]: ..?",
 		"[SYSTEM]: Rack 7 — Main diagnostic interface.",
 		"[SYSTEM]: All subsystem feeds confirmed.",
 		"[SYSTEM]: Initiating final containment sequence...",

@@ -2,6 +2,9 @@ extends CanvasLayer
 
 @onready var name_label = $Control/Panel/MarginContainer/VBoxContainer/NameLabel
 @onready var content_label = $Control/Panel/MarginContainer/VBoxContainer/ContentLabel
+@onready var dialogue_audio: AudioStreamPlayer = $DialogueAudio
+
+@export var dialogue_sounds: Array[AudioStream] = [] 
 
 var _current_lines: Array[String] = []
 var _line_index: int = 0
@@ -14,7 +17,6 @@ const CORRUPTED_SPEED = 0.15
 func _ready():
 	hide()
 	DialogueManager.dialogue_box = self
-	
 
 func start_dialogue(lines: Array[String]):
 	_current_lines = lines
@@ -23,7 +25,16 @@ func start_dialogue(lines: Array[String]):
 	_display_next_line()
 
 func _display_next_line():
+	# Stop the previous sound immediately when moving to a new line
+	if dialogue_audio.playing:
+		dialogue_audio.stop()
+
 	if _line_index < _current_lines.size():
+		# Play the sound assigned to this specific line index
+		if _line_index < dialogue_sounds.size() and dialogue_sounds[_line_index]:
+			dialogue_audio.stream = dialogue_sounds[_line_index]
+			dialogue_audio.play()
+			
 		_type_text(_current_lines[_line_index])
 		_line_index += 1
 	else:
@@ -65,11 +76,17 @@ func _type_text(text: String):
 func _input(event):
 	if not visible:
 		return
+		
+	# Check for skip/next input
 	if event.is_action_pressed("ui_accept") or event.is_action_pressed("interact"):
 		if _is_typing:
+			# Finish typing instantly
 			content_label.visible_ratio = 1.0
 			_is_typing = false
+			# Optional: Uncomment the line below if you want sound to stop when text is fast-forwarded
+			# dialogue_audio.stop() 
 		else:
+			# Move to the next line (this triggers the audio stop/start logic)
 			_display_next_line()
 
 func _on_next_pressed():
@@ -78,6 +95,3 @@ func _on_next_pressed():
 		_is_typing = false
 	else:
 		_display_next_line()
-
-func _on_next_button_pressed() -> void:
-	pass

@@ -25,7 +25,7 @@ const LINES = [
 	"The elevator is already heading back up.",
 ]
 
-const CHAR_DELAY = 0.099  # seconds per character
+const CHAR_DELAY = 0.02  # seconds per character
 const LINE_PAUSE = 0.3   # pause between lines
 
 var _skip_requested: bool = false

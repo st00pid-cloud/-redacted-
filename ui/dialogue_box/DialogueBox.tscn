@@ -1,10 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://c13sq6ef31tdd"]
+[gd_scene load_steps=5 format=3 uid="uid://c13sq6ef31tdd"]
 
 [ext_resource type="Script" uid="uid://boqkhh71sibc3" path="res://ui/dialogue_box/DialogueBox.gd" id="1_62fiq"]
+[ext_resource type="Texture2D" uid="uid://ctl6iijsjjctb" path="res://ui/dialogue_box/diaboxUI.png" id="2_mfn2e"]
 [ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_rfrdu"]
+[ext_resource type="AudioStream" uid="uid://bxasplyoshsya" path="res://ui/dialogue_box/468927__malakme__medium-text-blip.ogg" id="4_jtimw"]
 
 [node name="DialogueBox" type="CanvasLayer"]
 script = ExtResource("1_62fiq")
+dialogue_sounds = Array[AudioStream]([ExtResource("4_jtimw"), ExtResource("4_jtimw")])
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -22,6 +25,13 @@ anchor_bottom = 1.0
 offset_top = 482.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="Control/Panel"]
+modulate = Color(1, 1, 1, 0.4117647)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_mfn2e")
 
 [node name="MarginContainer" type="MarginContainer" parent="Control/Panel"]
 clip_contents = true
@@ -62,3 +72,8 @@ theme_override_colors/font_color = Color(0.4351923, 0.43519226, 0.43519226, 1)
 theme_override_fonts/font = ExtResource("2_rfrdu")
 text = "[E TO CONTINUE]"
 horizontal_alignment = 1
+
+[node name="DialogueAudio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_jtimw")
+volume_db = -20.0
+autoplay = true

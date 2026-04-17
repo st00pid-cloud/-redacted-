@@ -63,7 +63,7 @@ transform = Transform3D(1, 0, 0, 0, 2.220446e-16, 1, 0, -1, 2.220446e-16, 1.4015
 surface_material_override/0 = SubResource("StandardMaterial3D_meeu0")
 
 [node name="lamp" parent="Sketchfab_Scene/Sketchfab_model/SCP Server Room_obj_cleaner_materialmerger_gles/Object_13/StaticBody3D" index="1" instance=ExtResource("21_8jeay")]
-transform = Transform3D(3, 0, 0, 0, -1.3113416e-07, -3, 0, 3, -1.3113416e-07, 247.70885, 111.14206, 102.77822)
+transform = Transform3D(3, 0, 0, 0, -1.3113416e-07, -3, 0, 3, -1.3113416e-07, 247.70885, 111.14206, 102.58627)
 
 [node name="Rack1" parent="." instance=ExtResource("4_clck7")]
 transform = Transform3D(0.23546375, -0.27981722, -7.6913104, 0.7870689, 7.655442, -0.2544168, 7.656048, -0.7784007, 0.2627032, -32.011482, 8.719945, 8.733135)

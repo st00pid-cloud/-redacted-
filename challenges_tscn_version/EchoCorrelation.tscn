@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://byut5uclgbjfx"]
+[gd_scene load_steps=4 format=3 uid="uid://byut5uclgbjfx"]
 
 [ext_resource type="Script" uid="uid://cxlxqwal2yjm2" path="res://challenges/EchoCorrelation.gd" id="1_echo"]
 [ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_font"]
+[ext_resource type="Texture2D" uid="uid://cu0c1ycgk2vtq" path="res://challenges_tscn_version/ui/diagUi.png" id="2_h3wka"]
 
 [node name="EchoCorrelation" type="CanvasLayer" groups=["challenge_echo"]]
 layer = 100
@@ -38,6 +39,12 @@ offset_right = 380.0
 offset_bottom = 260.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="RootControl/Panel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_h3wka")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="RootControl/Panel"]
 layout_mode = 1
