@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://dooywrqu1b2uo"]
+[gd_scene load_steps=32 format=3 uid="uid://dooywrqu1b2uo"]
 
 [ext_resource type="Script" uid="uid://b7edm77j2m6y" path="res://World/Level_01.gd" id="1_bpnau"]
 [ext_resource type="PackedScene" uid="uid://c13sq6ef31tdd" path="res://ui/dialogue_box/DialogueBox.tscn" id="3_ccxtb"]
@@ -26,11 +26,9 @@
 [ext_resource type="PackedScene" uid="uid://c3ybha4iorguy" path="res://ui/SignalIntegrityDecay/SignalIntegrityTimer.tscn" id="27_5l5j7"]
 [ext_resource type="PackedScene" uid="uid://bq7ua7wtranyq" path="res://challenges_tscn_version/GhostCursor.tscn" id="28_ef1pq"]
 [ext_resource type="PackedScene" uid="uid://gwh1njmh1j8c" path="res://boxxy.tscn" id="28_ysi65"]
-[ext_resource type="Script" uid="uid://c2qissmovf05u" path="res://objectDialogueAdd/differentDialogue/boxxyDia.gd" id="29_0iud3"]
 [ext_resource type="PackedScene" uid="uid://c0v0q26os6epu" path="res://boxxy_ver2.tscn" id="29_8ll1u"]
 [ext_resource type="PackedScene" uid="uid://c5a3c6r8ipgfs" path="res://challenges_tscn_version/ThermalScan.tscn" id="29_582bg"]
 [ext_resource type="PackedScene" uid="uid://bg0gcrn0qv6k" path="res://challenges_tscn_version/MemoryString.tscn" id="30_c7iac"]
-[ext_resource type="PackedScene" uid="uid://4y68bkv54i1o" path="res://objectDialogueAdd/DialogueUI.tscn" id="31_ef1pq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_meeu0"]
 albedo_texture = ExtResource("4_6ga61")
@@ -46,9 +44,6 @@ glow_strength = 0.5
 glow_bloom = 0.2
 volumetric_fog_enabled = true
 volumetric_fog_albedo = Color(2.1658838e-07, 0.124740444, 0.1247404, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_0iud3"]
-size = Vector3(0.9581299, 1.8793945, 1.5874023)
 
 [node name="Level01" type="Node3D"]
 script = ExtResource("1_bpnau")
@@ -68,7 +63,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_meeu0")
 [node name="Rack1" parent="." instance=ExtResource("4_clck7")]
 transform = Transform3D(0.23546375, -0.27981722, -7.6913104, 0.7870689, 7.655442, -0.2544168, 7.656048, -0.7784007, 0.2627032, -32.011482, 8.719945, 8.733135)
 
-[node name="Player2" parent="." instance=ExtResource("4_bpnau")]
+[node name="Player2" parent="." groups=["player"] instance=ExtResource("4_bpnau")]
 transform = Transform3D(1.1923876, 0, 0.13494894, 0, 1.1999999, 0, -0.13494894, 0, 1.1923876, -6.9759192, 38.987434, 22.639372)
 
 [node name="DiagnosticPanel" parent="." instance=ExtResource("6_ieywp")]
@@ -116,11 +111,25 @@ light_cull_mask = 4294966273
 omni_range = 14.439776
 script = ExtResource("15_5l5j7")
 
+[node name="Bridge1-omni3" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.41028, 41.970448, -47.326725)
+layers = 1023
+light_energy = 20.0
+light_size = 100.0
+light_specular = 8.5
+light_bake_mode = 1
+light_cull_mask = 4294966273
+omni_range = 14.439776
+script = ExtResource("15_5l5j7")
+
 [node name="lamp" parent="." instance=ExtResource("21_8jeay")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -49.98644, 44.976593, 23.317074)
 
 [node name="lamp2" parent="." instance=ExtResource("21_8jeay")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -49.83352, 44.023224, -28.962729)
+
+[node name="lamp3" parent="." instance=ExtResource("21_8jeay")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, -7.6781845, 44.023224, -35.727028)
 
 [node name="ghost_cursor" parent="." instance=ExtResource("22_3ymyv")]
 transform = Transform3D(-0.54114056, -0.7453693, -7.644709, -0.052630235, 7.663839, -0.74350893, 7.68078, 0, -0.54369384, 23.93931, 8.351957, 27.38104)
@@ -156,21 +165,14 @@ transform = Transform3D(1, 0, 0, 0, 0.0057770447, 0.9999833, 0, -0.9999833, 0.00
 
 [node name="SignalIntegrityTimer" parent="." instance=ExtResource("27_5l5j7")]
 
-[node name="boxxy_" parent="." groups=["interactable"] instance=ExtResource("28_ysi65")]
+[node name="boxxy_" parent="." instance=ExtResource("28_ysi65")]
 transform = Transform3D(4.898297, 0, 1.003338, 0, 5, 0, -1.003338, 0, 4.898297, -13.809384, 33.39552, 16.254528)
-
-[node name="Area3D" type="Area3D" parent="boxxy_"]
-script = ExtResource("29_0iud3")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="boxxy_/Area3D"]
-transform = Transform3D(1, 0, 0, 0, 0.99999976, 0, 0, 0, 1, -0.020934582, 0.43969727, -0.2937014)
-shape = SubResource("BoxShape3D_0iud3")
 
 [node name="boxxy_2" parent="." instance=ExtResource("28_ysi65")]
 transform = Transform3D(4.1345196, 0, 2.811716, 0, 4.9999995, 0, -2.811716, 0, 4.1345196, -2.6057844, 33.39552, 3.254528)
 
 [node name="boxxy_5" parent="." instance=ExtResource("28_ysi65")]
-transform = Transform3D(4.1345196, 0, 2.811716, 0, 4.9999995, 0, -2.811716, 0, 4.1345196, 1.6166048, 33.39552, -56.81745)
+transform = Transform3D(3.3808453, 0, 3.6837325, 0, 5, 0, -3.6837325, 0, 3.3808453, 1.6166048, 33.39552, -58.063564)
 
 [node name="boxxy_3" parent="." instance=ExtResource("29_8ll1u")]
 transform = Transform3D(2.7205834, 0, 5.3477497, 0, 6, 0, -5.3477497, 0, 2.7205834, -11.611752, 33, -20)
@@ -178,9 +180,8 @@ transform = Transform3D(2.7205834, 0, 5.3477497, 0, 6, 0, -5.3477497, 0, 2.72058
 [node name="boxxy_4" parent="." instance=ExtResource("29_8ll1u")]
 transform = Transform3D(0.89068806, 0, 5.9335213, 0, 6, 0, -5.9335213, 0, 0.89068806, -11.611752, 33, -31.621157)
 
-[node name="DialogueUI" parent="." instance=ExtResource("31_ef1pq")]
-
-[connection signal="body_entered" from="boxxy_/Area3D" to="boxxy_/Area3D" method="_on_body_entered"]
+[node name="boxxy_6" parent="." instance=ExtResource("29_8ll1u")]
+transform = Transform3D(-2.6068292, -3.5407787e-08, 3.6680293, 0.49216303, 4.459308, 0.34977508, -3.634861, 0.60379374, -2.5832565, 38.23201, 33.30478, -58.281895)
 
 [editable path="Sketchfab_Scene"]
 [editable path="Rack1"]

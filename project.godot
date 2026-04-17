@@ -37,6 +37,7 @@ window/size/resizable=false
 interactable=""
 horror_overlay=""
 resist_overlay=""
+player=""
 
 [input]
 
