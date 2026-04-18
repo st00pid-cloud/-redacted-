@@ -33,13 +33,13 @@ var port_data = [
 const HORROR_QUESTIONS = [
 	{
 		"question": "FINAL VERIFICATION 1/4:\nDo you believe E.M. Butido is still alone in this room?",
-		"answers": ["YES", "NO"], "correct": 1,
+		"answers": ["YES", "NO"], "correct": 0,
 		"success_text": "Correct. You were never alone.",
 		"fail_text": "Denial noted. Integration preference: willing host.",
 	},
 	{
 		"question": "FINAL VERIFICATION 2/4:\nThe maintenance logs mention sounds from this rack.\nWhat do machines dream about?",
-		"answers": ["NOTHING", "US"], "correct": 0,
+		"answers": ["US", "NOTHING"], "correct": 1,
 		"success_text": "Response logged. Rational mind confirmed.",
 		"fail_text": "You listened too closely. It appreciates that.",
 	},
@@ -51,7 +51,7 @@ const HORROR_QUESTIONS = [
 	},
 	{
 		"question": "FINAL VERIFICATION 4/4:\nThe entity requests a name.\nDo you give it one?",
-		"answers": ["NO", "YES"], "correct": 0,
+		"answers": ["YES", "NO"], "correct": 1,
 		"success_text": "Unnamed things are harder to love.\nContainment holds.",
 		"fail_text": "Named things grow. You know that now.",
 	},

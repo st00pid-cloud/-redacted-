@@ -1,8 +1,5 @@
 extends CanvasLayer
 
-## ThermalScan.gd — Scene-based version (CORRECTED PATHS)
-## Script attached to ThermalScan (CanvasLayer) node
-
 signal challenge_completed(success: bool)
 
 @onready var _root_control: Control = $RootControl
@@ -163,9 +160,9 @@ func _on_verify(answered_yes: bool) -> void:
 		return
 	_phase = 2
 
-	var success = not answered_yes
+	var success = answered_yes
 
-	if not answered_yes:
+	if answered_yes:
 		if _silhouette_hovered:
 			_feedback.text = "You saw it move."
 		else:

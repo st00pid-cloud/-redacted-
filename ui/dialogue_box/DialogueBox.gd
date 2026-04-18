@@ -50,7 +50,7 @@ func _display_next_line():
 		DialogueManager.emit_signal("dialogue_finished")
 
 func _get_type_duration(text: String) -> float:
-	if text.begins_with("[SYSTEM]") or text.begins_with("[TERMINAL") or text.begins_with("[MAINTENANCE"):
+	if text.begins_with("[SYSTEM]") or text.begins_with("[TERMINAL") or text.begins_with("[MAINTENANCE]"):
 		return SYSTEM_SPEED
 	elif text.begins_with("ENGINEER"):
 		return ENGINEER_SPEED
@@ -71,7 +71,6 @@ func _get_speaker_name(text: String) -> String:
 
 func _type_text(text: String):
 	var speaker = _get_speaker_name(text)
-	print("Speaker identified as: ", speaker)
 	name_label.text = speaker
 	
 	# Logic to show/hide character sprites based on speaker
