@@ -21,10 +21,10 @@ var _resist_pulse_timer: float = 0.0
 
 const OPENING_LINES = [
 	"Hey, EM. You're up.",
-	"Got a weird blip on Rack 7. Standard maintenance, you know the drill. ",
-	"You've done this a hundred times. Pop the component out, plug it back in, and call it a night.",
-	"[YOU] The server room is quieter than usual.",
-	"...",
+	"Chen wasn't too happy with staying here, but did say something about uh...",
+	"You have to acknowledge it's existence, then go against it afterwards.",
+	"The server room's messier than usual, there's a pending investigation.",
+	"[YOU]...",
 	"The main computer is locked out. You'll need to hit the local stations first to run a health check.",
 	"Find the terminals, clear the errors, then head back to Rack 7.",
 ]

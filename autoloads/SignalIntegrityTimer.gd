@@ -3,7 +3,7 @@ extends CanvasLayer
 ## SignalIntegrityTimer — Autoload
 ## Displays an 8-minute "Signal Integrity" countdown.
 
-const TOTAL_TIME: float = 480.0 
+const TOTAL_TIME: float = 150.0 
 
 var _time_remaining: float = TOTAL_TIME
 var _running: bool = false

@@ -51,7 +51,7 @@ const ENDINGS = {
 			{"text": "The rack's light was green.", "duration": 3.0, "color": "red"},
 		],
 		"final_message": "SESSION EXPIRED",
-		"final_sub": "Eight minutes was all it needed.\nYou gave it nine.",
+		"final_sub": "Two minutes was all it needed.\nYou gave it three.",
 		"final_color": "red",
 	},
 }

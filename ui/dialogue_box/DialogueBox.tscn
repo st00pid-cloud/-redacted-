@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://c13sq6ef31tdd"]
+[gd_scene load_steps=7 format=3 uid="uid://c13sq6ef31tdd"]
 
 [ext_resource type="Script" uid="uid://boqkhh71sibc3" path="res://ui/dialogue_box/DialogueBox.gd" id="1_62fiq"]
 [ext_resource type="Texture2D" uid="uid://ctl6iijsjjctb" path="res://ui/dialogue_box/diaboxUI.png" id="2_mfn2e"]
 [ext_resource type="FontFile" uid="uid://d17g453y5r5td" path="res://fonts/Kenney High.ttf" id="2_rfrdu"]
 [ext_resource type="AudioStream" uid="uid://bxasplyoshsya" path="res://ui/dialogue_box/468927__malakme__medium-text-blip.ogg" id="4_jtimw"]
+[ext_resource type="Texture2D" uid="uid://dstqcyfctimo5" path="res://ui/dialogue_box/Untitled156_20260418120252.png" id="5_y468l"]
+[ext_resource type="Texture2D" uid="uid://du0b1lqfljarf" path="res://ui/dialogue_box/Untitled156_20260418120331.png" id="6_58j7o"]
 
 [node name="DialogueBox" type="CanvasLayer"]
 script = ExtResource("1_62fiq")
@@ -73,7 +75,17 @@ theme_override_fonts/font = ExtResource("2_rfrdu")
 text = "[E TO CONTINUE]"
 horizontal_alignment = 1
 
+[node name="mainChar" type="Sprite2D" parent="Control"]
+position = Vector2(158, 303.99997)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_y468l")
+
+[node name="netEng" type="Sprite2D" parent="Control"]
+position = Vector2(200, 304)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("6_58j7o")
+
 [node name="DialogueAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_jtimw")
-volume_db = -20.0
+volume_db = -10.0
 autoplay = true
