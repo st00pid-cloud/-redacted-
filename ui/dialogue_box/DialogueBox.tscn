@@ -75,17 +75,17 @@ theme_override_fonts/font = ExtResource("2_rfrdu")
 text = "[E TO CONTINUE]"
 horizontal_alignment = 1
 
-[node name="mainChar" type="Sprite2D" parent="Control"]
-position = Vector2(158, 303.99997)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("5_y468l")
-
-[node name="netEng" type="Sprite2D" parent="Control"]
-position = Vector2(200, 304)
-scale = Vector2(0.2, 0.2)
-texture = ExtResource("6_58j7o")
-
 [node name="DialogueAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_jtimw")
 volume_db = -10.0
 autoplay = true
+
+[node name="mainChar" type="Sprite2D" parent="."]
+position = Vector2(158, 303.99997)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("5_y468l")
+
+[node name="netEng" type="Sprite2D" parent="."]
+position = Vector2(200, 304)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("6_58j7o")

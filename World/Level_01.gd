@@ -20,13 +20,13 @@ var _resist_ui_container: CanvasLayer = null
 var _resist_pulse_timer: float = 0.0
 
 const OPENING_LINES = [
-	"Hey, EM. You're up.",
-	"Chen wasn't too happy with staying here, but did say something about uh...",
-	"You have to acknowledge it's existence, then go against it afterwards.",
-	"The server room's messier than usual, there's a pending investigation.",
-	"[YOU]...",
-	"The main computer is locked out. You'll need to hit the local stations first to run a health check.",
-	"Find the terminals, clear the errors, then head back to Rack 7.",
+	"SYSTEM ADMINISTRATOR: Hey, EM. You're up.",
+	"SYSTEM ADMINISTRATOR: Chen wasn't too happy with staying here, but did say something about uh...",
+	"SYSTEM ADMINISTRATOR: You have to acknowledge it's existence, then go against it afterwards.",
+	"ENGINEER 1: The server room's messier than usual. I hear there's a pending investigation?",
+	"ENGINEER 1: ...",
+	"SYSTEM ADMINISTRATOR: The main computer is locked out. You'll need to hit the local stations first to run a health check.",
+	"SYSTEM ADMINISTRATOR: Find the terminals, clear the errors, then head back to Rack 7.",
 ]
 
 func _ready() -> void:
